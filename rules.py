@@ -16,13 +16,19 @@ import numpy as np
 CV_MAX = 0.30      # 이보다 흩어지면 제약으로 보지 않는다
 N_MIN = 20         # 이보다 적으면 판정을 보류한다
 
+# TYPO_MCP_GPU=1 이면 GPU 를 쓴다. easyocr 은 cuda 가 없으면 mps 로 내려간다.
+# 기본이 CPU 인 이유: M 계열에서 재보니 mps 가 빠르지 않다. 포스터 3장 기준
+# cpu 1.7s/장, mps 1.9s/장, 측정값은 완전히 같았다. easyocr 의 인식 모델은
+# CPU 에서 int8 양자화 경로를 타고, batch_size=1 이라 mps 는 이득이 없다.
+GPU = os.environ.get('TYPO_MCP_GPU', '0') not in ('0', 'false', 'False')
+
 
 def collect(paths, reader=None, progress=None):
     """포스터들을 측정해 원자료를 모은다."""
     import easyocr
     import pipeline
     if reader is None:
-        reader = easyocr.Reader(['de'], gpu=False, verbose=False)
+        reader = easyocr.Reader(['de'], gpu=GPU, verbose=False)
     raw = {}
     for i, p in enumerate(paths, 1):
         n = os.path.basename(p)

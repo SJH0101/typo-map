@@ -7,6 +7,21 @@ GAP_RATIO  = 1.5    # 행간이 중앙값의 1.5배 넘으면 자름
 SIZE_RATIO = 0.25   # 활자 높이가 25% 넘게 변하면 자름
 XSTART_EPS = EPS    # 좌측 끝이 오차 이상 움직이면 자름
 
+def polarity(g):
+    """어두운 바탕에 밝은 활자면 뒤집어 돌려준다.
+
+    아래의 모든 판정이 「잉크는 배경보다 어둡다」(g < th) 를 전제한다.
+    극성을 여기서 한 번 맞춰두면 나머지 코드는 그대로 쓸 수 있다.
+
+    활자는 화면의 소수파다. 그래서 중앙값에서 먼 쪽이 활자다.
+    밝은 꼬리가 어두운 꼬리보다 길면 활자가 밝은 것으로 본다.
+    절대 밝기로 자르지 않는 이유: 회색 바탕 포스터는 중앙값만 보면
+    어느 쪽인지 알 수 없다. 코어 108장 중 13장이 그런 중간톤이었다.
+    """
+    lo, med, hi = np.percentile(g, (5, 50, 95))
+    return 255.0 - g if (hi - med) > (med - lo) else g
+
+
 def threshold(g):
     bg = np.median(g)
     return bg * 0.72          # 배경 밝기 기준 (회색 활자 대응)
@@ -258,6 +273,7 @@ def apply_grid(ls, ink):
 
 def run(path, region):
     g = np.asarray(Image.open(path).convert('L')).astype(float)[region[1]:region[3], region[0]:region[2]]
+    g = polarity(g)           # 밝은 활자 / 어두운 배경을 여기서 정규화한다
     th = threshold(g)
     (tx0, ty0, tx1, ty1), _ = trim(g, th)
     g = g[ty0:ty1, tx0:tx1]
