@@ -60,10 +60,31 @@ def check_trim(g, th, box, limit=0.35):
     bad = {k: round(float(v), 3) for k, v in e.items() if v > limit}
     return (len(bad) == 0), bad
 
+COL_FRAC = 0.13     # 단 사이 빈 띠 판정. 그 영역 최대 잉크의 이 비율 이하를 빈 것으로 본다.
+                    # 코어 108장 스윕 (표본 n / 블록 수)
+                    #   0.00  58 / 901     0.15  75 / 1022
+                    #   0.10  69 / 960     0.18  74 / 1084
+                    #   0.13  69 / 985     0.25  66 / 1190
+                    #                      0.35  72 / 1335
+                    # 총량만 보면 0.15 가 낫다. 그런데 0.15 는 1952 Die Gute
+                    # Form 의 오른쪽 정렬 5줄 블록을 쪼갠다 (n 5 → 1). 눈으로
+                    # 확인한 블록이다. 오른쪽 정렬은 왼쪽 끝이 들쭉날쭉하므로
+                    # 블록 안에 잉크가 적은 세로 띠가 생기고, 문턱이 높으면
+                    # 그것을 단 경계로 오인한다. 0.13 이 그 블록을 지키는
+                    # 최대값이다. 회귀 검사가 잡았다.
+
 def columns(g, th, min_gap=6):
+    """세로로 빈 띠를 찾아 단을 가른다.
+
+    「잉크가 정확히 0」 을 요구하면 얼룩·그래픽·스캔 노이즈가 띠를 메워 단이
+    갈리지 않는다. lines() 는 같은 문제를 이미 상대 비율(INK_FRAC)로 풀고
+    있었는데 여기만 절대 0 이었다.
+    """
     col = (g < th).sum(axis=0)
+    peak = np.percentile(col[col > 0], 90) if (col > 0).any() else 0.0
+    empty = col <= COL_FRAC * peak
     gaps = []; s = None
-    for x, v in enumerate(col == 0):
+    for x, v in enumerate(empty):
         if v and s is None: s = x
         if (not v) and s is not None:
             if x - s >= min_gap: gaps.append((s, x))
