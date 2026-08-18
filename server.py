@@ -69,6 +69,46 @@ def _band(R):
     return r
 
 
+def _entry(R, key="lead_over_cap"):
+    """채택 여부와 무관하게 그 지표의 항목을 찾는다."""
+    R = R or {}
+    return R.get("rules", {}).get(key) or R.get("not_rules", {}).get(key)
+
+
+def _layers(R, key="lead_over_cap"):
+    """계층 목록. 계층이 없는 지표는 항목 자신을 유일한 계층으로 본다."""
+    e = _entry(R, key)
+    if not e:
+        return []
+    return e.get("layers") or [e]
+
+
+def _layer_list(R, key="lead_over_cap"):
+    """호출하는 쪽에 보여줄 계층 요약. 번호는 1부터."""
+    return [{"layer": i, "label": x["label"], "median": x["median"],
+             "band": [x["lo"], x["hi"]],
+             "observed": [x.get("min", x["lo"]), x.get("max", x["hi"])],
+             "n": x["n"], "verdict": x["verdict"]}
+            for i, x in enumerate(_layers(R, key), 1)]
+
+
+def _pick(R, sel, key="lead_over_cap"):
+    """쓸 계층을 고른다. sel 이 없으면 대표 계층 — 예전과 같은 동작.
+
+    본문인지 실무 정보인지는 코퍼스가 모르는 정보다. 호출하는 쪽이 정한다.
+    """
+    ls = _layers(R, key)
+    if sel is None:
+        return _entry(R, key) if not ls else (R.get("rules", {}).get(key) or ls[0]), None
+    try:
+        i = int(sel)
+    except (TypeError, ValueError):
+        return None, f"layer 는 1~{len(ls)} 의 정수다: {sel!r}"
+    if not 1 <= i <= len(ls):
+        return None, f"layer 는 1~{len(ls)} 여야 한다. 받은 값 {i}"
+    return ls[i - 1], None
+
+
 # ── 도구 ─────────────────────────────────────────────────────────────────
 
 def measure_corpus(args):
@@ -105,23 +145,56 @@ def check_layout(args):
     R = _rules()
     if not R:
         return _need()
-    band = _band(R)
+    sel = args.get("layer")
+    forced, err = (_pick(R, sel) if sel is not None else (None, None))
+    if err:
+        return {"ok": False, "error": err, "layers": _layer_list(R)}
+    lyr = _layers(R)          # 아래 루프의 ls 는 「줄」이다. 이름을 겹치지 않게 둔다
     blocks = args.get("blocks", [])
     if not blocks:
         return {"ok": False, "error": "blocks 가 비어 있다"}
-    v = []
+    v, held = [], []
     for b in blocks:
         lead, h = _lead(b), b.get("cap_height")
         if not lead or not h:
             continue
-        if band:
+        if lyr:
             r = lead / h
-            if r < band["lo"] or r > band["hi"]:
+            # layer 를 지정하면 그 계층으로만 검사한다. 지정하지 않으면 계층 전체를
+            # 놓고 본다 — 채택된 계층에 들면 통과, 판정 보류인 계층에 들면 보류,
+            # 어느 계층에도 없으면 위반이다. 코퍼스가 아직 판정하지 못한 값을
+            # 위반이라고 단정하지 않는다.
+            cands = [forced] if forced else lyr
+            # 통과는 채택된 계층의 권장 범위(10~90%)로 본다 — 기존 판정 그대로.
+            # 보류는 판정 못 한 계층의 실측 전폭으로 본다. 「코퍼스에 그런 값이
+            # 있었는가」와 「권장 범위에 드는가」는 다른 질문이다.
+            ok_fit = [x for x in cands
+                      if x["verdict"] == "제약" and x["lo"] <= r <= x["hi"]]
+            held_fit = [x for x in cands
+                        if x["verdict"] != "제약"
+                        and x.get("min", x["lo"]) <= r <= x.get("max", x["hi"])]
+            band = forced or (R.get("rules", {}).get("lead_over_cap") or lyr[0])
+            if ok_fit:
+                pass
+            elif held_fit:
+                x = held_fit[0]
+                held.append({"block": b.get("id"), "value": round(r, 2),
+                             "layer": lyr.index(x) + 1,
+                             "layer_observed": [x.get("min", x["lo"]), x.get("max", x["hi"])],
+                             "layer_band": [x["lo"], x["hi"]],
+                             "message": (f'행간이 활자 높이의 {r:.2f}배. 코퍼스에 '
+                                         f'{x.get("min", x["lo"])}~{x.get("max", x["hi"])}배 계층이 '
+                                         f'있으나 표본 {x["n"]} 개로 판정 보류다 ({x["verdict"]}). '
+                                         f'위반으로 보지 않는다')})
+            else:
                 v.append({"rule": band["label"], "block": b.get("id"), "value": round(r, 2),
                           "expected": f'{band["lo"]}~{band["hi"]}',
                           "fix": round(h * band["median"], 1),
-                          "message": (f'행간이 활자 높이의 {r:.2f}배. 코퍼스 10~90% 는 '
-                                      f'{band["lo"]}~{band["hi"]}배 (n={band["n"]}, CV {band["cv"]})')})
+                          "message": (f'행간이 활자 높이의 {r:.2f}배. 코퍼스의 어느 계층에도 '
+                                      f'없다. 채택된 계층은 {band["lo"]}~{band["hi"]}배 '
+                                      f'(n={band["n"]}, CV {band["cv"]})')})
+        else:
+            continue
         if lead - h < GAP_MIN_FALLBACK:
             v.append({"rule": "줄 겹침", "block": b.get("id"), "value": round(lead - h, 1),
                       "expected": f"{GAP_MIN_FALLBACK}px 이상",
@@ -134,18 +207,27 @@ def check_layout(args):
                           "value": f"{min(g)}~{max(g)}", "expected": "편차 1px 이내",
                           "message": "한 블록 안에서 행간이 흔들린다"})
     return {"ok": not v, "n_blocks": len(blocks), "n_violations": len(v), "violations": v,
+            "n_held": len(held), "held": held,
+            "layer": (int(sel) if sel is not None else None),
+            "layers": _layer_list(R),
             "checked_against": {k: {"n": x["n"], "cv": x["cv"]} for k, x in R["rules"].items()},
             "not_checked": [x["label"] for x in R["not_rules"].values()],
-            "note": "코퍼스에서 「자유」로 판정된 항목은 검사하지 않는다."}
+            "note": ("코퍼스에서 「자유」로 판정된 항목은 검사하지 않는다. "
+                     "layer 를 주면 그 계층으로만 검사한다. 주지 않으면 계층 전체를 놓고 보며, "
+                     "판정 보류인 계층에 드는 값은 held 로 따로 보고하고 위반으로 세지 않는다.")}
 
 
 def place_text(args):
     R = _rules()
     if not R:
         return _need()
-    band = _band(R)
+    sel = args.get("layer")
+    band, err = _pick(R, sel)
+    if err:
+        return {"ok": False, "error": err, "layers": _layer_list(R)}
     if not band:
-        return {"ok": False, "error": "행간 규칙이 코퍼스에서 채택되지 않았다. 표본을 늘려라"}
+        return {"ok": False, "error": "행간 규칙이 코퍼스에서 채택되지 않았다. 표본을 늘려라",
+                "layers": _layer_list(R)}
     blocks = args.get("blocks", [])
     if not blocks:
         return {"ok": False, "error": "blocks 가 비어 있다"}
@@ -174,10 +256,18 @@ def place_text(args):
                     "in_range": band["lo"] <= r <= band["hi"]})
         if not (band["lo"] <= r <= band["hi"]):
             notes.append(f'{b.get("id")}: 격자 정수배로 맞추니 비가 {r:.2f} 로 코퍼스 범위 밖')
+    if band["verdict"] != "제약":
+        notes.append(f'고른 계층은 표본 {band["n"]} 개로 판정 보류다 ({band["verdict"]}). '
+                     f'배치는 했으나 규칙이라 부를 근거는 아직 없다')
     return {"ok": True, "grid_lead": grid, "blocks": out, "notes": notes,
-            "based_on": {"n": band["n"], "median": band["median"], "cv": band["cv"]},
+            "based_on": {"n": band["n"], "median": band["median"], "cv": band["cv"],
+                         "verdict": band["verdict"],
+                         "layer": (int(sel) if sel is not None else None)},
+            "layers": _layer_list(R),
             "not_computed": ["x 좌표", "판면 마진", "이미지 영역과의 관계"],
-            "note": "모든 블록의 행간을 하나의 격자의 정수배로 맞춘다."}
+            "note": ("모든 블록의 행간을 하나의 격자의 정수배로 맞춘다. "
+                     "본문인지 실무 정보인지는 코퍼스가 모르므로 layer 로 골라라. "
+                     "고르지 않으면 대표 계층을 쓴다.")}
 
 
 TOOLS = [
@@ -197,6 +287,8 @@ TOOLS = [
                      "모든 블록이 하나의 격자를 정수배로 공유하게 만든다. "
                      "가로 위치와 판면 구성은 계산하지 않는다."),
      "inputSchema": {"type": "object", "properties": {
+         "layer": {"type": "integer", "description": ("쓸 행간 계층 번호(1부터). show_rules 의 layers 참조. "
+                                                      "생략하면 대표 계층. 코퍼스는 본문인지 실무 정보인지 모른다")},
          "grid_lead": {"type": "number", "description": "격자 간격(px). 생략하면 가장 작은 활자에서 정한다"},
          "blocks": {"type": "array", "items": {"type": "object", "properties": {
              "id": {"type": "string"}, "x": {"type": "number"},
@@ -205,8 +297,12 @@ TOOLS = [
              "required": ["cap_height", "n_lines"]}}},
          "required": ["blocks"]}},
     {"name": "check_layout",
-     "description": "배치안을 캐시의 규칙과 대조해 위반 목록을 돌려준다.",
+     "description": ("배치안을 캐시의 규칙과 대조해 위반 목록을 돌려준다. "
+                     "행간 규칙이 여러 계층이면 계층 전체를 놓고 보고, 판정 보류인 계층에 드는 값은 "
+                     "위반이 아니라 「보류」로 따로 보고한다."),
      "inputSchema": {"type": "object", "properties": {
+         "layer": {"type": "integer", "description": ("이 계층으로만 검사한다(1부터). "
+                                                      "생략하면 계층 전체를 놓고 본다")},
          "blocks": {"type": "array", "items": {"type": "object", "properties": {
              "id": {"type": "string"}, "x": {"type": "number"},
              "cap_height": {"type": "number"},

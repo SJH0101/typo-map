@@ -158,6 +158,11 @@ def _judge(a, label, unit):
              median=round(float(np.median(a)), 3),
              lo=round(float(np.percentile(a, 10)), 3),
              hi=round(float(np.percentile(a, 90)), 3),
+             # 실측 전폭. lo~hi 는 권장 범위이고 이쪽은 「코퍼스에 그런 값이
+             # 있었는가」를 묻는 데 쓴다. 표본이 적으면 10~90% 밴드가 자기
+             # 계층의 최대값조차 밀어내므로 둘을 구분해 둔다.
+             min=round(float(a.min()), 3),
+             max=round(float(a.max()), 3),
              cv=round(cv, 3))
     d['verdict'] = ('제약' if len(a) >= N_MIN and cv <= CV_MAX
                     else ('자유' if len(a) >= N_MIN else '표본 부족'))
