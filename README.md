@@ -30,6 +30,22 @@ cd typo-map && git pull
 측정 캐시는 `~/.typo-mcp/corpus.json` 에 저장되어 저장소 밖에 있으므로
 `git pull` 로 덮이지 않는다. 위치는 `TYPO_MCP_CACHE` 환경변수로 바꿀 수 있다.
 
+## 회귀 검사
+
+측정을 고칠 때 「표본이 늘었다」만 보면 안 된다. 늘면서 이미 맞던 것이 깨질 수 있다.
+`snapshot.py` 는 지금까지 고친 문제마다 대표 포스터를 하나씩 두고 측정값을 굳혀 둔다.
+
+```bash
+TYPO_MCP_CORPUS=/포스터/폴더 python snapshot.py           # 검사
+TYPO_MCP_CORPUS=/포스터/폴더 python snapshot.py --bless   # 현재값으로 갱신
+```
+
+측정은 결정적이라 같은 입력에 같은 값이 나온다. 그래서 정확히 비교한다.
+값이 달라졌다고 곧 틀린 것은 아니다. 무엇이 어떻게 달라졌는지, 그 포스터가
+무엇을 지키려고 들어 있는지 함께 보여주므로, 눈으로 확인한 뒤 `--bless` 로 다시 굳힌다.
+
+`GPU` 로 재려면 `TYPO_MCP_GPU=1` 을 준다. M 계열에서는 빠르지 않다 (mps 1.9 vs cpu 1.7s/장).
+
 ## 도구
 
 ### `measure_corpus`

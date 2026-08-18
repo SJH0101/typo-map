@@ -1,0 +1,576 @@
+{
+ "Gewerbemuseum_Basel/1938_Siedlungsbau in der Schweiz 1938-47 - Ausstellung im Gewerbe.jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     0,
+     602,
+     427,
+     623
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 15.0
+   },
+   {
+    "box": [
+     0,
+     608,
+     432,
+     623
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 15.0
+   },
+   {
+    "box": [
+     439,
+     608,
+     468,
+     630
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 22.0
+   },
+   {
+    "box": [
+     0,
+     664,
+     201,
+     758
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 94.0
+   },
+   {
+    "box": [
+     207,
+     664,
+     387,
+     756
+    ],
+    "lead": 28,
+    "n": 4,
+    "xh": 5.0
+   }
+  ],
+  "n_blocks": 5
+ },
+ "Gewerbemuseum_Basel/1952_Die Gute Form 1952 - Gewerbemuseum Basel - 10.April - 10.Mai.jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     19,
+     160,
+     114,
+     539
+    ],
+    "lead": null,
+    "n": 4,
+    "xh": 82.0
+   },
+   {
+    "box": [
+     253,
+     167,
+     547,
+     537
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 368.0
+   },
+   {
+    "box": [
+     110,
+     630,
+     224,
+     710
+    ],
+    "lead": 17,
+    "n": 5,
+    "xh": 12.0
+   },
+   {
+    "box": [
+     256,
+     630,
+     398,
+     710
+    ],
+    "lead": 17,
+    "n": 5,
+    "xh": 9.0
+   },
+   {
+    "box": [
+     256,
+     714,
+     291,
+     727
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 13.0
+   },
+   {
+    "box": [
+     256,
+     731,
+     374,
+     760
+    ],
+    "lead": null,
+    "n": 2,
+    "xh": 9.0
+   }
+  ],
+  "n_blocks": 6
+ },
+ "Gewerbemuseum_Basel/1969_Spitzen - Gewerbemuseum Basel.jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     143,
+     190,
+     439,
+     223
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 33.0
+   },
+   {
+    "box": [
+     132,
+     253,
+     439,
+     295
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 42.0
+   },
+   {
+    "box": [
+     132,
+     322,
+     439,
+     350
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 28.0
+   },
+   {
+    "box": [
+     132,
+     356,
+     147,
+     368
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 12.0
+   },
+   {
+    "box": [
+     132,
+     376,
+     145,
+     385
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 9.0
+   },
+   {
+    "box": [
+     132,
+     391,
+     439,
+     466
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 70.0
+   },
+   {
+    "box": [
+     144,
+     404,
+     327,
+     411
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 5.0
+   },
+   {
+    "box": [
+     144,
+     433,
+     439,
+     557
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 120.0
+   },
+   {
+    "box": [
+     132,
+     467,
+     439,
+     557
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 31.0
+   }
+  ],
+  "n_blocks": 9
+ },
+ "Gewerbemuseum_Basel/1975_Gewerbemuseum Basel - Ausstellung Plan & Bau - 50 Jahre Arch.jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     24,
+     318,
+     539,
+     544
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 223.0
+   },
+   {
+    "box": [
+     216,
+     420,
+     509,
+     544
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 114.0
+   },
+   {
+    "box": [
+     24,
+     553,
+     169,
+     690
+    ],
+    "lead": 18,
+    "n": 8,
+    "xh": 10.0
+   },
+   {
+    "box": [
+     222,
+     765,
+     347,
+     778
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 13.0
+   },
+   {
+    "box": [
+     346,
+     775,
+     349,
+     779
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 4.0
+   }
+  ],
+  "n_blocks": 5
+ },
+ "Gewerbemuseum_etc/1951_Form & Farbe - Gewerbemuseum Winterthur - 22.6. - 15.7.jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     109,
+     13,
+     339,
+     144
+    ],
+    "lead": 40,
+    "n": 4,
+    "xh": 8.5
+   },
+   {
+    "box": [
+     109,
+     173,
+     302,
+     184
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 11.0
+   },
+   {
+    "box": [
+     0,
+     203,
+     563,
+     566
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 324.0
+   }
+  ],
+  "n_blocks": 3
+ },
+ "Konzert/1986_Basler Bach-Chor - Stadtcasino Basel - Stabat Mater.jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     66,
+     65,
+     511,
+     529
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 464.0
+   },
+   {
+    "box": [
+     29,
+     415,
+     236,
+     448
+    ],
+    "lead": null,
+    "n": 2,
+    "xh": 9.0
+   },
+   {
+    "box": [
+     29,
+     454,
+     235,
+     467
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 13.0
+   },
+   {
+    "box": [
+     29,
+     477,
+     71,
+     524
+    ],
+    "lead": 19,
+    "n": 3,
+    "xh": 8.0
+   },
+   {
+    "box": [
+     30,
+     549,
+     152,
+     563
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 9.0
+   },
+   {
+    "box": [
+     29,
+     586,
+     281,
+     612
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 24.0
+   },
+   {
+    "box": [
+     69,
+     587,
+     262,
+     611
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 22.0
+   },
+   {
+    "box": [
+     30,
+     616,
+     72,
+     629
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 9.0
+   },
+   {
+    "box": [
+     27,
+     653,
+     271,
+     781
+    ],
+    "lead": 19,
+    "n": 7,
+    "xh": 8.0
+   }
+  ],
+  "n_blocks": 9
+ },
+ "Kunsthalle_Basel/1966_Wilfredo Lam Malerei - Vic Gentils Bildhauerei - Kunsthalle .jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     181,
+     444,
+     378,
+     543
+    ],
+    "lead": 18,
+    "n": 6,
+    "xh": 8.5
+   },
+   {
+    "box": [
+     182,
+     748,
+     366,
+     767
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 14.0
+   }
+  ],
+  "n_blocks": 2
+ },
+ "Sonstige/1954_Die gute Form - SWB-Sonderschau - Veranstaltet vom Schweizer.jpg": {
+  "angle": 0.0,
+  "blocks": [
+   {
+    "box": [
+     11,
+     148,
+     563,
+     467
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 123.0
+   },
+   {
+    "box": [
+     87,
+     665,
+     155,
+     696
+    ],
+    "lead": 12,
+    "n": 3,
+    "xh": 4.0
+   },
+   {
+    "box": [
+     79,
+     702,
+     557,
+     708
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 4.0
+   },
+   {
+    "box": [
+     119,
+     716,
+     154,
+     720
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 4.0
+   },
+   {
+    "box": [
+     85,
+     729,
+     557,
+     782
+    ],
+    "lead": 12,
+    "n": 5,
+    "xh": 4.0
+   }
+  ],
+  "n_blocks": 5
+ },
+ "_rules": {
+  "align_ratio": {
+   "cv": 0.355,
+   "hi": 0.8,
+   "lo": 0.289,
+   "max": 0.8,
+   "median": 0.667,
+   "min": 0.222,
+   "n": 7,
+   "verdict": "표본 부족"
+  },
+  "asc_over_xh": {
+   "cv": 0.146,
+   "hi": 1.625,
+   "lo": 1.081,
+   "max": 1.75,
+   "median": 1.4,
+   "min": 1.005,
+   "n": 59,
+   "verdict": "제약"
+  },
+  "gap_px": {
+   "cv": 0.885,
+   "hi": 21.7,
+   "lo": 3.9,
+   "max": 28.0,
+   "median": 6.0,
+   "min": 3.0,
+   "n": 10,
+   "verdict": "표본 부족"
+  },
+  "lead_over_cap": {
+   "cv": 0.463,
+   "hi": 3.4,
+   "lo": 1.298,
+   "max": 4.0,
+   "median": 1.481,
+   "min": 1.214,
+   "n": 10,
+   "verdict": "표본 부족"
+  }
+ }
+}
