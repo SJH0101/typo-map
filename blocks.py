@@ -5,7 +5,7 @@ from scipy import ndimage
 EPS        = 2      # 측정 오차 (안티에일리어싱 2~3px). 절대 하한으로 쓴다.
 GAP_RATIO  = 1.5    # 행간이 중앙값의 1.5배 넘으면 자름
 SIZE_RATIO = 0.25   # 활자 높이가 25% 넘게 변하면 자름
-XSTART_EPS = EPS    # 좌측 끝이 오차 이상 움직이면 자름
+XSTART_EPS = EPS    # 정렬 축이 오차 이상 움직이면 자름
 
 def polarity(g):
     """어두운 바탕에 밝은 활자면 뒤집어 돌려준다.
@@ -241,6 +241,21 @@ def fit_grid(bases, ink, s0, s1):
     return fitted, lead, resid
 
 
+def shares_axis(a, b, eps=XSTART_EPS):
+    """두 줄이 같은 정렬 축을 공유하는가.
+
+    정렬 방식을 코드가 정하지 않는다. 왼쪽·오른쪽·가운데 중 어느 축이든
+    하나만 맞으면 같은 블록으로 본다. 셋 다 어긋날 때만 자른다.
+
+    왼쪽 축만 보던 때는 왼쪽 정렬 격자를 전제하는 것이었다. 그 전제는
+    조판 방식을 코드에 박는 것이고, 오른쪽 정렬이나 가운데 정렬로 짠
+    블록은 줄마다 좌측 끝이 수십 px 씩 움직이므로 전부 낱줄로 흩어졌다.
+    """
+    return (abs(a['xs'] - b['xs']) <= eps or                       # 왼쪽
+            abs(a['xe'] - b['xe']) <= eps or                       # 오른쪽
+            abs((a['xs'] + a['xe']) - (b['xs'] + b['xe'])) <= 2 * eps)   # 가운데
+
+
 def group(ls):
     if not ls: return []
     if len(ls) < 2: return [ls]
@@ -252,7 +267,7 @@ def group(ls):
         cut  = (gp > GAP_RATIO * med
                 or (abs(a['xh']-b['xh']) > EPS                      # 절대차가 오차를 넘고
                     and abs(a['xh']-b['xh']) / min(a['xh'], b['xh']) > SIZE_RATIO)
-                or abs(a['xs']-b['xs']) > XSTART_EPS)
+                or not shares_axis(a, b))
         (blocks.append([b]) if cut else blocks[-1].append(b))
     return blocks
 
