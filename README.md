@@ -8,8 +8,8 @@
 ## 설치
 
 ```bash
-git clone https://github.com/사용자명/typo-mcp.git
-cd typo-mcp
+git clone https://github.com/SJH0101/typo-map.git
+cd typo-map
 pip install -r requirements.txt
 claude mcp add typo -- python "$(pwd)/server.py"
 ```
@@ -17,13 +17,13 @@ claude mcp add typo -- python "$(pwd)/server.py"
 Claude Desktop 이면 설정 파일에 아래를 넣는다.
 
 ```json
-{"mcpServers": {"typo": {"command": "python", "args": ["/절대경로/typo-mcp/server.py"]}}}
+{"mcpServers": {"typo": {"command": "python", "args": ["/절대경로/typo-map/server.py"]}}}
 ```
 
 ## 업데이트
 
 ```bash
-cd typo-mcp && git pull
+cd typo-map && git pull
 ```
 
 경로가 그대로이므로 재등록할 필요가 없다.
