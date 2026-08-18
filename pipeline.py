@@ -6,6 +6,15 @@ import blocks, rotate
 
 PAD = 6
 FLAT = 1.0          # 이보다 작은 각은 회전하지 않는다
+MAX_SKEW = 10.0     # 이보다 큰 각은 스캔 기울기가 아니다. 회전하지 않는다.
+                    # 회전 보정의 목적은 스캔 기울기를 펴는 것이지 디자인을
+                    # 따라가는 것이 아니다. 호프만 코어에서 10° 이상으로
+                    # 판정된 30장 중 16장을 눈으로 확인하니 15장이 똑바로
+                    # 서 있었다. 전부 큰 사진·추상 도형·대각선 색면이 화면을
+                    # 지배하는 포스터로, 뾰족함 탐색이 활자가 아니라 그
+                    # 그래픽의 모서리 방향을 잡는다. 진짜로 기울어진 조판은
+                    # 1장뿐이었고, 그런 포스터는 베이스라인 격자 자체가
+                    # 없으므로 측정 대상에서 빠지는 편이 맞다.
 
 
 def _boxes(img, reader):
@@ -46,6 +55,8 @@ def estimate_angle(gray, quads, reader, top=8):
                                 detail=1, paragraph=False)
             if r: s += max(x[2] * len(x[1]) for x in r)
         if s > score: best, score = cand, s
+    if abs(best) > MAX_SKEW:   # 디자인 대각선으로 본다
+        return 0.0, float(A.std())
     return float(best), float(A.std())
 
 
