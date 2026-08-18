@@ -224,6 +224,14 @@ def fit_grid(bases, ink, s0, s1):
        줄 하나가 글자 모양 때문에 1px 흔들려도 나머지가 위치를 잡아준다."""
     if len(bases) < 3:
         return bases, None, 0.0
+    # 창을 잉크 배열 안으로 가둔다. apply_grid 는 첫 베이스라인에서 20px 위를
+    # 창의 시작으로 잡는데, 블록이 단 상단에 가까우면 음수가 된다. numpy 는
+    # 음수 시작을 뒤에서부터로 해석하므로 ink[-3:59] 가 빈 배열이 되어
+    # np.correlate 가 죽었다. 코어 108장 중 2장이 이 때문에 빠져 있었다.
+    s0 = max(0, int(s0))
+    s1 = min(len(ink), int(s1))
+    if s1 - s0 < 3:
+        return bases, None, 0.0
     r = ink[s0:s1] - ink[s0:s1].mean()
     ac = np.correlate(r, r, 'full')[len(r)-1:]
     if ac[0] <= 0: return bases, None, 0.0
@@ -317,8 +325,16 @@ def apply_grid(ls, ink):
     return ls, lead, resid
 
 
-def run(path, region):
-    g = np.asarray(Image.open(path).convert('L')).astype(float)[region[1]:region[3], region[0]:region[2]]
+def run(src, region):
+    """src 는 파일 경로 또는 회색조 배열. 배열을 받으면 디스크를 거치지 않는다.
+
+    예전에는 호출하는 쪽이 고정 경로 /tmp/_work.png 에 저장해 넘겼다. 측정을
+    두 개 동시에 돌리면 서로의 파일을 덮어써서 엉뚱한 이미지를 재고, 조용히
+    틀린 값이 나온다. 포스터마다 PNG 를 인코딩·디코딩하는 값도 없다.
+    """
+    g = (src.astype(float) if isinstance(src, np.ndarray)
+         else np.asarray(Image.open(src).convert('L')).astype(float))
+    g = g[region[1]:region[3], region[0]:region[2]]
     g = polarity(g)           # 밝은 활자 / 어두운 배경을 여기서 정규화한다
     th = threshold(g)
     (tx0, ty0, tx1, ty1), _ = trim(g, th)

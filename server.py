@@ -124,14 +124,15 @@ def measure_corpus(args):
         paths = paths[:int(limit)]
     if not paths:
         return {"ok": False, "error": "이미지가 없다"}
-    raw = rules.collect(paths)
+    errors = []
+    raw = rules.collect(paths, errors=errors)
     if not raw:
-        return {"ok": False, "error": "측정에 성공한 포스터가 없다"}
+        return {"ok": False, "error": "측정에 성공한 포스터가 없다", "failed": errors}
     r = rules.derive(raw)
     rules.save(CACHE, raw, r)
     return {"ok": True, "cache": CACHE, "n_found": len(paths), **r,
-            "note": ("측정 실패한 포스터는 조용히 제외된다. n_posters 와 n_found 가 크게 다르면 "
-                     "회전·색반전 등으로 측정이 깨진 것이다.")}
+            "n_failed": len(errors), "failed": errors,
+            "note": ("실패한 포스터는 failed 에 이유와 함께 나온다. 조용히 빠지지 않는다.")}
 
 
 def show_rules(args):

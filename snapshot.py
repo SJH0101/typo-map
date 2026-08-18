@@ -39,6 +39,10 @@ CASES = [
      '성긴 행간 계층, 행간/활자높이 4.00 (layers)'),
     ('Gewerbemuseum_Basel/1975_Gewerbemuseum Basel - Ausstellung Plan & Bau - 50 Jahre Arch.jpg',
      '원래부터 잘 잡히던 8줄 블록. 개선이 이것을 깨지 않았는지 본다'),
+    ('Konzert/1986_J. Brahms - Ein deutsches Requiem.jpg',
+     'fit_grid 의 음수 슬라이스로 측정이 죽던 포스터 (s0=-3)'),
+    ('Stadttheater_Basel/1961_Stadttheater Basel - Beginn der Spielzeit 1961-62.jpg',
+     'fit_grid 의 음수 슬라이스로 측정이 죽던 포스터 (s0=-7). 9줄·8줄 블록이 있다'),
 ]
 
 

@@ -26,8 +26,13 @@ LAYER_GAP = 10.0   # 이웃 값의 간격이 간격 중앙값의 이 배를 넘�
 GPU = os.environ.get('TYPO_MCP_GPU', '0') not in ('0', 'false', 'False')
 
 
-def collect(paths, reader=None, progress=None):
-    """포스터들을 측정해 원자료를 모은다."""
+def collect(paths, reader=None, progress=None, errors=None):
+    """포스터들을 측정해 원자료를 모은다.
+
+    errors 에 리스트를 주면 실패한 포스터와 이유를 담아 준다. 조용히 빠지게
+    두면 안 된다 — fit_grid 의 음수 슬라이스 버그가 108장 중 2장을 떨어뜨리고
+    있었는데, 예외가 삼켜져서 오래 드러나지 않았다.
+    """
     import easyocr
     import pipeline
     if reader is None:
@@ -38,6 +43,8 @@ def collect(paths, reader=None, progress=None):
         try:
             r = pipeline.measure(p, reader)
             if not r['ok']:
+                if errors is not None:
+                    errors.append(dict(file=n, reason=r.get('why', '측정 실패')))
                 continue
             raw[n] = dict(angle=r['angle'], blocks=[
                 dict(x1=int(b['x1']), y1=int(b['y1']), x2=int(b['x2']), y2=int(b['y2']),
@@ -46,8 +53,9 @@ def collect(paths, reader=None, progress=None):
                      bases=[int(l['base']) for l in b['lines']],
                      caps=[None if l['cap'] is None else int(l['cap']) for l in b['lines']],
                      xtops=[int(l['x_top']) for l in b['lines']]) for b in r['blocks']])
-        except Exception:
-            pass
+        except Exception as e:
+            if errors is not None:
+                errors.append(dict(file=n, reason=f'{type(e).__name__}: {e}'))
         if progress:
             progress(i, len(paths), n)
     return raw

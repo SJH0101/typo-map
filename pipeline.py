@@ -89,9 +89,7 @@ def measure(path, reader):
     region = _region(wq, nw, nh)
     if region is None: return dict(ok=False, why='영역 없음')
 
-    tmp = '/tmp/_work.png'
-    work.save(tmp)
-    th, res = blocks.run(tmp, region)
+    th, res = blocks.run(np.asarray(work.convert('L')).astype(float), region)
 
     for b in res:
         # 블록 박스는 회전 좌표계의 수평 사각형이므로, 원본으로 되돌리면
