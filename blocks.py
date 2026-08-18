@@ -76,12 +76,16 @@ def columns(g, th, min_gap=6):
         prev = e
     return out
 
+STRATA_RATIO = 3.0  # 성분 높이가 중앙값의 이 배를 넘으면 다른 크기 계층으로 본다.
+                    # 36장 스윕: 분리 없음 n=8, 2.5~12배 n=14~17 로 평평하다.
+                    # 값이 아니라 분리하느냐 마느냐가 결정적이다. 3.0 은 얕은 봉우리.
+
 INK_FRAC = 0.06     # 그 단 최대 잉크의 이 비율 이하는 얼룩으로 본다. 스윕 결과 0.02~0.10 평평, 0.20부터 줄 소실
 
 
-def lines(g, th, x0, x1, min_h=2, body_h=4):
+def lines(g, th, x0, x1, min_h=2, body_h=4, mask=None):
     """min_h 로 잘게 자른 뒤, 몸통 위의 작은 조각을 발음기호로 흡수한다"""
-    m = g[:, x0:x1] < th
+    m = (g[:, x0:x1] < th) if mask is None else mask
     ink = m.sum(axis=1).astype(float)
     # 절대량이 아니라 비율로 판정한다. 얼룩·테두리·안티에일리어싱은
     # 잉크량이 글자 몸통의 몇 %에 불과하므로 이 규칙 하나로 함께 걸러진다.
@@ -256,6 +260,33 @@ def shares_axis(a, b, eps=XSTART_EPS):
             abs((a['xs'] + a['xe']) - (b['xs'] + b['xe'])) <= 2 * eps)   # 가운데
 
 
+def scale_strata(m, ratio=None):
+    """잉크를 크기 계층으로 가른다.
+
+    행간은 크기 계층 안에서만 정의된다. 자기 키의 수십 배인 성분이 같은
+    가로 스캔에 섞이면, 그 성분의 잉크가 모든 행에 걸쳐 작은 활자의 줄
+    경계를 덮는다. 호프만은 활자로 그림을 그리므로 이 일이 자주 일어난다.
+    Bach-Chor 포스터에서는 x높이 464px 의 「B」 하나가 8px 활자 6줄을
+    통째로 삼켰다.
+
+    큰 글자를 배제하는 것이 아니다. 자기 계층에서 따로 측정될 뿐이고,
+    낱글자라면 잴 행간이 없을 뿐이다.
+    """
+    ratio = STRATA_RATIO if ratio is None else ratio   # 기본 인자로 두면 정의 시점에 굳는다
+    lab, n = ndimage.label(m)
+    if n == 0:
+        return [m]
+    hs = np.array([o[0].stop - o[0].start for o in ndimage.find_objects(lab)])
+    body = hs[hs >= 2]
+    if body.size == 0:
+        return [m]
+    big = np.where(hs > ratio * float(np.median(body)))[0] + 1
+    if big.size == 0:
+        return [m]
+    tall = np.isin(lab, big)
+    return [m & ~tall, tall]
+
+
 def group(ls):
     if not ls: return []
     if len(ls) < 2: return [ls]
@@ -295,8 +326,9 @@ def run(path, region):
     region = (region[0]+tx0, region[1]+ty0, region[0]+tx1, region[1]+ty1)
     res = []
     for cx0, cx1 in columns(g, th):
-        ink_col = (g[:, cx0:cx1] < th).sum(axis=1).astype(float)
-        for bl in group(lines(g, th, cx0, cx1)):
+      for sm in scale_strata(g[:, cx0:cx1] < th):
+        ink_col = sm.sum(axis=1).astype(float)
+        for bl in group(lines(g, th, cx0, cx1, mask=sm)):
             bl, lead, resid = apply_grid(bl, ink_col)
             x1, y1, x2, y2 = box(bl)
             res.append(dict(lead=lead, grid_resid=round(resid, 2),x1=x1+region[0], y1=y1+region[1], x2=x2+region[0], y2=y2+region[1],
