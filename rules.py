@@ -355,10 +355,16 @@ def _judge(a, label, unit):
 def derive(raw):
     """원자료에서 분포를 내고 규칙 채택 여부를 판정한다."""
     rules, free = {}, {}
+    n_all_posters = len(raw)
     for key, (fn, label, unit) in METRICS.items():
         a = np.array(fn(raw), dtype=float)
         if len(a) == 0:
             continue
+        # 측정값 개수(n) 와 그 값을 낸 포스터 수는 다르다. 행간처럼 한 장에서
+        # 여러 블록이 값을 내는 지표는 n 이 커도 소수의 포스터에서만 나올 수
+        # 있다 — 빽빽한 활자 포스터나 사진 포스터는 블록이 안 묶여 한 값도
+        # 내지 못한다. 규칙을 몇 장이 떠받치는지는 판단에 필요한 사실이다.
+        n_from = sum(1 for name, r in raw.items() if len(fn({name: r})) > 0)
         ls = layers(a)
         # 판정할 만큼 큰 계층만 따로 보고하고, 나머지는 한 덩어리로 모은다.
         # 표본이 조밀할수록 간격 중앙값이 작아져 희소한 꼬리가 잘게 부서지는데,
@@ -387,6 +393,16 @@ def derive(raw):
             d['layers'] = parts
             d['note'] = (f'값이 계층 {len(parts)} 개로 갈렸다. 위 수치는 대표 계층의 것이고 '
                          f'전체 {len(a)} 개 중 {d["n"]} 개를 덮는다. 계층별 분포는 layers 에 있다.')
+        # n 은 대표 계층의 측정값 수다. 아래 둘은 지표 전체 기준이므로
+        # 계층이 갈린 지표에서는 n 보다 클 수 있다.
+        d.setdefault('n_all', int(len(a)))
+        d['n_posters'] = n_from
+        d['n_posters_all'] = n_all_posters
+        if n_from < n_all_posters:
+            d['coverage'] = (f'이 지표는 {n_all_posters} 장 중 {n_from} 장에서 나왔다 '
+                             f'({n_from / n_all_posters * 100:.0f}%). 나머지 '
+                             f'{n_all_posters - n_from} 장은 한 값도 내지 못했다 — '
+                             f'무작위 표본이 아니므로 규칙을 그 장들까지 확장해 읽으면 안 된다.')
         (rules if d['verdict'] == '제약' else free)[key] = d
     return dict(n_posters=len(raw), rules=rules, not_rules=free,
                 criteria=dict(cv_max=CV_MAX, n_min=N_MIN, layer_gap=LAYER_GAP))

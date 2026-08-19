@@ -345,13 +345,20 @@ def style_card(args):
             "range_10_90": [e["lo"], e["hi"]],
             "observed": [e.get("min"), e.get("max")],
             "n_layers": len(layers),
-            "sample": {"n": e.get("n_all", e["n"]), "of_posters": len(raw)},
+            # n 은 측정값 수, from_posters 는 그 값을 낸 포스터 수다. 행간처럼
+            # 한 장에서 여러 값이 나오는 지표는 둘이 크게 다르고, 값을 못 낸
+            # 포스터는 무작위가 아니라 사진·해상도 한계에 몰려 있다.
+            "sample": {"n": e.get("n_all", e["n"]),
+                       "from_posters": e.get("n_posters"),
+                       "of_posters": e.get("n_posters_all", len(raw))},
         }
         if len(layers) > 1:
             card["layers"] = [{"median": x["median"], "cv": x["cv"], "n": x["n"],
                                "range_10_90": [x["lo"], x["hi"]],
                                "observed": [x.get("min"), x.get("max")],
                                "verdict": x["verdict"]} for x in layers]
+        if e.get("coverage"):
+            card["sample"]["note"] = e["coverage"]
         if key in rules.EXCLUDES:
             card["sample"]["excluded"] = n_rot
             card["sample"]["exclusion_reason"] = rules.EXCLUDES[key]
