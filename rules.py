@@ -372,6 +372,11 @@ def derive(raw):
             if rest:
                 r = _judge(rest, label, unit)
                 r['label'] = label + ' (나머지)'
+                # 잔여물은 규칙이 될 수 없다. 여러 작은 계층을 모은 것이라
+                # 하나의 무리가 아니고, CV 가 낮게 나오는 것은 우연이다.
+                # 표시하지 않으면 대표 계층 자리를 차지해 검사기가 잔여물의
+                # 범위를 규칙으로 들이댄다 (브로크만 상 마진에서 실제로 그랬다).
+                r['verdict'] = '혼합'
                 parts.append(r)
             parts.sort(key=lambda p: p['median'])
             # 채택된 계층 중 표본이 가장 많은 것을 대표로 둔다. 대표가 없으면

@@ -142,6 +142,66 @@ def show_rules(args):
     return {"ok": True, "cache": CACHE, **R}
 
 
+def _candidate(args):
+    """검사할 배치안에서 지표 값을 뽑는다.
+
+    코퍼스를 잰 것과 같은 함수로 재야 비교가 성립한다. 이미지를 주면
+    color_features 를 그대로 태우고, 블록만 주면 기하 지표만 낸다.
+    """
+    out, notes = {}, []
+    canvas = args.get("canvas") or {}
+    W, H = canvas.get("w"), canvas.get("h")
+    blocks = args.get("blocks", [])
+
+    caps = [b["cap_height"] for b in blocks if b.get("cap_height")]
+    if len(caps) >= 2:
+        out["cap_range"] = max(caps) / min(caps)
+    out["n_blocks"] = len(blocks)
+
+    xs = [b["x"] for b in blocks if b.get("x") is not None]
+    x2 = [b["x"] + b["x_width"] for b in blocks
+          if b.get("x") is not None and b.get("x_width") is not None]
+    if W and xs:
+        out["margin_left"] = min(xs) / float(W)
+        if x2:
+            out["margin_right"] = (W - max(x2)) / float(W)
+        else:
+            notes.append("x_width 가 없어 우 마진을 계산하지 못했다")
+    tops = [min(l["baseline"] for l in b["lines"]) - (b.get("cap_height") or 0)
+            for b in blocks if b.get("lines")]
+    bots = [max(l["baseline"] for l in b["lines"]) for b in blocks if b.get("lines")]
+    if H and tops:
+        out["margin_top"] = min(tops) / float(H)
+        out["margin_bottom"] = (H - max(bots)) / float(H)
+    if W and H and blocks:
+        area = sum((b.get("x_width") or 0) *
+                   (max(l["baseline"] for l in b["lines"]) -
+                    min(l["baseline"] for l in b["lines"]) + (b.get("cap_height") or 0))
+                   for b in blocks if b.get("lines"))
+        if area:
+            out["text_area"] = area / float(W * H)
+
+    img = args.get("image")
+    if img:
+        p = os.path.expanduser(img)
+        if os.path.exists(p):
+            out.update(rules.color_features(p))
+        else:
+            notes.append(f"이미지를 찾을 수 없다: {img}")
+    return out, notes
+
+
+def _position(value, entry):
+    """후보 값이 코퍼스 분포의 어디에 있는가. 판정이 아니라 위치다."""
+    lo, hi = entry.get("lo"), entry.get("hi")
+    mn, mx = entry.get("min", lo), entry.get("max", hi)
+    where = ("10~90% 안" if lo is not None and lo <= value <= hi else
+             "실측 범위 안, 10~90% 밖" if mn is not None and mn <= value <= mx else
+             "코퍼스 실측 범위 밖")
+    return {"value": round(float(value), 4), "corpus_median": entry.get("median"),
+            "corpus_10_90": [lo, hi], "corpus_observed": [mn, mx], "where": where}
+
+
 def check_layout(args):
     R = _rules()
     if not R:
@@ -207,15 +267,44 @@ def check_layout(args):
                 v.append({"rule": "블록 내 행간 일정", "block": b.get("id"),
                           "value": f"{min(g)}~{max(g)}", "expected": "편차 1px 이내",
                           "message": "한 블록 안에서 행간이 흔들린다"})
+    # ── 나머지 지표 ────────────────────────────────────────────────
+    # 「제약」인 지표만 위반으로 센다. 「자유」와 「표본 부족」은 판정하지 않고
+    # 후보가 코퍼스 분포의 어디에 있는지만 알려준다. 코퍼스가 규칙이라 말하지
+    # 않은 것을 도구가 위반이라 부르면 안 된다.
+    cand, cnotes = _candidate(args)
+    reference, more_v = {}, []
+    for key, val in cand.items():
+        if key == "lead_over_cap":
+            continue
+        e = R["rules"].get(key) or R["not_rules"].get(key)
+        if not e:
+            continue
+        pos = _position(val, e)
+        pos["label"] = e["label"]
+        pos["corpus_verdict"] = e["verdict"]
+        if e["verdict"] == "제약":
+            pos["ok"] = pos["where"] == "10~90% 안"
+            if not pos["ok"]:
+                more_v.append({"rule": e["label"], "block": None,
+                               "value": pos["value"],
+                               "expected": f'{e["lo"]}~{e["hi"]}',
+                               "message": (f'{e["label"]} 가 {pos["value"]}. 코퍼스 10~90% 는 '
+                                           f'{e["lo"]}~{e["hi"]} (n={e["n"]}, CV {e["cv"]})')})
+        reference[key] = pos
+    v = v + more_v
+
     return {"ok": not v, "n_blocks": len(blocks), "n_violations": len(v), "violations": v,
             "n_held": len(held), "held": held,
+            "measured": reference,
+            "not_measured": cnotes,
             "layer": (int(sel) if sel is not None else None),
             "layers": _layer_list(R),
             "checked_against": {k: {"n": x["n"], "cv": x["cv"]} for k, x in R["rules"].items()},
             "not_checked": [x["label"] for x in R["not_rules"].values()],
-            "note": ("코퍼스에서 「자유」로 판정된 항목은 검사하지 않는다. "
-                     "layer 를 주면 그 계층으로만 검사한다. 주지 않으면 계층 전체를 놓고 보며, "
-                     "판정 보류인 계층에 드는 값은 held 로 따로 보고하고 위반으로 세지 않는다.")}
+            "note": ("violations 는 「제약」으로 채택된 지표에서만 나온다. 「자유」·「표본 부족」 "
+                     "지표는 measured 에 후보의 분포상 위치만 싣는다 — 코퍼스가 규칙이라 하지 "
+                     "않은 것을 위반이라 부르지 않는다. canvas 와 블록 x·x_width 를 주면 마진을, "
+                     "image 를 주면 색까지 코퍼스와 같은 방식으로 잰다.")}
 
 
 def style_card(args):
@@ -280,7 +369,8 @@ def style_card(args):
             "reading": {
                 "verdict": {"제약": "이 값을 지켜라",
                             "자유": "재봤으나 규칙이 아니다. range_10_90 에서 뽑아 쓸 수는 있다",
-                            "표본 부족": "판정하지 못했다. n 과 criteria.n_min 을 비교하라"},
+                            "표본 부족": "판정하지 못했다. n 과 criteria.n_min 을 비교하라",
+                            "혼합": "여러 작은 계층을 모은 잔여물이다. 하나의 무리가 아니므로 규칙으로 쓰지 마라"},
                 "n_layers": "1 보다 크면 단봉이 아니다. median 하나로 읽지 마라",
                 "reference": ("separating_pairs 가 0 이면 지금 참조로는 이 지표가 아무도 "
                               "구분하지 못한다는 뜻이다. 그것이 지표의 성질인지 참조가 "
@@ -384,8 +474,14 @@ TOOLS = [
      "inputSchema": {"type": "object", "properties": {
          "layer": {"type": "integer", "description": ("이 계층으로만 검사한다(1부터). "
                                                       "생략하면 계층 전체를 놓고 본다")},
+         "canvas": {"type": "object", "description": "판면 크기. 주면 마진과 글자 면적을 잰다",
+                    "properties": {"w": {"type": "number"}, "h": {"type": "number"}}},
+         "image": {"type": "string",
+                   "description": ("렌더된 포스터 이미지 경로. 주면 색을 코퍼스와 같은 "
+                                   "방식으로 잰다. 다르게 재면 비교가 성립하지 않는다")},
          "blocks": {"type": "array", "items": {"type": "object", "properties": {
              "id": {"type": "string"}, "x": {"type": "number"},
+             "x_width": {"type": "number", "description": "블록 가로 폭. 우 마진 계산에 필요"},
              "cap_height": {"type": "number"},
              "lines": {"type": "array", "items": {"type": "object", "properties": {
                  "baseline": {"type": "number"}}}}},
