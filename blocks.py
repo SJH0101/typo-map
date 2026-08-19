@@ -101,6 +101,8 @@ STRATA_RATIO = 3.0  # 성분 높이가 중앙값의 이 배를 넘으면 다른 
                     # 36장 스윕: 분리 없음 n=8, 2.5~12배 n=14~17 로 평평하다.
                     # 값이 아니라 분리하느냐 마느냐가 결정적이다. 3.0 은 얕은 봉우리.
 
+FRAG_WIDE = 0.40    # 이웃 글줄 폭의 이 비율 이하로 좁으면 글줄이 아니라 조각으로 본다
+
 INK_FRAC = 0.06     # 그 단 최대 잉크의 이 비율 이하는 얼룩으로 본다. 스윕 결과 0.02~0.10 평평, 0.20부터 줄 소실
 
 
@@ -129,17 +131,39 @@ def lines(g, th, x0, x1, min_h=2, body_h=4, mask=None):
         h = e - s
         out.append(dict(s=s, e=e, h=h, span=span(s, e), dia=False))
 
+    # 조각 문턱은 그 계층에서 가장 큰 글줄에 비례시킨다. 4px 고정이면 8px
+    # 본문에서는 맞지만 70px 제목에서는 움라우트 점(14px)이나 큰 글자의
+    # 아래 가장자리(3px)가 저마다 글줄로 선다 — 「Opernhaus Zürich」 한 판에서
+    # 부스러기 블록이 여덟 개 나왔다.
+    # 글줄인지 조각인지는 높이가 아니라 폭으로 갈린다. 같은 블록 안에서
+    # 글줄은 이웃 줄과 폭이 비슷하지만, 움라우트 점이나 큰 글자의 아래
+    # 가장자리는 이웃의 일부만 덮는다. Zürich 의 ü 점은 폭이 7%, 높이는
+    # 19% 다 — 높이만 보면 본문의 짧은 줄과 구분되지 않는다.
+    def wide(o):
+        return o['span'][1] - o['span'][0]
+
     res = []
     i = 0
     while i < len(out):
         cur = out[i]
-        if cur['h'] < body_h and i + 1 < len(out):
-            nxt = out[i + 1]
-            gap = nxt['s'] - cur['e']
-            inside = cur['span'][0] >= nxt['span'][0] - 1 and cur['span'][1] <= nxt['span'][1] + 1
-            if gap <= max(3, nxt['h'] * 0.6) and inside and cur['h'] <= nxt['h'] * 0.5:
-                nxt['s'] = cur['s']; nxt['mark'] = True
-                i += 1; continue
+        best, bd = None, None
+        for j in (i + 1, i - 1):
+            if not (0 <= j < len(out)): continue
+            nb = out[j]
+            if nb['h'] <= cur['h']: continue
+            gap = (nb['s'] - cur['e']) if j > i else (cur['s'] - nb['e'])
+            inside = (cur['span'][0] >= nb['span'][0] - 1
+                      and cur['span'][1] <= nb['span'][1] + 1)
+            small = (cur['h'] <= nb['h'] * 0.5
+                     and wide(cur) <= FRAG_WIDE * max(wide(nb), 1))
+            if inside and small and gap <= max(3, nb['h'] * 0.6) and (bd is None or gap < bd):
+                best, bd = j, gap
+        if best is not None:
+            nb = out[best]
+            nb['s'] = min(nb['s'], cur['s']); nb['e'] = max(nb['e'], cur['e'])
+            nb['h'] = nb['e'] - nb['s']
+            if best > i: nb['mark'] = True
+            i += 1; continue
         if cur['h'] >= body_h:
             res.append(cur)
         i += 1
@@ -501,6 +525,36 @@ def _panels(gb, thb):
             yield cx0, cx1, sm[:, cx0:cx1]
 
 
+SHADOW_PAD = 5      # 큰 블록의 상자를 이만큼 넓혀 그 안에 드는지 본다
+SHADOW_H = 0.30     # 큰 블록 높이의 이 비율 이하인 한 줄짜리 블록은 조각으로 본다
+
+
+def drop_shadows(res):
+    """큰 글줄 바로 아래에 남는 한 줄짜리 부스러기를 버린다.
+
+    획의 가장자리·잉크 번짐(2~4px)과 움라우트 점(14px)이 저마다 한 줄로
+    선다. 크기 계층이 이것들을 큰 글자와 다른 계층으로 갈라 놓으므로
+    lines() 의 조각 흡수가 닿지 않는다. 큰 블록의 상자 안에 통째로 들어가고
+    높이가 그 일부에 불과하면 그 글줄의 부분이지 따로 선 글줄이 아니다.
+    「Opernhaus Zürich」 한 판에서 이런 블록이 여섯 개 나왔다.
+    """
+    big = [b for b in res if b['n'] >= 1]
+    out = []
+    for b in res:
+        if b['n'] != 1:
+            out.append(b); continue
+        shadow = False
+        for o in big:
+            if o is b or o['h'] <= 0: continue
+            if b['h'] > SHADOW_H * o['h']: continue
+            if (o['x1'] - SHADOW_PAD <= b['x1'] and b['x2'] <= o['x2'] + SHADOW_PAD
+                    and o['y1'] - SHADOW_PAD <= b['y1'] and b['y2'] <= o['y2'] + SHADOW_PAD):
+                shadow = True; break
+        if not shadow:
+            out.append(b)
+    return out
+
+
 def run(src, region, seeds=None):
     """src 는 파일 경로 또는 회색조 배열. 배열을 받으면 디스크를 거치지 않는다.
 
@@ -545,6 +599,8 @@ def run(src, region, seeds=None):
                                         ink_top=l['ink_top']+oy, xh=l['xh'],
                                         xs=l['xs']+region[0], xe=l['xe']+region[0]) for l in bl],
                             base=[l['base']+oy for l in bl]))
+
+    res = drop_shadows(res)
 
     # ── 보강: 검출기가 글자를 짚었는데 줄을 못 찾은 자리 ──────────────
     if seeds:
