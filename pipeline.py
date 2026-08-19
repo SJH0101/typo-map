@@ -6,6 +6,15 @@ import blocks, rotate
 
 PAD = 6
 FLAT = 1.0          # 이보다 작은 각은 회전하지 않는다
+ANGLE_SD = 2.0      # 상자별 각도 추정이 이보다 흩어지면 회전하지 않는다.
+                    # 회전은 스캔 기울기를 펴려고 있는 것이고, 스캔이 기울면
+                    # 모든 상자가 같은 각도로 기운다. 추정치가 서로 다르다는
+                    # 것은 각 상자가 제 나름의 그래픽 모서리를 따라갔다는 뜻,
+                    # 즉 잴 기울기가 없다는 뜻이다. 오페라하우스 18점을 손으로
+                    # 찍은 베이스라인 361개와 대조하니 회전을 끄면 재현율이
+                    # 38%→45%, 정밀도 40%→52%, 오차 0.63→0.51px 로 전부
+                    # 좋아졌다. 이 코퍼스에서 회전이 도움이 된 경우는 없다.
+
 MAX_SKEW = 10.0     # 이보다 큰 각은 스캔 기울기가 아니다. 회전하지 않는다.
                     # 회전 보정의 목적은 스캔 기울기를 펴는 것이지 디자인을
                     # 따라가는 것이 아니다. 호프만 코어에서 10° 이상으로
@@ -55,9 +64,12 @@ def estimate_angle(gray, quads, reader, top=8):
                                 detail=1, paragraph=False)
             if r: s += max(x[2] * len(x[1]) for x in r)
         if s > score: best, score = cand, s
+    sd = float(A.std())
     if abs(best) > MAX_SKEW:   # 디자인 대각선으로 본다
-        return 0.0, float(A.std())
-    return float(best), float(A.std())
+        return 0.0, sd
+    if sd > ANGLE_SD:          # 상자마다 다른 각도 = 스캔 기울기가 아니다
+        return 0.0, sd
+    return float(best), sd
 
 
 def back(x, y, ang, ow, oh, nw, nh):
@@ -94,7 +106,8 @@ def measure(path, reader):
     region = _region(wq, nw, nh)
     if region is None: return dict(ok=False, why='영역 없음')
 
-    th, res, n_cols = blocks.run(np.asarray(work.convert('L')).astype(float), region)
+    seeds = [(q[:, 0].min(), q[:, 1].min(), q[:, 0].max(), q[:, 1].max()) for q in wq]
+    th, res, n_cols = blocks.run(np.asarray(work.convert('L')).astype(float), region, seeds=seeds)
 
     for b in res:
         # 블록 박스는 회전 좌표계의 수평 사각형이므로, 원본으로 되돌리면

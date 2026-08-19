@@ -367,7 +367,52 @@ def apply_grid(ls, ink):
     return ls, lead, resid
 
 
-def run(src, region):
+SEED_PAD = 4     # 씨앗 상자를 이만큼 넓혀 본다
+
+
+def seeded(g, seeds, covered):
+    """줄을 하나도 못 찾은 씨앗 상자 안에서만 국소 극성으로 다시 찾는다.
+
+    전역 극성은 한 판 안에서 극성이 뒤집히는 포스터를 못 읽는다. 그런데
+    그런 자리도 검출기는 「글자가 있다」 까지는 안다 — 읽지는 못해도(신뢰도
+    0.00) 위치는 짚는다. 그 좁은 띠 안에서 극성을 다시 정하면 읽힌다.
+
+    보강이지 교체가 아니다. 씨앗 방식만 쓰면 검출기의 회수율 한계 때문에
+    잘 되던 포스터에서 줄을 놓친다. 그래서 빈 자리에만 덧붙인다.
+
+    오페라하우스 18점을 손으로 찍은 베이스라인 361개와 대조한 결과
+    (회전 게이트를 함께 적용한 상태):
+
+        보강 끔   재현율 26%  정밀도 49%  본문을 통째로 놓친 포스터 5점
+        보강 켬   재현율 45%  정밀도 52%  통째로 놓친 포스터 0점
+    """
+    H, W = g.shape
+    out = []
+    for x0, y0, x1, y1 in seeds:
+        x0 = max(0, int(x0) - SEED_PAD); x1 = min(W, int(x1) + SEED_PAD)
+        y0 = max(0, int(y0) - SEED_PAD); y1 = min(H, int(y1) + SEED_PAD)
+        if x1 - x0 < 8 or y1 - y0 < 6:
+            continue
+        if covered[y0:y1, x0:x1].any():        # 이미 찾은 줄이 있으면 건너뛴다
+            continue
+        crop = polarity(g[y0:y1, x0:x1].copy())
+        try:
+            ls = lines(crop, threshold(crop), 0, crop.shape[1])
+        except Exception:
+            continue
+        for l in ls:
+            d = dict(l)
+            for k in ('base', 'top', 'x_top'):
+                d[k] = l[k] + y0
+            for k in ('cap', 'mark_top', 'desc', 'ink_top'):
+                if d.get(k) is not None:
+                    d[k] = l[k] + y0
+            d['xs'] = l['xs'] + x0; d['xe'] = l['xe'] + x0
+            out.append(d)
+    return out
+
+
+def run(src, region, seeds=None):
     """src 는 파일 경로 또는 회색조 배열. 배열을 받으면 디스크를 거치지 않는다.
 
     예전에는 호출하는 쪽이 고정 경로 /tmp/_work.png 에 저장해 넘겼다. 측정을
@@ -405,6 +450,42 @@ def run(src, region):
                                         ink_top=l['ink_top']+region[1], xh=l['xh'],
                                         xs=l['xs']+region[0], xe=l['xe']+region[0]) for l in bl],
                             base=[l['base']+region[1] for l in bl]))
+
+    # ── 보강: 검출기가 글자를 짚었는데 줄을 못 찾은 자리 ──────────────
+    if seeds:
+        covered = np.zeros(g.shape, bool)
+        for b in res:
+            y0 = max(0, b['y1'] - region[1]); y1 = max(0, b['y2'] - region[1])
+            x0 = max(0, b['x1'] - region[0]); x1 = max(0, b['x2'] - region[0])
+            covered[y0:y1, x0:x1] = True
+        loc = [(x0 - region[0], y0 - region[1], x1 - region[0], y1 - region[1])
+               for x0, y0, x1, y1 in seeds]
+        extra = seeded(g, loc, covered)
+        if extra:
+            for bl in group(sorted(extra, key=lambda d: d['base'])):
+                x0b = min(l['xs'] for l in bl); x1b = max(l['xe'] for l in bl)
+                ink_col = (g[:, max(0, x0b):max(1, x1b)] <
+                           threshold(polarity(g[:, max(0, x0b):max(1, x1b)].copy()))).sum(1).astype(float)
+                bl, lead, resid = apply_grid(bl, ink_col)
+                x1_, y1_, x2_, y2_ = box(bl)
+                res.append(dict(lead=lead, grid_resid=round(resid, 2),
+                                x1=x1_+region[0], y1=y1_+region[1],
+                                x2=x2_+region[0], y2=y2_+region[1],
+                                n=len(bl), seeded=True,
+                                h=round(float(np.median([l['base']-l['top'] for l in bl])), 1),
+                                xh=round(float(np.median([l['xh'] for l in bl])), 1),
+                                lines=[dict(top=l['top']+region[1], base=l['base']+region[1],
+                                            base_grid=(None if l.get('base_grid') is None
+                                                       else l['base_grid']+region[1]),
+                                            shift=l.get('shift', 0),
+                                            x_top=l['x_top']+region[1],
+                                            cap=None if l['cap'] is None else l['cap']+region[1],
+                                            mark_top=None if l['mark_top'] is None else l['mark_top']+region[1],
+                                            desc=None if l['desc'] is None else l['desc']+region[1],
+                                            cap_kind=l['cap_kind'], n_mark=l['n_mark'],
+                                            ink_top=l['ink_top']+region[1], xh=l['xh'],
+                                            xs=l['xs']+region[0], xe=l['xe']+region[0]) for l in bl],
+                                base=[l['base']+region[1] for l in bl]))
     return th, res, len(cols)
 
 if __name__ == '__main__':
