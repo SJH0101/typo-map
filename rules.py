@@ -26,6 +26,32 @@ LAYER_GAP = 10.0   # 이웃 값의 간격이 간격 중앙값의 이 배를 넘�
 GPU = os.environ.get('TYPO_MCP_GPU', '0') not in ('0', 'false', 'False')
 
 
+def color_features(path):
+    """포스터의 색 구성. 200px 로 줄여서 본다.
+
+    오늘까지 막힌 지표들은 전부 해상도가 원인이었다 — x높이가 10px 인
+    썸네일에서 1~2px 오차가 20% 가 된다. 색 통계는 그 한계를 받지 않는다.
+    축소해도 원본과 거의 같고, OCR·회전 보정·베이스라인 검출을 거치지 않는다.
+
+    주의: 이것은 포스터가 아니라 포스터의 스캔이다. 절대 색은 스캔 조건·
+    조명·종이 노화·JPEG 압축에 영향받는다. 코퍼스가 같은 출처일 때만
+    designer 간 비교에 쓸 수 있다.
+    """
+    from PIL import Image
+    im = Image.open(path).convert('RGB')
+    im.thumbnail((200, 200))
+    a = np.asarray(im).astype(float).reshape(-1, 3)
+    mx, mn = a.max(1), a.min(1)
+    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1), 0)
+    q = (a // 64).astype(int)                       # 축마다 4단계 = 64색
+    cnt = np.bincount(q[:, 0] * 16 + q[:, 1] * 4 + q[:, 2], minlength=64) / len(a)
+    return dict(ground_share=round(float(cnt.max()), 4),
+                n_colors=int((cnt > 0.02).sum()),
+                saturation=round(float(np.median(sat)), 4),
+                value=round(float(np.median(mx) / 255.0), 4),
+                gray_share=round(float((sat < 0.12).mean()), 4))
+
+
 def collect(paths, reader=None, progress=None, errors=None):
     """포스터들을 측정해 원자료를 모은다.
 
@@ -57,6 +83,7 @@ def collect(paths, reader=None, progress=None, errors=None):
             xs = [x for b in r['blocks'] for x, _ in b['corners']]
             ys = [y for b in r['blocks'] for _, y in b['corners']]
             raw[n] = dict(angle=r['angle'], size=list(r['orig_size']),
+                          color=color_features(p),
                           region=([min(xs), min(ys), max(xs), max(ys)] if xs else None),
                           n_columns=r.get('n_columns'),
                           blocks=[
@@ -174,6 +201,52 @@ def m_columns(raw):
     return [v['n_columns'] for v in raw.values() if v.get('n_columns')]
 
 
+def _color(raw, key):
+    return [v['color'][key] for v in raw.values() if v.get('color')]
+
+
+def m_ground_share(raw):  return _color(raw, 'ground_share')
+def m_n_colors(raw):      return _color(raw, 'n_colors')
+def m_saturation(raw):    return _color(raw, 'saturation')
+def m_value(raw):         return _color(raw, 'value')
+def m_gray_share(raw):    return _color(raw, 'gray_share')
+
+
+def m_cap_range(raw):
+    """한 포스터 안에서 가장 큰 활자와 가장 작은 활자의 비.
+
+    호프만은 판을 덮는 표제활자와 8px 본문을 같이 쓴다. 브로크만은 그
+    폭이 좁을 것으로 본다. 활자 크기 「비」 자체는 인접 비가 1.0~1.2 에
+    몰려 측정 오차가 지배하지만, 한 포스터의 최대·최소 폭은 그 문제를
+    받지 않는다 — 수십 배 차이를 재는 데 1px 오차는 무시할 만하다.
+    """
+    out = []
+    for v in raw.values():
+        xh = [b['xh'] for b in v['blocks'] if b['xh'] and b['xh'] > 0]
+        if len(xh) >= 2:
+            out.append(max(xh) / min(xh))
+    return out
+
+
+def m_text_area(raw):
+    """블록이 덮은 면적의 합 / 판면 면적. 블록이 겹치면 겹친 만큼 더해진다."""
+    out = []
+    for v in raw.values():
+        sz = v.get('size')
+        if not sz or abs(v.get('angle', 0)) >= 1:
+            continue
+        w, h = sz
+        if w <= 0 or h <= 0:
+            continue
+        area = sum(max(0, b['x2'] - b['x1']) * max(0, b['y2'] - b['y1']) for b in v['blocks'])
+        out.append(area / float(w * h))
+    return out
+
+
+def m_n_blocks(raw):
+    return [len(v['blocks']) for v in raw.values() if v['blocks']]
+
+
 METRICS = {
     'lead_over_cap': (m_lead_over_cap, '행간 / 활자높이', '블록'),
     'margin_left':   (m_margin_left,   '좌 마진 / 판면 폭', '포스터'),
@@ -181,6 +254,14 @@ METRICS = {
     'margin_top':    (m_margin_top,    '상 마진 / 판면 높이', '포스터'),
     'margin_bottom': (m_margin_bottom, '하 마진 / 판면 높이', '포스터'),
     'n_columns':     (m_columns,       '단 개수', '포스터'),
+    'cap_range':     (m_cap_range,     '활자 크기 폭 (최대/최소)', '포스터'),
+    'text_area':     (m_text_area,     '글자 면적 / 판면 면적', '포스터'),
+    'n_blocks':      (m_n_blocks,      '블록 개수', '포스터'),
+    'ground_share':  (m_ground_share,  '최빈색 점유율', '포스터'),
+    'n_colors':      (m_n_colors,      '색 수 (2% 이상 쓰인)', '포스터'),
+    'saturation':    (m_saturation,    '채도 중앙값', '포스터'),
+    'value':         (m_value,         '밝기 중앙값', '포스터'),
+    'gray_share':    (m_gray_share,    '무채색 화소 비율', '포스터'),
     'gap_px':        (m_gap,           '여백 = 행간 − 활자높이 (px)', '블록'),
     'asc_over_xh':   (m_asc_over_xh,   '어센더 / x높이', '줄'),
     'align_ratio':   (m_align_ratio,   '정렬선 수 / 블록 수', '포스터'),

@@ -77,7 +77,12 @@ def measure(path, reader):
 
     ang, spread = estimate_angle(gray, quads, reader)
     if abs(ang) >= FLAT:
-        fill = int(min(255, np.percentile(np.asarray(img.convert('L')), 95) + 30))
+        # 포스터 자신의 배경 밝기로 채운다. 밝은 색으로 채우면 어두운 배경
+        # 포스터에서 polarity() 가 뒤집을 때 그 채움이 잉크로 잡혀, 블록이
+        # 채움 영역까지 뻗고 원본 좌표로 되돌렸을 때 판면 밖으로 나간다.
+        # rotate.py 는 이미 median 을 쓰고 있었다. 회전된 55장 기준
+        # 판면을 벗어나는 포스터가 26장에서 17장으로 줄었다.
+        fill = int(np.median(np.asarray(img.convert('L'))))
         rimg = img.rotate(ang, resample=Image.BICUBIC, expand=True,
                           fillcolor=(fill, fill, fill))
         rquads = [q for q, t, c in _boxes(rimg, reader)]
