@@ -316,6 +316,41 @@ def scale_strata(m, ratio=None):
     return [m & ~tall, tall]
 
 
+COL_GAP_FRAC = 0.5   # 단을 가르는 최소 틈을 그 계층 활자 높이의 이 배로 잡는다.
+                     # 0 (=6px 고정) 이면 제목의 자간이 단 경계로 잡힌다.
+                     # 오페라하우스 18점 스윕: 0 에서 헛검출 34, 0.3~2.0 은
+                     # 25~28 로 평평하다. 0.5 가 베이스라인 재현율 최고(98%).
+
+
+def body_height(m):
+    """그 마스크의 성분 높이 중앙값. 활자 크기의 대용값."""
+    lab, n = ndimage.label(m)
+    if n == 0: return 0.0
+    hs = np.array([o[0].stop - o[0].start for o in ndimage.find_objects(lab)])
+    b = hs[hs >= 2]
+    return float(np.median(b)) if b.size else 0.0
+
+
+def columns_mask(m, min_gap=6):
+    """columns() 와 같은 논리를 이진 마스크 위에서 돌린다."""
+    col = m.sum(axis=0)
+    peak = np.percentile(col[col > 0], 90) if (col > 0).any() else 0.0
+    empty = col <= COL_FRAC * peak
+    gaps = []; s = None
+    for x, v in enumerate(empty):
+        if v and s is None: s = x
+        if (not v) and s is not None:
+            if x - s >= min_gap: gaps.append((s, x))
+            s = None
+    out = []; prev = 0
+    for s, e in gaps + [(m.shape[1], m.shape[1])]:
+        if s - prev > 10:
+            idx = np.where(col[prev:s] > 0)[0]
+            if len(idx): out.append((prev + idx[0], prev + idx[-1] + 1))
+        prev = e
+    return out
+
+
 def group(ls):
     if not ls: return []
     if len(ls) < 2: return [ls]
@@ -367,6 +402,45 @@ def apply_grid(ls, ink):
     return ls, lead, resid
 
 
+BAND_STEP = 48.0  # 바탕 밝기가 이만큼(0~255) 달라지면 다른 바탕으로 본다.
+                  # 낮추면 그러데이션이 계단으로 잡혀 띠가 잘게 부서진다.
+                  # 오페라하우스 18점 스윕: 10 에서 포스터당 띠 10.7 개,
+                  # 헛검출 119. 44~52 구간은 전부 같은 점수로 평평하다.
+BAND_MIN = 48     # 이보다 얇은 띠는 가르지 않는다. 계단 판정의 창 크기도
+                  # 겸한다. 45~49 평평하고 52 부터 제목 재현율이 86%→75%
+                  # 로 떨어진다 — 제목 띠(약 250px) 가 본문과 합쳐진다.
+
+
+def bands(g, step=None, min_h=None):
+    """바탕이 바뀌는 자리에서 가로 띠를 가른다.
+
+    한 판에 극성과 문턱을 하나씩만 쓰면, 회색 바탕의 흰 제목과 채도 높은
+    색면 위의 검은 본문 중 한쪽이 반드시 깨진다. 오페라하우스 18점에서
+    제목부를 따로 떼어 재면 아라벨라 가이드를 89% 맞히는데 통째로 재면
+    44% 였다 — 코드가 아니라 자르는 범위의 문제였다.
+
+    바탕은 행별 중앙값으로 본다. 활자는 행의 일부만 덮으므로 중앙값을
+    거의 움직이지 않고, 색면이 바뀔 때만 계단이 생긴다.
+    """
+    step = BAND_STEP if step is None else step
+    min_h = BAND_MIN if min_h is None else min_h
+    H = g.shape[0]
+    if H < 2 * min_h or g.shape[1] < 4:
+        return [(0, H)]
+    med = np.median(g, axis=1)
+    d = np.zeros(H)
+    for i in range(min_h, H - min_h):
+        d[i] = abs(np.median(med[i:i+min_h]) - np.median(med[i-min_h:i]))
+    cuts = []
+    for i in np.argsort(-d):
+        if d[i] < step: break
+        if i < min_h or i > H - min_h: continue
+        if any(abs(int(i) - c) < min_h for c in cuts): continue
+        cuts.append(int(i))
+    edges = [0] + sorted(cuts) + [H]
+    return list(zip(edges[:-1], edges[1:]))
+
+
 SEED_PAD = 4     # 씨앗 상자를 이만큼 넓혀 본다
 
 
@@ -412,6 +486,21 @@ def seeded(g, seeds, covered):
     return out
 
 
+def _panels(gb, thb):
+    """측정 단위(단 × 크기계층)를 낸다.
+
+    옛 순서는 단을 먼저 가르고 그 안에서 크기 계층을 갈랐다. 그러면 단을
+    가르는 최소 틈을 활자 크기에 맞출 수 없다 — 큰 제목과 작은 본문이 한
+    띠에 있으면 성분 높이의 중앙값이 작은 쪽으로 끌려간다. 6px 고정으로
+    두면 제목의 자간이 단 경계로 잡혀 「Wiener Blut」 한 줄이 글자별로
+    쪼개지고 15줄이 된다.
+    """
+    for sm in scale_strata(gb < thb):
+        gap = max(6, int(COL_GAP_FRAC * body_height(sm)))
+        for cx0, cx1 in columns_mask(sm, gap):
+            yield cx0, cx1, sm[:, cx0:cx1]
+
+
 def run(src, region, seeds=None):
     """src 는 파일 경로 또는 회색조 배열. 배열을 받으면 디스크를 거치지 않는다.
 
@@ -422,34 +511,40 @@ def run(src, region, seeds=None):
     g = (src.astype(float) if isinstance(src, np.ndarray)
          else np.asarray(Image.open(src).convert('L')).astype(float))
     g = g[region[1]:region[3], region[0]:region[2]]
-    g = polarity(g)           # 밝은 활자 / 어두운 배경을 여기서 정규화한다
-    th = threshold(g)
-    (tx0, ty0, tx1, ty1), _ = trim(g, th)
-    g = g[ty0:ty1, tx0:tx1]
+    gp = polarity(g)          # 밝은 활자 / 어두운 배경을 여기서 정규화한다
+    th = threshold(gp)
+    (tx0, ty0, tx1, ty1), _ = trim(gp, th)
+    g = g[ty0:ty1, tx0:tx1]   # 이후로는 원본 밝기를 들고 다닌다
     region = (region[0]+tx0, region[1]+ty0, region[0]+tx1, region[1]+ty1)
     res = []
-    cols = columns(g, th)
-    for cx0, cx1 in cols:
-      for sm in scale_strata(g[:, cx0:cx1] < th):
-        ink_col = sm.sum(axis=1).astype(float)
-        for bl in group(lines(g, th, cx0, cx1, mask=sm)):
+    n_cols = 0
+    for b0, b1 in bands(g):
+      gb = polarity(g[b0:b1])     # 띠마다 극성과 문턱을 다시 정한다
+      thb = threshold(gb)
+      # 판면의 단 수는 보고용 지표다. 측정 단위를 가르는 일은 _panels() 가
+      # 크기 계층 안에서 따로 한다.
+      n_cols = max(n_cols, len(columns(gb, thb)))
+      oy = region[1] + b0
+      for cx0, cx1, sm in _panels(gb, thb):
+          ink_col = sm.sum(axis=1).astype(float)
+          for bl in group(lines(gb, thb, cx0, cx1, mask=sm)):
             bl, lead, resid = apply_grid(bl, ink_col)
             x1, y1, x2, y2 = box(bl)
-            res.append(dict(lead=lead, grid_resid=round(resid, 2),x1=x1+region[0], y1=y1+region[1], x2=x2+region[0], y2=y2+region[1],
+            res.append(dict(lead=lead, grid_resid=round(resid, 2),x1=x1+region[0], y1=y1+oy, x2=x2+region[0], y2=y2+oy,
                             n=len(bl), h=round(float(np.median([l['base']-l['top'] for l in bl])), 1),
                             xh=round(float(np.median([l['xh'] for l in bl])), 1),
-                            lines=[dict(top=l['top']+region[1], base=l['base']+region[1],
+                            lines=[dict(top=l['top']+oy, base=l['base']+oy,
                                         base_grid=(None if l.get('base_grid') is None
-                                                   else l['base_grid']+region[1]),
+                                                   else l['base_grid']+oy),
                                         shift=l.get('shift', 0),
-                                        x_top=l['x_top']+region[1],
-                                        cap=None if l['cap'] is None else l['cap']+region[1],
-                                        mark_top=None if l['mark_top'] is None else l['mark_top']+region[1],
-                                        desc=None if l['desc'] is None else l['desc']+region[1],
+                                        x_top=l['x_top']+oy,
+                                        cap=None if l['cap'] is None else l['cap']+oy,
+                                        mark_top=None if l['mark_top'] is None else l['mark_top']+oy,
+                                        desc=None if l['desc'] is None else l['desc']+oy,
                                         cap_kind=l['cap_kind'], n_mark=l['n_mark'],
-                                        ink_top=l['ink_top']+region[1], xh=l['xh'],
+                                        ink_top=l['ink_top']+oy, xh=l['xh'],
                                         xs=l['xs']+region[0], xe=l['xe']+region[0]) for l in bl],
-                            base=[l['base']+region[1] for l in bl]))
+                            base=[l['base']+oy for l in bl]))
 
     # ── 보강: 검출기가 글자를 짚었는데 줄을 못 찾은 자리 ──────────────
     if seeds:
@@ -486,7 +581,7 @@ def run(src, region, seeds=None):
                                             ink_top=l['ink_top']+region[1], xh=l['xh'],
                                             xs=l['xs']+region[0], xe=l['xe']+region[0]) for l in bl],
                                 base=[l['base']+region[1] for l in bl]))
-    return th, res, len(cols)
+    return th, res, n_cols
 
 if __name__ == '__main__':
     th, res, n_cols = run('/mnt/user-data/uploads/1958_Musica_viva_-_Dienstag__den_7__Januar_1958_-_Schweizerische_.jpg',
