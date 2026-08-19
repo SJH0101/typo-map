@@ -414,7 +414,11 @@ def compare(key, raws):
     for name, raw in raws.items():
         a = np.array(fn(raw), dtype=float)
         if key in ('lead_over_cap', 'gap_px', 'asc_over_xh') and len(a):
-            a = np.array(layers(a)[0], dtype=float)
+            # 표본이 가장 많은 계층을 대표로 쓴다. derive() 와 같은 규칙이다.
+            # 가장 낮은 계층을 쓰면 값 하나짜리 이상치가 코퍼스 값을 가로챈다 —
+            # 브로크만 행간비가 실제 본문 계층(n=184, 1.437) 대신 n=1 인
+            # 0.72 로 보고됐다.
+            a = np.array(max(layers(a), key=len), dtype=float)
         if not len(a):
             continue
         names.append(name)
