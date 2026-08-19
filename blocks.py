@@ -362,7 +362,8 @@ def run(src, region):
     g = g[ty0:ty1, tx0:tx1]
     region = (region[0]+tx0, region[1]+ty0, region[0]+tx1, region[1]+ty1)
     res = []
-    for cx0, cx1 in columns(g, th):
+    cols = columns(g, th)
+    for cx0, cx1 in cols:
       for sm in scale_strata(g[:, cx0:cx1] < th):
         ink_col = sm.sum(axis=1).astype(float)
         for bl in group(lines(g, th, cx0, cx1, mask=sm)):
@@ -383,11 +384,11 @@ def run(src, region):
                                         ink_top=l['ink_top']+region[1], xh=l['xh'],
                                         xs=l['xs']+region[0], xe=l['xe']+region[0]) for l in bl],
                             base=[l['base']+region[1] for l in bl]))
-    return th, res
+    return th, res, len(cols)
 
 if __name__ == '__main__':
-    th, res = run('/mnt/user-data/uploads/1958_Musica_viva_-_Dienstag__den_7__Januar_1958_-_Schweizerische_.jpg',
-                  (0, 630, 566, 795))
+    th, res, n_cols = run('/mnt/user-data/uploads/1958_Musica_viva_-_Dienstag__den_7__Januar_1958_-_Schweizerische_.jpg',
+                          (0, 630, 566, 795))
     print('threshold', round(th, 1))
     for i, b in enumerate(res, 1):
         print(f"{i}  box({b['x1']},{b['y1']})-({b['x2']},{b['y2']})  줄 {b['n']}  활자 {b['h']}px")

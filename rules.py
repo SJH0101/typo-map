@@ -46,7 +46,20 @@ def collect(paths, reader=None, progress=None, errors=None):
                 if errors is not None:
                     errors.append(dict(file=n, reason=r.get('why', '측정 실패')))
                 continue
-            raw[n] = dict(angle=r['angle'], blocks=[
+            # 판면 마진을 재려면 종이 가장자리가 어딘지 알아야 한다. measure 는
+            # orig_size 를 이미 계산해 돌려주는데 여기서 버리고 있었다.
+            #
+            # region 은 쓰면 안 된다. 그것은 회전·확장된 작업 이미지의 좌표계에
+            # 있고 orig_size 는 원본 판면이다. 둘을 비교하면 회전된 포스터에서
+            # 음수 마진이 나온다 (코어 4종 274장 중 30장, 전부 회전된 것).
+            # 블록의 corners 는 measure 가 원본 좌표로 되돌려 둔 값이므로
+            # 그것으로 글자 영역을 다시 잡는다.
+            xs = [x for b in r['blocks'] for x, _ in b['corners']]
+            ys = [y for b in r['blocks'] for _, y in b['corners']]
+            raw[n] = dict(angle=r['angle'], size=list(r['orig_size']),
+                          region=([min(xs), min(ys), max(xs), max(ys)] if xs else None),
+                          n_columns=r.get('n_columns'),
+                          blocks=[
                 dict(x1=int(b['x1']), y1=int(b['y1']), x2=int(b['x2']), y2=int(b['y2']),
                      n=int(b['n']), xh=float(b['xh']),
                      lead=(None if b['lead'] is None else int(b['lead'])),
@@ -118,8 +131,56 @@ def m_align_ratio(raw):
     return out
 
 
+def _margins(raw):
+    """포스터마다 (좌, 우, 상, 하) 를 판면 대비 비율로.
+
+    회전 보정을 받은 포스터는 뺀다. rotate(expand=True) 가 만든 채움 영역
+    안에서 검출이 일어나면 원본 좌표로 되돌렸을 때 판면 밖으로 나간다.
+    코어 4종 273장 중 26장이 그랬고 전부 회전된 것이었으며, 벗어난 정도가
+    각도에 비례했다 (중앙 14px, 6.5°에서 58px). 음수 마진은 뜻이 없으므로
+    값을 깎아 맞추지 않고 측정 대상에서 제외한다. 회전된 포스터의 마진은
+    아직 잴 수 없다.
+    """
+    out = []
+    for v in raw.values():
+        sz, rg = v.get('size'), v.get('region')
+        if not sz or not rg or abs(v.get('angle', 0)) >= 1:
+            continue
+        w, h = sz
+        x1, y1, x2, y2 = rg
+        if w <= 0 or h <= 0:
+            continue
+        out.append((x1 / w, (w - x2) / w, y1 / h, (h - y2) / h))
+    return out
+
+
+def m_margin_left(raw):
+    return [m[0] for m in _margins(raw)]
+
+
+def m_margin_right(raw):
+    return [m[1] for m in _margins(raw)]
+
+
+def m_margin_top(raw):
+    return [m[2] for m in _margins(raw)]
+
+
+def m_margin_bottom(raw):
+    return [m[3] for m in _margins(raw)]
+
+
+def m_columns(raw):
+    return [v['n_columns'] for v in raw.values() if v.get('n_columns')]
+
+
 METRICS = {
     'lead_over_cap': (m_lead_over_cap, '행간 / 활자높이', '블록'),
+    'margin_left':   (m_margin_left,   '좌 마진 / 판면 폭', '포스터'),
+    'margin_right':  (m_margin_right,  '우 마진 / 판면 폭', '포스터'),
+    'margin_top':    (m_margin_top,    '상 마진 / 판면 높이', '포스터'),
+    'margin_bottom': (m_margin_bottom, '하 마진 / 판면 높이', '포스터'),
+    'n_columns':     (m_columns,       '단 개수', '포스터'),
     'gap_px':        (m_gap,           '여백 = 행간 − 활자높이 (px)', '블록'),
     'asc_over_xh':   (m_asc_over_xh,   '어센더 / x높이', '줄'),
     'align_ratio':   (m_align_ratio,   '정렬선 수 / 블록 수', '포스터'),

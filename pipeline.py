@@ -89,7 +89,7 @@ def measure(path, reader):
     region = _region(wq, nw, nh)
     if region is None: return dict(ok=False, why='영역 없음')
 
-    th, res = blocks.run(np.asarray(work.convert('L')).astype(float), region)
+    th, res, n_cols = blocks.run(np.asarray(work.convert('L')).astype(float), region)
 
     for b in res:
         # 블록 박스는 회전 좌표계의 수평 사각형이므로, 원본으로 되돌리면
@@ -107,6 +107,7 @@ def measure(path, reader):
                     l['p_' + k] = (back(l['xs'], v, ang, ow, oh, nw, nh),
                                    back(l['xe'], v, ang, ow, oh, nw, nh))
     return dict(ok=True, angle=round(ang, 2), angle_spread=round(spread, 2),
-                region=region, n_model_boxes=len(wq), threshold=round(th, 1),
+                region=region, n_columns=n_cols,
+                n_model_boxes=len(wq), threshold=round(th, 1),
                 blocks=res, n_lines=sum(b['n'] for b in res),
                 orig_size=(ow, oh), work_size=(nw, nh))
