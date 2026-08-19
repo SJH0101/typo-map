@@ -218,6 +218,77 @@ def check_layout(args):
                      "판정 보류인 계층에 드는 값은 held 로 따로 보고하고 위반으로 세지 않는다.")}
 
 
+def style_card(args):
+    """AI 가 추론에 쓸 정량 데이터. 결론은 담지 않는다.
+
+    show_rules 는 사람이 읽는 리포트다. 이쪽은 소비자가 스스로 판단할 수 있게
+    재료를 준다 — 대표값 하나가 아니라 흔들림·표본 수·계층 수·무엇이 빠졌는지·
+    참조와 어떻게 다른지를 함께 넘긴다. 「유파 공통 문법」 같은 해석은 쓰지
+    않는다. 그건 이 숫자를 읽는 쪽의 몫이다.
+    """
+    R = _rules()
+    if not R:
+        return _need()
+    d = json.load(open(CACHE))
+    raw = d.get("raw", {})
+
+    refs = {}
+    for name, path in (args.get("reference") or {}).items():
+        p = os.path.expanduser(path)
+        if os.path.exists(p):
+            refs[name] = json.load(open(p)).get("raw", {})
+    if refs:
+        refs = dict({"이 코퍼스": raw}, **refs)
+
+    n_rot = sum(1 for v in raw.values() if abs(v.get("angle", 0)) >= 1)
+    out = {}
+    for key, (fn, label, unit) in rules.METRICS.items():
+        e = R["rules"].get(key) or R["not_rules"].get(key)
+        if not e:
+            out[key] = {"label": label, "verdict": "값 없음",
+                        "note": "이 코퍼스에서 이 지표를 하나도 뽑지 못했다"}
+            continue
+        layers = e.get("layers") or [e]
+        card = {
+            "label": label, "unit": rules.UNITS.get(key, unit),
+            "verdict": e["verdict"],
+            "median": e["median"], "cv": e["cv"], "n": e["n"],
+            "range_10_90": [e["lo"], e["hi"]],
+            "observed": [e.get("min"), e.get("max")],
+            "n_layers": len(layers),
+            "sample": {"n": e.get("n_all", e["n"]), "of_posters": len(raw)},
+        }
+        if len(layers) > 1:
+            card["layers"] = [{"median": x["median"], "cv": x["cv"], "n": x["n"],
+                               "range_10_90": [x["lo"], x["hi"]],
+                               "observed": [x.get("min"), x.get("max")],
+                               "verdict": x["verdict"]} for x in layers]
+        if key in rules.EXCLUDES:
+            card["sample"]["excluded"] = n_rot
+            card["sample"]["exclusion_reason"] = rules.EXCLUDES[key]
+        if refs:
+            c = rules.compare(key, refs)
+            if c:
+                card["reference"] = c
+        out[key] = card
+
+    return {"ok": True, "cache": CACHE,
+            "n_posters": len(raw),
+            "criteria": R.get("criteria"),
+            "metrics": out,
+            "blocked": rules.BLOCKED,
+            "reading": {
+                "verdict": {"제약": "이 값을 지켜라",
+                            "자유": "재봤으나 규칙이 아니다. range_10_90 에서 뽑아 쓸 수는 있다",
+                            "표본 부족": "판정하지 못했다. n 과 criteria.n_min 을 비교하라"},
+                "n_layers": "1 보다 크면 단봉이 아니다. median 하나로 읽지 마라",
+                "reference": ("separating_pairs 가 0 이면 지금 참조로는 이 지표가 아무도 "
+                              "구분하지 못한다는 뜻이다. 그것이 지표의 성질인지 참조가 "
+                              "치우쳐서인지는 이 도구가 알 수 없다"),
+                "blocked": "재려 했으나 못 잰 항목. reason 과 blocked_by 를 보고 필요하면 더 나은 입력을 요구하라"},
+            "note": "결론은 담지 않는다. 이 숫자로 판단하는 것은 읽는 쪽이다."}
+
+
 def place_text(args):
     R = _rules()
     if not R:
@@ -283,6 +354,15 @@ TOOLS = [
     {"name": "show_rules",
      "description": "캐시에 저장된 규칙과 각 지표의 분포·표본 수·채택 여부를 보여준다.",
      "inputSchema": {"type": "object", "properties": {}}},
+    {"name": "style_card",
+     "description": ("AI 가 추론에 쓸 정량 데이터를 낸다. 대표값 하나가 아니라 흔들림·표본 수·"
+                     "계층 수·제외된 것·참조와의 차이를 함께 준다. 해석과 결론은 담지 않는다. "
+                     "사람이 읽을 리포트가 필요하면 show_rules 를 써라."),
+     "inputSchema": {"type": "object", "properties": {
+         "reference": {"type": "object",
+                       "description": ("참조 코퍼스. {이름: 캐시경로}. 주면 지표마다 "
+                                       "중앙값 차이와 신뢰구간이 갈리는 쌍 수를 함께 낸다"),
+                       "additionalProperties": {"type": "string"}}}}},
     {"name": "place_text",
      "description": ("활자 크기와 줄 수를 주면 행간과 베이스라인을 계산한다. "
                      "모든 블록이 하나의 격자를 정수배로 공유하게 만든다. "
@@ -313,7 +393,7 @@ TOOLS = [
          "required": ["blocks"]}},
 ]
 
-FUNCS = {"measure_corpus": measure_corpus, "show_rules": show_rules,
+FUNCS = {"measure_corpus": measure_corpus, "show_rules": show_rules, "style_card": style_card,
          "place_text": place_text, "check_layout": check_layout}
 
 

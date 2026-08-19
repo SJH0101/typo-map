@@ -247,6 +247,39 @@ def m_n_blocks(raw):
     return [len(v['blocks']) for v in raw.values() if v['blocks']]
 
 
+# 재려고 했으나 못 재는 것들. 주석이 아니라 데이터로 둔다 — 카드에 실어
+# 보내야 소비자가 「안 쟀다」와 「재봤는데 못 믿겠다」를 구분한다.
+BLOCKED = {
+    'cap_ratio': dict(label='인접 활자 크기 비', unit='블록 쌍',
+                      reason='인접 비가 1.0~1.2 에 몰려 측정 오차가 지배한다',
+                      blocked_by='입력 해상도'),
+    'descender': dict(label='디센더 깊이', unit='줄',
+                      reason='검출 실패율이 높다',
+                      blocked_by='입력 해상도'),
+    'margin_const': dict(label='판면 마진 상수', unit='포스터',
+                         reason='회전 보정된 포스터에서 글자 영역이 판면 밖으로 나간다',
+                         blocked_by='회전 프레임의 채움 영역'),
+}
+
+# 지표마다 표본에서 무엇이 빠지는지. 표본 수만 주면 조건부인 줄 모른다.
+EXCLUDES = {
+    'margin_left':   '회전 보정된 포스터 — 판면 좌표를 신뢰할 수 없다',
+    'margin_right':  '회전 보정된 포스터 — 판면 좌표를 신뢰할 수 없다',
+    'margin_top':    '회전 보정된 포스터 — 판면 좌표를 신뢰할 수 없다',
+    'margin_bottom': '회전 보정된 포스터 — 판면 좌표를 신뢰할 수 없다',
+    'text_area':     '회전 보정된 포스터 — 판면 좌표를 신뢰할 수 없다',
+}
+
+UNITS = {
+    'lead_over_cap': 'ratio', 'gap_px': 'px', 'asc_over_xh': 'ratio',
+    'align_ratio': 'ratio', 'n_columns': 'count', 'cap_range': 'ratio',
+    'text_area': 'fraction', 'n_blocks': 'count',
+    'margin_left': 'fraction_of_width', 'margin_right': 'fraction_of_width',
+    'margin_top': 'fraction_of_height', 'margin_bottom': 'fraction_of_height',
+    'ground_share': 'fraction', 'n_colors': 'count',
+    'saturation': 'fraction', 'value': 'fraction', 'gray_share': 'fraction',
+}
+
 METRICS = {
     'lead_over_cap': (m_lead_over_cap, '행간 / 활자높이', '블록'),
     'margin_left':   (m_margin_left,   '좌 마진 / 판면 폭', '포스터'),
@@ -352,6 +385,53 @@ def derive(raw):
         (rules if d['verdict'] == '제약' else free)[key] = d
     return dict(n_posters=len(raw), rules=rules, not_rules=free,
                 criteria=dict(cv_max=CV_MAX, n_min=N_MIN, layer_gap=LAYER_GAP))
+
+
+def median_ci(a, boot=4000, seed=0):
+    """중앙값의 95% 신뢰구간. 표본이 적으면 넓게 나온다 — 그게 정보다."""
+    a = np.asarray(a, dtype=float)
+    if len(a) < 3:
+        return None
+    rng = np.random.default_rng(seed)
+    bs = np.median(rng.choice(a, (boot, len(a)), replace=True), axis=1)
+    return [round(float(x), 4) for x in np.percentile(bs, [2.5, 97.5])]
+
+
+def compare(key, raws):
+    """참조 코퍼스들과 대조한다. 사실만 낸다 — 결론은 읽는 쪽이 낸다.
+
+    separating_pairs 가 0 이면 「지금 라이브러리로는 이 지표가 아무도 구분하지
+    못한다」는 뜻이다. 그것이 지표의 성질인지 라이브러리가 한쪽으로 치우쳐서인지는
+    도구가 알 수 없다. 라이브러리에 없는 것이 무엇인지는 라이브러리가 모른다.
+    """
+    fn = METRICS[key][0]
+    med, cis, names = [], [], []
+    for name, raw in raws.items():
+        a = np.array(fn(raw), dtype=float)
+        if key in ('lead_over_cap', 'gap_px', 'asc_over_xh') and len(a):
+            a = np.array(layers(a)[0], dtype=float)
+        if not len(a):
+            continue
+        names.append(name)
+        med.append(float(np.median(a)))
+        cis.append(median_ci(a))
+    if len(names) < 2:
+        return None
+    sep, pairs = 0, []
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            x, y = cis[i], cis[j]
+            if not x or not y:
+                continue
+            if x[1] < y[0] or y[1] < x[0]:
+                sep += 1
+                pairs.append([names[i], names[j]])
+    m = np.array(med)
+    return dict(n_corpora=len(names), corpora=names,
+                medians={n: round(v, 4) for n, v in zip(names, med)},
+                spread=(round(float(m.max() / m.min()), 3) if m.min() > 0 else None),
+                separating_pairs=sep, of_pairs=len(names) * (len(names) - 1) // 2,
+                separated=pairs)
 
 
 def save(path, raw, rules):
