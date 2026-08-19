@@ -340,8 +340,11 @@ def group(ls):
         # 줄보다 잉크가 높게 잡힌다. 활자 크기가 실제로 바뀌면 다음 줄도
         # 함께 바뀐다. 1957 Musica Viva 에서 12줄 단이 7+5 로, 7줄 단이
         # 6+1 로 잘린 것이 전부 한 줄짜리 튐 때문이었다.
+        # 마지막 줄에는 「이어지는지」 볼 다음 줄이 없다. 증거가 없으면 자르지
+        # 않는다 — 끝줄 하나가 튀는 것은 대개 내용 때문이다. 1957 Musica Viva
+        # 의 karten / fr.1.10-3.30 이 그랬다 (숫자가 소문자보다 높게 잡힌다).
         nxt = ls[i+2] if i + 2 < len(ls) else None
-        size_cut = differs(b['xh']) and (nxt is None or differs(nxt['xh']))
+        size_cut = differs(b['xh']) and nxt is not None and differs(nxt['xh'])
 
         cut  = (gp > GAP_RATIO * med
                 or size_cut

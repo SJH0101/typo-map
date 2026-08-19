@@ -206,47 +206,25 @@
      132,
      391,
      439,
-     466
+     557
     ],
     "lead": null,
-    "n": 1,
-    "xh": 70.0
+    "n": 2,
+    "xh": 50.5
    },
    {
     "box": [
      144,
      404,
-     327,
-     411
-    ],
-    "lead": null,
-    "n": 1,
-    "xh": 5.0
-   },
-   {
-    "box": [
-     144,
-     433,
      439,
      557
     ],
     "lead": null,
-    "n": 1,
-    "xh": 120.0
-   },
-   {
-    "box": [
-     132,
-     467,
-     439,
-     557
-    ],
-    "lead": null,
-    "n": 1,
-    "xh": 31.0
+    "n": 2,
+    "xh": 62.5
    }
   ],
-  "n_blocks": 8
+  "n_blocks": 6
  },
  "Gewerbemuseum_Basel/1975_Gewerbemuseum Basel - Ausstellung Plan & Bau - 50 Jahre Arch.jpg": {
   "angle": 0.0,
@@ -449,22 +427,11 @@
      109,
      13,
      339,
-     144
-    ],
-    "lead": 40,
-    "n": 4,
-    "xh": 8.5
-   },
-   {
-    "box": [
-     109,
-     173,
-     302,
      184
     ],
-    "lead": null,
-    "n": 1,
-    "xh": 11.0
+    "lead": 40,
+    "n": 5,
+    "xh": 9.0
    },
    {
     "box": [
@@ -500,7 +467,7 @@
     "xh": 143.0
    }
   ],
-  "n_blocks": 5
+  "n_blocks": 4
  },
  "Konzert/1986_Basler Bach-Chor - Stadtcasino Basel - Stabat Mater.jpg": {
   "angle": 0.0,
@@ -960,37 +927,26 @@
    },
    {
     "box": [
-     145,
-     518,
-     175,
-     528
-    ],
-    "lead": null,
-    "n": 1,
-    "xh": 10.0
-   },
-   {
-    "box": [
      131,
-     532,
+     518,
      188,
      537
     ],
     "lead": null,
-    "n": 1,
-    "xh": 5.0
+    "n": 2,
+    "xh": 7.5
    }
   ],
-  "n_blocks": 11
+  "n_blocks": 10
  },
  "_rules": {
   "align_ratio": {
-   "cv": 0.306,
-   "hi": 0.8,
-   "lo": 0.352,
-   "max": 0.8,
+   "cv": 0.34,
+   "hi": 0.82,
+   "lo": 0.33,
+   "max": 1.0,
    "median": 0.609,
-   "min": 0.25,
+   "min": 0.3,
    "n": 10,
    "verdict": "표본 부족"
   },
@@ -1005,11 +961,11 @@
    "verdict": "제약"
   },
   "cap_range": {
-   "cv": 0.551,
+   "cv": 0.631,
    "hi": 57.64,
    "lo": 3.975,
    "max": 58.0,
-   "median": 34.725,
+   "median": 33.667,
    "min": 3.75,
    "n": 10,
    "verdict": "표본 부족"
@@ -1095,11 +1051,11 @@
    "verdict": "표본 부족"
   },
   "n_blocks": {
-   "cv": 0.436,
+   "cv": 0.471,
    "hi": 11.6,
-   "lo": 4.9,
+   "lo": 4.0,
    "max": 17.0,
-   "median": 7.5,
+   "median": 7.0,
    "min": 4.0,
    "n": 10,
    "verdict": "표본 부족"
@@ -1135,11 +1091,11 @@
    "verdict": "표본 부족"
   },
   "text_area": {
-   "cv": 0.616,
-   "hi": 0.478,
+   "cv": 0.613,
+   "hi": 0.492,
    "lo": 0.057,
    "max": 0.602,
-   "median": 0.322,
+   "median": 0.331,
    "min": 0.026,
    "n": 10,
    "verdict": "표본 부족"
