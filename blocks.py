@@ -324,9 +324,27 @@ def group(ls):
     blocks = [[ls[0]]]
     for i, gp in enumerate(gaps):
         a, b = ls[i], ls[i+1]
+        # 크기는 이웃 한 줄이 아니라 지금까지 쌓인 블록의 중앙값과 견준다.
+        # 한 줄만 보면 내용 때문에 x높이가 튀는 것을 크기 변화로 오인한다 —
+        # 움라우트가 있는 줄(für), 숫자만 있는 줄(fr.1.10-3.30) 은 소문자
+        # 줄보다 잉크가 높게 잡힌다. 1957 Musica Viva 에서 12줄 단이 7+5 로,
+        # 7줄 단이 6+1 로 잘린 것이 전부 이 때문이었다.
+        ref = float(np.median([l['xh'] for l in blocks[-1]]))
+
+        def differs(x):
+            return (abs(ref - x) > EPS and
+                    abs(ref - x) / min(ref, x) > SIZE_RATIO)
+
+        # 크기 변화는 이어져야 인정한다. 한 줄만 튀는 것은 내용 때문이다 —
+        # 움라우트가 있는 줄(für)과 숫자만 있는 줄(fr.1.10-3.30)은 소문자
+        # 줄보다 잉크가 높게 잡힌다. 활자 크기가 실제로 바뀌면 다음 줄도
+        # 함께 바뀐다. 1957 Musica Viva 에서 12줄 단이 7+5 로, 7줄 단이
+        # 6+1 로 잘린 것이 전부 한 줄짜리 튐 때문이었다.
+        nxt = ls[i+2] if i + 2 < len(ls) else None
+        size_cut = differs(b['xh']) and (nxt is None or differs(nxt['xh']))
+
         cut  = (gp > GAP_RATIO * med
-                or (abs(a['xh']-b['xh']) > EPS                      # 절대차가 오차를 넘고
-                    and abs(a['xh']-b['xh']) / min(a['xh'], b['xh']) > SIZE_RATIO)
+                or size_cut
                 or not shares_axis(a, b))
         (blocks.append([b]) if cut else blocks[-1].append(b))
     return blocks
