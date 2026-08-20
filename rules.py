@@ -60,6 +60,7 @@ def collect(paths, reader=None, progress=None, errors=None):
     있었는데, 예외가 삼켜져서 오래 드러나지 않았다.
     """
     import easyocr
+    import photo
     import pipeline
     if reader is None:
         reader = easyocr.Reader(['de'], gpu=GPU, verbose=False)
@@ -93,6 +94,9 @@ def collect(paths, reader=None, progress=None, errors=None):
                      bases=[int(l['base']) for l in b['lines']],
                      caps=[None if l['cap'] is None else int(l['cap']) for l in b['lines']],
                      xtops=[int(l['x_top']) for l in b['lines']]) for b in r['blocks']])
+            ph = photo.look(p)
+            if ph:
+                raw[n]['photo'] = ph
         except Exception as e:
             if errors is not None:
                 errors.append(dict(file=n, reason=f'{type(e).__name__}: {e}'))

@@ -330,6 +330,25 @@ def style_card(args):
         refs = dict({"이 코퍼스": raw}, **refs)
 
     n_rot = sum(1 for v in raw.values() if abs(v.get("angle", 0)) >= 1)
+
+    # 사진 판정은 선택 기능이다. 켜져 있을 때만 원자료에 들어 있다.
+    # 지표를 못 낸 포스터가 무작위가 아니라는 것을 말하는 데 쓴다.
+    seen = [v for v in raw.values() if v.get("photo")]
+    pic = None
+    if seen:
+        withp = [v for v in seen if v["photo"]["has_photo"]]
+        labs = {}
+        for v in withp:
+            for o in v["photo"]["objects"]:
+                labs[o["label"]] = labs.get(o["label"], 0) + 1
+        pic = {"judged": len(seen), "with_picture": len(withp),
+               "share": round(len(withp) / len(seen), 3),
+               "objects": dict(sorted(labs.items(), key=lambda t: -t[1])[:6]),
+               "how": ("깊이 기울기와 COCO 물체 검출을 함께 본다. 네 코퍼스 71장을 "
+                       "손으로 라벨해 절반에서 문턱을 정하고 나머지에서 재니 "
+                       "정밀 88% · 재현 69% 였다. 놓치는 쪽이 많으므로 "
+                       "「사진 없음」 은 「사진이 없다」 가 아니라 「못 찾았다」 로 읽어야 한다."),
+               "not_used_for": "측정을 바꾸지 않는다. 사진 위에 얹힌 진짜 글자까지 지우게 된다"}
     out = {}
     for key, (fn, label, unit) in rules.METRICS.items():
         e = R["rules"].get(key) or R["not_rules"].get(key)
@@ -359,6 +378,8 @@ def style_card(args):
                                "verdict": x["verdict"]} for x in layers]
         if e.get("coverage"):
             card["sample"]["note"] = e["coverage"]
+        if pic is not None:
+            card["sample"]["pictures"] = pic
         if key in rules.EXCLUDES:
             card["sample"]["excluded"] = n_rot
             card["sample"]["exclusion_reason"] = rules.EXCLUDES[key]

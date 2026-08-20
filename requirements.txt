@@ -2,3 +2,9 @@ easyocr>=1.7
 numpy>=1.24
 scipy>=1.10
 Pillow>=10.0
+
+# 선택 — TYPO_MCP_PHOTO=1 로 사진 판정을 켤 때만 필요하다.
+# 켜지 않으면 받지 않아도 되고, 서버 동작도 달라지지 않는다.
+# torch 는 easyocr 가 이미 끌고 온다.
+# torchvision>=0.17
+# transformers>=4.40
