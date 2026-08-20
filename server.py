@@ -336,18 +336,19 @@ def style_card(args):
     seen = [v for v in raw.values() if v.get("photo")]
     pic = None
     if seen:
-        withp = [v for v in seen if v["photo"]["has_photo"]]
+        by = {"있음": 0, "없음": 0, "모름": 0}
         labs = {}
-        for v in withp:
+        for v in seen:
+            by[v["photo"].get("verdict", "모름")] = by.get(v["photo"].get("verdict", "모름"), 0) + 1
             for o in v["photo"]["objects"]:
                 labs[o["label"]] = labs.get(o["label"], 0) + 1
-        pic = {"judged": len(seen), "with_picture": len(withp),
-               "share": round(len(withp) / len(seen), 3),
+        pic = {"judged": len(seen), **by,
                "objects": dict(sorted(labs.items(), key=lambda t: -t[1])[:6]),
-               "how": ("깊이 기울기와 COCO 물체 검출을 함께 본다. 네 코퍼스 71장을 "
-                       "손으로 라벨해 절반에서 문턱을 정하고 나머지에서 재니 "
-                       "정밀 88% · 재현 69% 였다. 놓치는 쪽이 많으므로 "
-                       "「사진 없음」 은 「사진이 없다」 가 아니라 「못 찾았다」 로 읽어야 한다."),
+               "how": ("깊이 기울기와 COCO 물체 검출을 함께 본다. 두 근거가 같은 쪽을 "
+                       "가리킬 때만 확정하고 엇갈리면 「모름」 으로 둔다. 네 코퍼스 71장을 "
+                       "손으로 라벨해 재니 「있음」 10장은 10장 다 맞았고(100%), "
+                       "「없음」 41장은 38장 맞았다(93%). 30% 는 모름으로 남는다."),
+               "read_as": "「모름」 은 사진이 없다는 뜻이 아니라 가리지 못했다는 뜻이다",
                "not_used_for": "측정을 바꾸지 않는다. 사진 위에 얹힌 진짜 글자까지 지우게 된다"}
     out = {}
     for key, (fn, label, unit) in rules.METRICS.items():

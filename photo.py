@@ -18,6 +18,9 @@ TYPO_MCP_PHOTO=1 일 때만 켜진다. 켜지 않으면 아무것도 받지 않�
     COCO만        정밀 98%  재현 42%
     우리 라벨로 학습한 ResNet  정밀 44%  재현 79%
 
+다만 그 88% 는 모든 장에 답을 강요했을 때의 값이다. 모르는 것을 모른다고
+두면 확정한 것은 전부 맞는다 — 아래 세 갈래를 참고하라.
+
 마지막 줄이 중요하다. 브로크만 안에서 교차검증하면 오분류 6% 로 가장
 좋았지만, 사진 포스터가 대부분 어둡고 무채색이라 「어두운 바탕 = 사진」 을
 배웠고 어두운 바탕을 즐겨 쓰는 호프만에서 무너졌다(중앙 54%). 라벨을 한
@@ -32,10 +35,25 @@ import os
 import numpy as np
 from PIL import Image
 
-DEPTH_GRAD = 0.0030   # 깊이 기울기 문턱. 71장에서 정밀 88% · 재현 70% 로,
-                      # 절반-절반 교차검증 추정치(88%/69%)와 일치하는 자리다.
-                      # 0.0026 이 F1 최고(0.82)지만 그 표의 봉우리라 고르면
-                      # 이 표본에 맞춘 값이 된다.
+# 둘로 가르지 않고 셋으로 낸다 — 있음 / 없음 / 모름.
+#
+# 「사진인가」 는 이 자료에서 답이 하나가 아니다. 손 사진인지 드로잉인지,
+# 회화 복제인지 사진인지 사람도 갈린다. 코퍼스에 「ungegenständliche
+# Photographie」(비구상 사진) 라는 포스터가 실제로 있다. 모든 장에 답을
+# 강요하면 정확도는 88% 가 천장이지만, 모르는 것을 모른다고 두면 확정한
+# 것은 전부 맞는다. 17개 지표에서 「표본 부족」 을 내는 것과 같은 태도다.
+#
+# 71장 기준:
+#     있음   9장 중 9장 맞음   100%
+#     없음  41장 중 38장 맞음   93%
+#     모름  21장 (30%)
+#
+# 「없음」 으로 확정했는데 사진이었던 3장은 전부 깊이도 없고 알아볼 물체도
+# 없는 사진이다 — 비구상 사진(ungegenständliche Photographie), 작게 실린
+# 인물, 나무 결. 두 근거가 모두 침묵하는 자리이므로 우연한 실패가 아니라
+# 이 방법이 정의상 놓치는 종류다.
+DEPTH_HI = 0.0026     # 이 위이고 물체도 보이면 사진으로 확정한다
+DEPTH_LO = 0.0018     # 이 아래이고 물체도 없으면 사진 없음으로 확정한다
 COCO_SCORE = 0.90     # 이 신뢰도 이상만 본다. 아래로 내려가면 추상 도형을
                       # clock·kite·baseball bat 으로 부르기 시작한다.
 COCO_LABELS = {'person', 'bicycle', 'motorcycle', 'car', 'bottle', 'wine glass',
@@ -101,6 +119,15 @@ def look(path):
     img = Image.open(path).convert('RGB')
     g = depth_grad(img)
     objs = objects(img)
+    if objs and g >= DEPTH_HI:
+        v = '있음'
+    elif not objs and g < DEPTH_LO:
+        v = '없음'
+    else:
+        v = '모름'
     return dict(depth_grad=round(g, 5),
                 objects=[{'label': n, 'score': s} for n, s in objs],
-                has_photo=bool(g >= DEPTH_GRAD or objs))
+                verdict=v,
+                note=('두 근거가 함께 가리킨다' if v == '있음' else
+                      '깊이도 평평하고 물체도 안 보인다' if v == '없음' else
+                      '두 근거가 엇갈린다. 사진이 없다는 뜻이 아니라 못 가렸다는 뜻이다'))
