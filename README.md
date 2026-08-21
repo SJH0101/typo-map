@@ -109,11 +109,36 @@ x 좌표 · 판면 마진 · 도형과의 관계   실측이 없다
 ## 구성
 
 ```
-server.py     MCP 서버
-rules.py      코퍼스 → 분포 → 규칙 채택 판정
-pipeline.py   회전 보정 + 영역 검출
-blocks.py     단·줄·기준선·블록
-rotate.py     회전각 검출
+server.py       MCP 서버
+rules.py        코퍼스 → 분포 → 규칙 채택 판정
+pipeline.py     회전 보정 + 영역 검출
+blocks.py       단·줄·기준선·블록 (스스로 훑어 찾는 쪽)
+boxmeasure.py   주어진 상자 안만 잰다 (받아서 재는 쪽)
+rotate.py       회전각 검출
+```
+
+## typographic metrology — 짚는 일과 재는 일을 나눈다
+
+`blocks.py` 는 판면을 스스로 훑어 덩어리를 찾고 그 안을 잰다. 두 일을 한
+함수가 하므로 찾기가 틀리면 재기가 아무리 정확해도 소용이 없다.
+
+오페라하우스 두 점을 IDML 가이드로 대조해 그 경계를 실측했다.
+
+    덩어리 찾기   VLM 6/6 맞음      ·  blocks.run() 은 17개·12개로 쪼갬
+    상자 위치     VLM ±1px (8변 중 7)
+    행간 재기     VLM +24% 편향     ·  boxmeasure 21.0px (정답 21px)
+    정렬 판정     —                 ·  왼쪽 흩어짐 0.0px 대 오른쪽 39.6px
+
+짚는 일은 추정이 허용되고 재는 일은 허용되지 않는다. 재는 값이 행간/활자높이
+같은 비율이므로, 24% 편향은 규칙 채택을 통째로 바꾼다.
+
+그래서 `boxmeasure.py` 를 따로 둔다. 상자를 받아 그 안만 재므로 도형을 글자로
+오인하거나 검은 바탕의 흰 글자를 놓치는 실패가 구조적으로 생기지 않는다.
+
+```python
+from boxmeasure import measure
+measure(path, (x1, y1, x2, y2))
+# → baselines · x_heights · lead · lead_over_xh · align · align_spread
 ```
 
 의존: `requirements.txt` 참고
