@@ -298,7 +298,7 @@ def fit_grid(bases, ink, s0, s1):
     return fitted, lead, resid
 
 
-def shares_axis(a, b, eps=XSTART_EPS):
+def shares_axis(a, b, eps=None):
     """두 줄이 같은 정렬 축을 공유하는가.
 
     정렬 방식을 코드가 정하지 않는다. 왼쪽·오른쪽·가운데 중 어느 축이든
@@ -308,6 +308,7 @@ def shares_axis(a, b, eps=XSTART_EPS):
     조판 방식을 코드에 박는 것이고, 오른쪽 정렬이나 가운데 정렬로 짠
     블록은 줄마다 좌측 끝이 수십 px 씩 움직이므로 전부 낱줄로 흩어졌다.
     """
+    eps = XSTART_EPS if eps is None else eps   # 기본 인자로 두면 정의 시점에 굳는다
     return (abs(a['xs'] - b['xs']) <= eps or                       # 왼쪽
             abs(a['xe'] - b['xe']) <= eps or                       # 오른쪽
             abs((a['xs'] + a['xe']) - (b['xs'] + b['xe'])) <= 2 * eps)   # 가운데
@@ -526,27 +527,38 @@ def _panels(gb, thb):
 
 
 SHADOW_PAD = 5      # 큰 블록의 상자를 이만큼 넓혀 그 안에 드는지 본다
-SHADOW_H = 0.30     # 큰 블록 높이의 이 비율 이하인 한 줄짜리 블록은 조각으로 본다
+SHADOW_H = 0.45     # 큰 블록 상자 높이의 이 비율 이하면 조각으로 본다.
+                    # 예전에는 글줄 높이(h) 로 견줬는데, 그것은 상자 높이가
+                    # 아니라 줄 하나의 높이라 두 줄짜리 큰 블록에서 문턱이
+                    # 절반으로 줄었다 — Wiener Blut 의 「Wiener Blut」 상자는
+                    # 48px 인데 h 가 22.5 라, 8px 짜리 획 조각이 6.75 문턱을
+                    # 넘어 살아남았다.
+SHADOW_W = 0.45     # 폭도 함께 본다. 조각은 큰 글줄의 일부라 좁다.
 
 
 def drop_shadows(res):
     """큰 글줄 바로 아래에 남는 한 줄짜리 부스러기를 버린다.
 
-    획의 가장자리·잉크 번짐(2~4px)과 움라우트 점(14px)이 저마다 한 줄로
-    선다. 크기 계층이 이것들을 큰 글자와 다른 계층으로 갈라 놓으므로
+    획의 가장자리·잉크 번짐(2~4px), 움라우트 점(14px), 큰 활자의 획 조각이
+    저마다 한 줄로 선다. 줄 수는 보지 않는다 — Wiener Blut 에서 폭 6px 에
+    4줄짜리 조각이 나왔다. 크기 계층이 이것들을 큰 글자와 다른 계층으로 갈라 놓으므로
     lines() 의 조각 흡수가 닿지 않는다. 큰 블록의 상자 안에 통째로 들어가고
     높이가 그 일부에 불과하면 그 글줄의 부분이지 따로 선 글줄이 아니다.
     「Opernhaus Zürich」 한 판에서 이런 블록이 여섯 개 나왔다.
     """
-    big = [b for b in res if b['n'] >= 1]
+    def box_h(b): return b['y2'] - b['y1']
+    def box_w(b): return b['x2'] - b['x1']
+
     out = []
     for b in res:
-        if b['n'] != 1:
-            out.append(b); continue
         shadow = False
-        for o in big:
-            if o is b or o['h'] <= 0: continue
-            if b['h'] > SHADOW_H * o['h']: continue
+        for o in res:
+            if o is b: continue
+            if box_h(o) <= 0 or box_w(o) <= 0: continue
+            # 상자가 더 커야 부모다
+            if box_h(o) * box_w(o) <= box_h(b) * box_w(b): continue
+            if box_h(b) > SHADOW_H * box_h(o): continue
+            if box_w(b) > SHADOW_W * box_w(o): continue
             if (o['x1'] - SHADOW_PAD <= b['x1'] and b['x2'] <= o['x2'] + SHADOW_PAD
                     and o['y1'] - SHADOW_PAD <= b['y1'] and b['y2'] <= o['y2'] + SHADOW_PAD):
                 shadow = True; break

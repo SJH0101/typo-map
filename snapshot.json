@@ -26,6 +26,17 @@
    },
    {
     "box": [
+     455,
+     607,
+     468,
+     610
+    ],
+    "lead": null,
+    "n": 1,
+    "xh": 3.0
+   },
+   {
+    "box": [
      183,
      608,
      382,
@@ -58,7 +69,7 @@
     "xh": 5.0
    }
   ],
-  "n_blocks": 5
+  "n_blocks": 6
  },
  "Gewerbemuseum_Basel/1952_Die Gute Form 1952 - Gewerbemuseum Basel - 10.April - 10.Mai.jpg": {
   "angle": 0.0,
@@ -203,28 +214,6 @@
    },
    {
     "box": [
-     245,
-     442,
-     303,
-     475
-    ],
-    "lead": null,
-    "n": 1,
-    "xh": 24.0
-   },
-   {
-    "box": [
-     333,
-     452,
-     356,
-     483
-    ],
-    "lead": null,
-    "n": 1,
-    "xh": 28.0
-   },
-   {
-    "box": [
      132,
      508,
      170,
@@ -312,7 +301,7 @@
     "xh": 26.0
    }
   ],
-  "n_blocks": 16
+  "n_blocks": 14
  },
  "Gewerbemuseum_Basel/1975_Gewerbemuseum Basel - Ausstellung Plan & Bau - 50 Jahre Arch.jpg": {
   "angle": 0.0,
@@ -931,28 +920,6 @@
    },
    {
     "box": [
-     387,
-     371,
-     424,
-     383
-    ],
-    "lead": null,
-    "n": 2,
-    "xh": 5.0
-   },
-   {
-    "box": [
-     244,
-     390,
-     311,
-     468
-    ],
-    "lead": null,
-    "n": 1,
-    "xh": 76.0
-   },
-   {
-    "box": [
      59,
      402,
      127,
@@ -986,28 +953,6 @@
    },
    {
     "box": [
-     361,
-     504,
-     373,
-     523
-    ],
-    "lead": null,
-    "n": 2,
-    "xh": 7.0
-   },
-   {
-    "box": [
-     257,
-     506,
-     310,
-     518
-    ],
-    "lead": null,
-    "n": 2,
-    "xh": 3.5
-   },
-   {
-    "box": [
      113,
      686,
      140,
@@ -1018,7 +963,7 @@
     "xh": 24.5
    }
   ],
-  "n_blocks": 11
+  "n_blocks": 7
  },
  "Kunsthalle_Basel/1966_Wilfredo Lam Malerei - Vic Gentils Bildhauerei - Kunsthalle .jpg": {
   "angle": 0.0,
@@ -1264,26 +1209,26 @@
    "hi": 1.0,
    "lo": 0.535,
    "max": 1.0,
-   "median": 0.707,
+   "median": 0.701,
    "min": 0.5,
    "n": 10,
    "verdict": "표본 부족"
   },
   "asc_over_xh": {
-   "cv": 0.146,
+   "cv": 0.144,
    "hi": 1.625,
-   "lo": 1.078,
+   "lo": 1.08,
    "max": 1.833,
    "median": 1.4,
    "min": 1.012,
-   "n": 119,
+   "n": 116,
    "verdict": "제약"
   },
   "cap_range": {
-   "cv": 0.652,
-   "hi": 56.875,
+   "cv": 0.558,
+   "hi": 47.785,
    "lo": 3.775,
-   "max": 67.0,
+   "max": 55.75,
    "median": 31.161,
    "min": 1.75,
    "n": 10,
@@ -1350,7 +1295,7 @@
    "verdict": "표본 부족"
   },
   "margin_right": {
-   "cv": 1.161,
+   "cv": 1.163,
    "hi": 0.38,
    "lo": 0.005,
    "max": 0.664,
@@ -1370,11 +1315,11 @@
    "verdict": "표본 부족"
   },
   "n_blocks": {
-   "cv": 0.516,
+   "cv": 0.529,
    "hi": 16.3,
    "lo": 3.9,
    "max": 19.0,
-   "median": 12.0,
+   "median": 10.0,
    "min": 3.0,
    "n": 10,
    "verdict": "표본 부족"
@@ -1410,7 +1355,7 @@
    "verdict": "표본 부족"
   },
   "text_area": {
-   "cv": 0.565,
+   "cv": 0.567,
    "hi": 0.41,
    "lo": 0.069,
    "max": 0.415,
