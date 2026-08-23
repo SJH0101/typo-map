@@ -1,4 +1,4 @@
-"""region-scoped measurement — 상자 하나를 받아 그 안을 잰다.
+"""상자 하나를 받아 그 안을 잰다 — 재는 쪽의 입구.
 
 어디를 잴지는 부르는 쪽이 정하고, 이 파일은 재기만 한다.
 typographic metrology 의 «재는» 쪽이다. 짚는 쪽은 VLM 이 맡는다.
@@ -7,7 +7,7 @@ typographic metrology 의 «재는» 쪽이다. 짚는 쪽은 VLM 이 맡는다.
 «재는» 일은 잘하는 쪽이 다르다. 오페라하우스 두 장을 IDML 가이드로 대조해
 그 경계를 실측했다.
 
-    덩어리 찾기   VLM 6/6 맞음         ·  blocks.run() 은 17개·12개로 쪼갬
+    덩어리 찾기   VLM 6/6 맞음         ·  baseline 의 detect.run() 은 17개·12개로 쪼갬
     상자 위치     VLM 여덟 변 중 일곱이 ±1px
     행간 재기     VLM +24% 편향        ·  이 파일은 21.0px (정답 21px)
     정렬 판정     —                    ·  왼쪽 흩어짐 0.0px 대 오른쪽 39.6px
@@ -16,16 +16,16 @@ typographic metrology 의 «재는» 쪽이다. 짚는 쪽은 VLM 이 맡는다.
 허용되고 재기는 허용되지 않는다 — 재는 값이 행간/활자높이 같은 비율이라
 24% 편향이 규칙 채택을 통째로 바꾸기 때문이다.
 
-blocks.run() 처럼 스스로 판면을 훑지 않으므로, 도형을 글자로 오인하거나
+baseline 의 detect.run() 처럼 스스로 판면을 훑지 않으므로, 도형을 글자로 오인하거나
 검은 바탕의 흰 글자를 놓치는 실패가 구조적으로 생기지 않는다 — 잴 자리를
 이미 받았기 때문이다.
 
-    from boxmeasure import measure
+    from measure.region import measure
     measure(path, (x1, y1, x2, y2))   # 좌표는 원본 픽셀
 """
 import numpy as np
 from PIL import Image
-import blocks
+from measure import ink, grid
 
 PAD = 3          # 상자 가장자리의 획이 잘리지 않게 조금 넓혀 잡는다
 ALIGN_EPS = 3.0  # 정렬로 인정하는 흩어짐 (px). 왼쪽은 이보다 훨씬 고르다
@@ -42,7 +42,7 @@ def _align(xs, xe):
     return (k if sp[k] <= ALIGN_EPS else 'none'), {a: round(b, 2) for a, b in sp.items()}
 
 
-def _clipped(ink, win):
+def _clipped(box, win):
     """잉크가 창 가장자리에 닿았으면 그 변에서 잘렸다고 본다.
 
     이 파일은 받은 상자 안만 본다. 상자가 글자를 가로지르면 밖에 남은
@@ -54,10 +54,10 @@ def _clipped(ink, win):
     빈 자리가 있으므로 가장자리에 닿지 않는다.
     """
     out = []
-    if ink[0] <= win[0] + 1: out.append('left')
-    if ink[1] <= win[1] + 1: out.append('top')
-    if ink[2] >= win[2] - 1: out.append('right')
-    if ink[3] >= win[3] - 1: out.append('bottom')
+    if box[0] <= win[0] + 1: out.append('left')
+    if box[1] <= win[1] + 1: out.append('top')
+    if box[2] >= win[2] - 1: out.append('right')
+    if box[3] >= win[3] - 1: out.append('bottom')
     return out
 
 
@@ -74,14 +74,14 @@ def measure(src, box):
 
     win = (x1, y1, x2, y2)          # PAD 만큼 넓힌 창. 잘림 판정의 기준이 된다
     sub = g[y1:y2, x1:x2]
-    gp = blocks.polarity(sub)            # 밝은 활자/어두운 바탕을 여기서 뒤집는다
-    th = blocks.threshold(gp)
-    ls = blocks.lines(gp, th, 0, x2 - x1)
+    gp = ink.polarity(sub)            # 밝은 활자/어두운 바탕을 여기서 뒤집는다
+    th = ink.threshold(gp)
+    ls = ink.lines(gp, th, 0, x2 - x1)
     if not ls:
         return dict(n_lines=0, why='줄을 찾지 못했다')
 
-    ink = (gp < th).sum(axis=1).astype(float)
-    ls, lead, resid = blocks.apply_grid(ls, ink)
+    rows = (gp < th).sum(axis=1).astype(float)      # 행마다 잉크량
+    ls, lead, resid = grid.apply_grid(ls, rows)
 
     base = [int(l['base']) + y1 for l in ls]
     xs = [int(l['xs']) + x1 for l in ls]
@@ -91,10 +91,10 @@ def measure(src, box):
     gaps = [base[i + 1] - base[i] for i in range(len(base) - 1)]
     al, spread = _align(xs, xe)
 
-    ink = (min(xs), min(int(l['ink_top']) + y1 for l in ls),
+    got = (min(xs), min(int(l['ink_top']) + y1 for l in ls),
            max(xe), max(int(l['ink_bot']) + y1 for l in ls))
     return dict(
-        clipped=_clipped(ink, win),
+        clipped=_clipped(got, win),
         n_lines=len(ls),
         baselines=base,
         x_tops=[int(l['x_top']) + y1 for l in ls],
@@ -108,5 +108,5 @@ def measure(src, box):
         grid_resid=round(float(resid), 2),
         align=al, align_spread=spread,
         x_starts=xs, x_ends=xe,
-        box_ink=ink,
+        box_ink=got,
     )

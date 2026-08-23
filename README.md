@@ -123,37 +123,61 @@ x 좌표 · 판면 마진 · 도형과의 관계   실측이 없다
 
 ## 구성
 
+두 경로가 있고 이름으로 갈라 둔다. **재는 쪽**은 받은 자리를 재고, **비교
+대상**은 스스로 훑어 찾는다. 의존은 한 방향이다 — `baseline/` 이 `measure/`
+를 부르고, 그 반대는 없다.
+
 ```
-server.py       MCP 서버
-rules.py        코퍼스 → 분포 → 규칙 채택 판정
-pipeline.py     회전 보정 + 영역 검출
-blocks.py       단·줄·기준선·블록 (스스로 훑어 찾는 쪽)
-boxmeasure.py   주어진 상자 안만 잰다 (받아서 재는 쪽)
-ground.py       짚어준 상자를 재서 코퍼스 원자료로 쌓는다 (짚기 ↔ 재기 잇는 곳)
-discrim.py      지표가 «브로크만다움» 을 재는지 판별력으로 검사
-rotate.py       회전각 검출
+server.py          JSON-RPC 전송과 디스패치. 50줄.
+rules.py           원자료 → 분포 → 규칙 채택 판정
+discrim.py         지표가 «브로크만다움» 을 재는지 판별력으로 검사
+snapshot.py        측정 회귀 검사
+
+measure/           재는 쪽 — 받은 자리를 잰다. 추정이 허용되지 않는다
+    ink.py         잉크 프로파일 → 글줄·베이스라인·x높이·발음기호·디센더
+    grid.py        베이스라인을 격자에 맞춰 본다 (측정값은 건드리지 않는다)
+    region.py      상자 하나를 잰다. 잘렸으면 잘렸다고 말한다
+    ground.py      짚어준 상자들 → 코퍼스 원자료
+
+baseline/          비교 대상 — 스스로 훑어 찾는 자동 검출
+    detect.py      단·줄·블록을 스스로 찾는다 (헛것 92 · 놓침 52)
+    skew.py        회전각 검출
+    scan.py        회전 보정 + 영역 검출 + 코퍼스 수집
+
+color/             색 — 색 구성 지표와 색면 분할. 파트 2 가 여기서 자란다
+    fields.py      features(색 다섯 숫자) · segment(색 계급 마스크)
+    photo.py       사진이 있는지 판정 (선택. TYPO_MCP_PHOTO=1)
+
+tools/             MCP 도구 — 스키마와 구현을 한 자리에
+    grounding.py   measure_boxes
+    corpus.py      measure_corpus · show_rules · style_card
+    layout.py      place_text · check_layout
+    shared.py      캐시 경로와 규칙 읽기
 ```
+
+`measure/` 와 `rules.py` 는 numpy·scipy·Pillow 만으로 돈다. easyocr 는
+`baseline/` 을 쓸 때만 필요하다 — 짚어서 재는 경로는 받지 않아도 된다.
 
 ## typographic metrology — 짚는 일과 재는 일을 나눈다
 
-`blocks.py` 는 판면을 스스로 훑어 덩어리를 찾고 그 안을 잰다. 두 일을 한
-함수가 하므로 찾기가 틀리면 재기가 아무리 정확해도 소용이 없다.
+`baseline/` 은 판면을 스스로 훑어 덩어리를 찾고 그 안을 잰다. 두 일을 한
+경로가 하므로 찾기가 틀리면 재기가 아무리 정확해도 소용이 없다.
 
 오페라하우스 두 점을 IDML 가이드로 대조해 그 경계를 실측했다.
 
-    덩어리 찾기   VLM 6/6 맞음      ·  blocks.run() 은 17개·12개로 쪼갬
+    덩어리 찾기   VLM 6/6 맞음      ·  baseline 은 17개·12개로 쪼갬
     상자 위치     VLM ±1px (8변 중 7)
-    행간 재기     VLM +24% 편향     ·  boxmeasure 21.0px (정답 21px)
+    행간 재기     VLM +24% 편향     ·  measure/ 21.0px (정답 21px)
     정렬 판정     —                 ·  왼쪽 흩어짐 0.0px 대 오른쪽 39.6px
 
 짚는 일은 추정이 허용되고 재는 일은 허용되지 않는다. 재는 값이 행간/활자높이
 같은 비율이므로, 24% 편향은 규칙 채택을 통째로 바꾼다.
 
-그래서 `boxmeasure.py` 를 따로 둔다. 상자를 받아 그 안만 재므로 도형을 글자로
+그래서 `measure/` 를 따로 둔다. 상자를 받아 그 안만 재므로 도형을 글자로
 오인하거나 검은 바탕의 흰 글자를 놓치는 실패가 구조적으로 생기지 않는다.
 
 ```python
-from boxmeasure import measure
+from measure.region import measure
 measure(path, (x1, y1, x2, y2))
 # → baselines · x_heights · lead · lead_over_xh · align · align_spread
 ```

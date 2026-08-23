@@ -1,14 +1,14 @@
 """VLM 이 짚은 상자를 받아 재고, 코퍼스 원자료로 쌓는다.
 
-이 파일이 파이프라인의 빠진 고리다. boxmeasure 는 상자 하나를 재고,
+이 파일이 파이프라인의 빠진 고리다. region 은 상자 하나를 재고,
 rules 는 원자료 더미에서 규칙을 뽑는데, 그 사이에 「누가 상자를 짚나」가
-비어 있었다. blocks.run() 이 그 자리를 맡고 있었고 그것이 헛것 92개·
+비어 있었다. baseline 의 detect.run() 이 그 자리를 맡고 있었고 그것이 헛것 92개·
 놓침 52개를 냈다. 여기서는 짚는 쪽을 부르는 쪽에게 넘긴다.
 
 부르는 쪽이 곧 VLM 이다 — API 키가 필요하지 않다. 이 저장소는 MCP 서버라
 클로드가 클라이언트로 붙는다. 클로드가 포스터를 눈으로 보고 상자를 불러주면
 서버가 그 안을 잰다. 판단은 모델이, 계측은 코드가 (judgment–measurement
-separation, boxmeasure.py 참조).
+separation, region.py 참조).
 
 좌표는 기본이 정규화(0~1)다. 모델은 픽셀 수를 세지 않고 화면의 비율로
 본다 — 원본 해상도를 알려주지 않아도 상자를 부를 수 있어야 한다.
@@ -22,8 +22,10 @@ import os
 import numpy as np
 from PIL import Image
 
-import boxmeasure
 import rules
+from color import fields
+from measure import region
+
 
 MIN_LINES = 1     # 줄을 하나도 못 찾은 상자는 원자료에 넣지 않는다
 
@@ -47,7 +49,7 @@ def measure_boxes(path, boxes, coords='norm'):
         raw = b['box'] if isinstance(b, dict) else b
         bid = b.get('id') or f'b{i + 1}' if isinstance(b, dict) else f'b{i + 1}'
         px = _px(raw, W, H, coords)
-        m = boxmeasure.measure(g, px)
+        m = region.measure(g, px)
         out.append(dict(id=bid, box_px=[round(v, 1) for v in px],
                         role=(b.get('role') if isinstance(b, dict) else None), **m))
     return dict(size=[W, H], boxes=out)
@@ -76,14 +78,14 @@ def entry(path, boxes, coords='norm', photo=True):
     ys = [v for b in bs for v in (b['y1'], b['y2'])]
     e = dict(angle=0.0,                       # 원본 좌표계에서 잰다. 회전 보정을 하지 않는다
              size=list(r['size']),
-             color=rules.color_features(path),
+             color=fields.features(path),
              region=([min(xs), min(ys), max(xs), max(ys)] if xs else None),
              n_columns=None,                  # 열은 짚어주지 않았으므로 재지 않는다
              blocks=bs,
              grounded=True)                   # 자동 검출이 아니라 짚어준 상자라는 표시
     if photo:
         try:
-            import photo as _p
+            from color import photo as _p
             ph = _p.look(path)
             if ph:
                 e['photo'] = ph

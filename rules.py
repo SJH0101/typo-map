@@ -23,86 +23,8 @@ LAYER_GAP = 10.0   # 이웃 값의 간격이 간격 중앙값의 이 배를 넘�
 # 기본이 CPU 인 이유: M 계열에서 재보니 mps 가 빠르지 않다. 포스터 3장 기준
 # cpu 1.7s/장, mps 1.9s/장, 측정값은 완전히 같았다. easyocr 의 인식 모델은
 # CPU 에서 int8 양자화 경로를 타고, batch_size=1 이라 mps 는 이득이 없다.
-GPU = os.environ.get('TYPO_MCP_GPU', '0') not in ('0', 'false', 'False')
 
 
-def color_features(path):
-    """포스터의 색 구성. 200px 로 줄여서 본다.
-
-    오늘까지 막힌 지표들은 전부 해상도가 원인이었다 — x높이가 10px 인
-    썸네일에서 1~2px 오차가 20% 가 된다. 색 통계는 그 한계를 받지 않는다.
-    축소해도 원본과 거의 같고, OCR·회전 보정·베이스라인 검출을 거치지 않는다.
-
-    주의: 이것은 포스터가 아니라 포스터의 스캔이다. 절대 색은 스캔 조건·
-    조명·종이 노화·JPEG 압축에 영향받는다. 코퍼스가 같은 출처일 때만
-    designer 간 비교에 쓸 수 있다.
-    """
-    from PIL import Image
-    im = Image.open(path).convert('RGB')
-    im.thumbnail((200, 200))
-    a = np.asarray(im).astype(float).reshape(-1, 3)
-    mx, mn = a.max(1), a.min(1)
-    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1), 0)
-    q = (a // 64).astype(int)                       # 축마다 4단계 = 64색
-    cnt = np.bincount(q[:, 0] * 16 + q[:, 1] * 4 + q[:, 2], minlength=64) / len(a)
-    return dict(ground_share=round(float(cnt.max()), 4),
-                n_colors=int((cnt > 0.02).sum()),
-                saturation=round(float(np.median(sat)), 4),
-                value=round(float(np.median(mx) / 255.0), 4),
-                gray_share=round(float((sat < 0.12).mean()), 4))
-
-
-def collect(paths, reader=None, progress=None, errors=None):
-    """포스터들을 측정해 원자료를 모은다.
-
-    errors 에 리스트를 주면 실패한 포스터와 이유를 담아 준다. 조용히 빠지게
-    두면 안 된다 — fit_grid 의 음수 슬라이스 버그가 108장 중 2장을 떨어뜨리고
-    있었는데, 예외가 삼켜져서 오래 드러나지 않았다.
-    """
-    import easyocr
-    import photo
-    import pipeline
-    if reader is None:
-        reader = easyocr.Reader(['de'], gpu=GPU, verbose=False)
-    raw = {}
-    for i, p in enumerate(paths, 1):
-        n = os.path.basename(p)
-        try:
-            r = pipeline.measure(p, reader)
-            if not r['ok']:
-                if errors is not None:
-                    errors.append(dict(file=n, reason=r.get('why', '측정 실패')))
-                continue
-            # 판면 마진을 재려면 종이 가장자리가 어딘지 알아야 한다. measure 는
-            # orig_size 를 이미 계산해 돌려주는데 여기서 버리고 있었다.
-            #
-            # region 은 쓰면 안 된다. 그것은 회전·확장된 작업 이미지의 좌표계에
-            # 있고 orig_size 는 원본 판면이다. 둘을 비교하면 회전된 포스터에서
-            # 음수 마진이 나온다 (코어 4종 274장 중 30장, 전부 회전된 것).
-            # 블록의 corners 는 measure 가 원본 좌표로 되돌려 둔 값이므로
-            # 그것으로 글자 영역을 다시 잡는다.
-            xs = [x for b in r['blocks'] for x, _ in b['corners']]
-            ys = [y for b in r['blocks'] for _, y in b['corners']]
-            raw[n] = dict(angle=r['angle'], size=list(r['orig_size']),
-                          color=color_features(p),
-                          region=([min(xs), min(ys), max(xs), max(ys)] if xs else None),
-                          n_columns=r.get('n_columns'),
-                          blocks=[
-                dict(x1=int(b['x1']), y1=int(b['y1']), x2=int(b['x2']), y2=int(b['y2']),
-                     n=int(b['n']), xh=float(b['xh']),
-                     lead=(None if b['lead'] is None else int(b['lead'])),
-                     bases=[int(l['base']) for l in b['lines']],
-                     caps=[None if l['cap'] is None else int(l['cap']) for l in b['lines']],
-                     xtops=[int(l['x_top']) for l in b['lines']]) for b in r['blocks']])
-            ph = photo.look(p)
-            if ph:
-                raw[n]['photo'] = ph
-        except Exception as e:
-            if errors is not None:
-                errors.append(dict(file=n, reason=f'{type(e).__name__}: {e}'))
-        if progress:
-            progress(i, len(paths), n)
-    return raw
 
 
 # ── 지표: 원자료에서 값 목록을 뽑는 함수들 ──────────────────────────────

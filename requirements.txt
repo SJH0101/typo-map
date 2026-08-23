@@ -1,10 +1,14 @@
-easyocr>=1.7
+# 재는 쪽 (measure/) 과 규칙 (rules.py) 은 이것만으로 돈다.
 numpy>=1.24
 scipy>=1.10
 Pillow>=10.0
 
-# 선택 — TYPO_MCP_PHOTO=1 로 사진 판정을 켤 때만 필요하다.
-# 켜지 않으면 받지 않아도 되고, 서버 동작도 달라지지 않는다.
-# torch 는 easyocr 가 이미 끌고 온다.
+# 비교 대상 (baseline/) — 스스로 훑어 찾는 자동 검출을 쓸 때만 필요하다.
+# measure_corpus 도구와 snapshot.py 가 이것을 쓴다. 짚어서 재는 경로
+# (measure_boxes) 는 받지 않아도 돈다.
+easyocr>=1.7
+
+# 색 (color/photo.py) — TYPO_MCP_PHOTO=1 로 사진 판정을 켤 때만.
+# 켜지 않으면 서버 동작이 달라지지 않는다. torch 는 easyocr 가 끌고 온다.
 # torchvision>=0.17
 # transformers>=4.40

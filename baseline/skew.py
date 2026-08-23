@@ -70,22 +70,3 @@ def box_angle(gray, quad, reader):
     if a is None:
         return None
     return dict(angle=a, coarse=c, score=round(score, 2), text=txt)
-
-
-def poster_angle(gray, quads, reader):
-    """포스터 대표 각. 상자 폭으로 가중한 중앙값."""
-    out = []
-    for q in quads:
-        r = box_angle(gray, q, reader)
-        if r:
-            b = np.array(q, dtype=float)
-            r['w'] = float(np.hypot(*(b[1] - b[0])))
-            out.append(r)
-    if not out:
-        return None, []
-    A = np.array([r['angle'] for r in out])
-    med = float(np.median(A))
-    A = np.where(A - med > 90, A - 180, np.where(med - A > 90, A + 180, A))
-    for r, a in zip(out, A):
-        r['angle'] = float(a)
-    return float(np.median(A)), out

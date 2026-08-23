@@ -14,10 +14,40 @@
 성분 통계만으로는 「큰 글자」 와 「그림」 이 갈리지 않는다는 것을 코어
 28장에서 확인했다 (상위3 비중으로 가르면 글자의 42% 를 잘못 잡는다).
 분리까지가 이 모듈의 일이고, 판정은 근거를 더 모은 뒤에 붙인다.
+
+이 모듈은 두 가지를 한다. features() 는 포스터 한 장의 색 구성을 다섯
+숫자로 줄여 코퍼스 지표로 쓰고, segment() 는 색 계급마다 마스크를 내어
+형태 후보를 찾는다. 앞은 이미 쓰이고 있고, 뒤가 색면 문제의 시작점이다.
 """
 import numpy as np
 from PIL import Image
 from scipy import ndimage
+
+
+def features(path):
+    """포스터의 색 구성. 200px 로 줄여서 본다.
+
+    오늘까지 막힌 지표들은 전부 해상도가 원인이었다 — x높이가 10px 인
+    썸네일에서 1~2px 오차가 20% 가 된다. 색 통계는 그 한계를 받지 않는다.
+    축소해도 원본과 거의 같고, OCR·회전 보정·베이스라인 검출을 거치지 않는다.
+
+    주의: 이것은 포스터가 아니라 포스터의 스캔이다. 절대 색은 스캔 조건·
+    조명·종이 노화·JPEG 압축에 영향받는다. 코퍼스가 같은 출처일 때만
+    designer 간 비교에 쓸 수 있다.
+    """
+    from PIL import Image
+    im = Image.open(path).convert('RGB')
+    im.thumbnail((200, 200))
+    a = np.asarray(im).astype(float).reshape(-1, 3)
+    mx, mn = a.max(1), a.min(1)
+    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1), 0)
+    q = (a // 64).astype(int)                       # 축마다 4단계 = 64색
+    cnt = np.bincount(q[:, 0] * 16 + q[:, 1] * 4 + q[:, 2], minlength=64) / len(a)
+    return dict(ground_share=round(float(cnt.max()), 4),
+                n_colors=int((cnt > 0.02).sum()),
+                saturation=round(float(np.median(sat)), 4),
+                value=round(float(np.median(mx) / 255.0), 4),
+                gray_share=round(float((sat < 0.12).mean()), 4))
 
 N_COLORS = 10       # 팔레트 크기. 넉넉히 뽑고 가까운 것끼리 합친다
 MERGE_DIST = 26     # 이보다 가까운 색은 같은 색으로 본다 (RGB 유클리드)

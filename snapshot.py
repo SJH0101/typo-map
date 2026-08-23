@@ -49,12 +49,12 @@ CASES = [
 def measure():
     """CASES 를 측정해 비교할 형태로 줄인다."""
     import easyocr
-    import rules
+    from baseline import scan
     paths = [os.path.join(CORPUS, rel) for rel, _ in CASES]
     missing = [p for p in paths if not os.path.exists(p)]
     if missing:
         sys.exit('포스터를 찾을 수 없다:\n  ' + '\n  '.join(missing))
-    raw = rules.collect(paths, reader=easyocr.Reader(['de'], gpu=False, verbose=False))
+    raw = scan.collect(paths, reader=easyocr.Reader(['de'], gpu=False, verbose=False))
     out = {}
     for rel, _ in CASES:
         name = os.path.basename(rel)
