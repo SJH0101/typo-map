@@ -356,9 +356,38 @@ def _judge(a, label, unit):
     return d
 
 
+# 지표 이름 → discrim 의 자리 지표. 여기 없는 지표는 자리를 섞어도 값이
+# 변하지 않으므로(행간비·어센더비 등) 판별력을 잴 수 없고 CV 판정을 쓴다.
+DISCRIM_MAP = {
+    'margin_left': '마진왼쪽', 'margin_right': '마진오른쪽',
+    'margin_top': '마진위',    'margin_bottom': '마진아래',
+    'text_area': '덮음',       'align_ratio': '축_왼쪽수',
+}
+
+
+def _posters_for_discrim(raw):
+    """원자료에서 (상자들, 폭, 높이) 를 뽑는다."""
+    out = []
+    for r in raw.values():
+        bs = r.get('blocks') or []
+        sz = r.get('orig_size') or r.get('size')
+        if not bs or not sz:
+            continue
+        out.append(([(b['x1'], b['y1'], b['x2'], b['y2']) for b in bs],
+                    float(sz[0]), float(sz[1])))
+    return out
+
+
 def derive(raw):
-    """원자료에서 분포를 내고 규칙 채택 여부를 판정한다."""
+    """원자료에서 분포를 내고 규칙 채택 여부를 판정한다.
+
+    판정이 둘이다. 변동계수는 「값이 모이는가」를 묻고, 판별력은 「자리를
+    섞은 것과 구분되는가」를 묻는다. 둘은 자주 엇갈린다 — 자세한 것은
+    discrim.py 첫머리와 docs/PART3.md 를 보라.
+    """
+    import discrim
     rules, free = {}, {}
+    sep = discrim.separability(_posters_for_discrim(raw))
     n_all_posters = len(raw)
     for key, (fn, label, unit) in METRICS.items():
         a = np.array(fn(raw), dtype=float)
@@ -407,9 +436,33 @@ def derive(raw):
                              f'({n_from / n_all_posters * 100:.0f}%). 나머지 '
                              f'{n_all_posters - n_from} 장은 한 값도 내지 못했다 — '
                              f'무작위 표본이 아니므로 규칙을 그 장들까지 확장해 읽으면 안 된다.')
+        # 자리에서 나오는 지표는 판별력도 함께 묻는다. 값이 모여도 자리를
+        # 섞은 것과 구분되지 않으면 작가의 선택이라 할 수 없다.
+        dk = DISCRIM_MAP.get(key)
+        if dk and dk in sep:
+            v = sep[dk]
+            d['auc'] = v['auc']
+            d['auc_real'] = v['real']
+            d['auc_null'] = v['null']
+            if v['auc'] < discrim.AUC_MIN:
+                if d['verdict'] == '제약':
+                    d['verdict'] = '정보 없음'
+                    d['note_discrim'] = (
+                        f'변동계수 {d["cv"]} 로는 모이지만 자리를 섞은 배치와 '
+                        f'구분되지 않는다 (AUC {v["auc"]}, 진짜 {v["real"]} 대 '
+                        f'무작위 {v["null"]}). 규칙으로 쓰면 안 된다.')
+                else:
+                    d['note_discrim'] = f'판별력도 없다 (AUC {v["auc"]}).'
+            elif d['verdict'] != '제약':
+                d['note_discrim'] = (
+                    f'변동계수 {d["cv"]} 로는 흩어지지만 자리를 섞은 배치와는 '
+                    f'구분된다 (AUC {v["auc"]}, 진짜 {v["real"]} 대 무작위 '
+                    f'{v["null"]}). 값 하나로 못 박을 수는 없어도 방향은 있다.')
         (rules if d['verdict'] == '제약' else free)[key] = d
     return dict(n_posters=len(raw), rules=rules, not_rules=free,
-                criteria=dict(cv_max=CV_MAX, n_min=N_MIN, layer_gap=LAYER_GAP))
+                separability=sep,
+                criteria=dict(cv_max=CV_MAX, n_min=N_MIN, layer_gap=LAYER_GAP,
+                              auc_min=discrim.AUC_MIN))
 
 
 def median_ci(a, boot=4000, seed=0):
