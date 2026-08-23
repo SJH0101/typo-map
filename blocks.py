@@ -189,7 +189,7 @@ def lines(g, th, x0, x1, min_h=2, body_h=4, mask=None):
         ls.append(dict(base=base, cap=f['cap'], x_top=f['x_top'], mark_top=f['mark'],
                        n_mark=f['n_mark'], desc=f['desc'], cap_kind=f['kind'],
                        top=f['cap'] if f['cap'] is not None else f['x_top'],
-                       xh=base - f['x_top'], ink_top=r['s'],
+                       xh=base - f['x_top'], ink_top=r['s'], ink_bot=r['e'],
                        xs=x0 + r['span'][0], xe=x0 + r['span'][1]))
     return ls
 
@@ -425,8 +425,17 @@ def group(ls):
     return blocks
 
 def box(bl):
-    return (min(l['xs'] for l in bl), min(l['top'] for l in bl),
-            max(l['xe'] for l in bl), max(l['base'] for l in bl))
+    """블록 상자는 잉크 전체다 — 발음기호 위끝부터 디센더 아래끝까지.
+
+    top~base 로 잡으면 ü 의 점과 j 의 꼬리가 상자 밖으로 나간다. top 은
+    캡 높이고 base 는 베이스라인이라 둘 다 잉크의 끝이 아니다. 상자가
+    글자를 자르면 마진과 덮음 면적이 그만큼 작게 나온다.
+
+    ink_top/ink_bot 은 lines() 가 잉크 문턱으로 자른 띠의 양 끝이라
+    디센더 검출(실패율이 높다)에 기대지 않는다.
+    """
+    return (min(l['xs'] for l in bl), min(l['ink_top'] for l in bl),
+            max(l['xe'] for l in bl), max(l['ink_bot'] for l in bl))
 
 def apply_grid(ls, ink):
     if len(ls) < 3: return ls, None, 0.0

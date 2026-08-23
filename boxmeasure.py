@@ -42,6 +42,25 @@ def _align(xs, xe):
     return (k if sp[k] <= ALIGN_EPS else 'none'), {a: round(b, 2) for a, b in sp.items()}
 
 
+def _clipped(ink, win):
+    """잉크가 창 가장자리에 닿았으면 그 변에서 잘렸다고 본다.
+
+    이 파일은 받은 상자 안만 본다. 상자가 글자를 가로지르면 밖에 남은
+    부분을 볼 방법이 없고, 잘린 값을 아무 말 없이 돌려주게 된다 —
+    1957 Musica Viva 에서 「hans rosbaud」 의 d 와 마지막 줄 셋이 그렇게
+    잘렸다. 그래서 잘림을 값으로 낸다. 짚은 쪽이 상자를 넓혀 다시 부르면 된다.
+
+    PAD 가 판정 여유가 된다. 제대로 짚은 상자는 잉크와 창 사이에 PAD 만큼
+    빈 자리가 있으므로 가장자리에 닿지 않는다.
+    """
+    out = []
+    if ink[0] <= win[0] + 1: out.append('left')
+    if ink[1] <= win[1] + 1: out.append('top')
+    if ink[2] >= win[2] - 1: out.append('right')
+    if ink[3] >= win[3] - 1: out.append('bottom')
+    return out
+
+
 def measure(src, box):
     """box = (x1, y1, x2, y2), 원본 픽셀 좌표. 못 재면 n_lines 0 으로 돌려준다."""
     g = (src.astype(float) if isinstance(src, np.ndarray)
@@ -53,6 +72,7 @@ def measure(src, box):
     if x2 - x1 < 4 or y2 - y1 < 4:
         return dict(n_lines=0, why='상자가 너무 작다')
 
+    win = (x1, y1, x2, y2)          # PAD 만큼 넓힌 창. 잘림 판정의 기준이 된다
     sub = g[y1:y2, x1:x2]
     gp = blocks.polarity(sub)            # 밝은 활자/어두운 바탕을 여기서 뒤집는다
     th = blocks.threshold(gp)
@@ -71,7 +91,10 @@ def measure(src, box):
     gaps = [base[i + 1] - base[i] for i in range(len(base) - 1)]
     al, spread = _align(xs, xe)
 
+    ink = (min(xs), min(int(l['ink_top']) + y1 for l in ls),
+           max(xe), max(int(l['ink_bot']) + y1 for l in ls))
     return dict(
+        clipped=_clipped(ink, win),
         n_lines=len(ls),
         baselines=base,
         x_tops=[int(l['x_top']) + y1 for l in ls],
@@ -85,5 +108,5 @@ def measure(src, box):
         grid_resid=round(float(resid), 2),
         align=al, align_spread=spread,
         x_starts=xs, x_ends=xe,
-        box_ink=(min(xs), min(int(l['top']) + y1 for l in ls), max(xe), max(base)),
+        box_ink=ink,
     )
