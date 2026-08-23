@@ -43,14 +43,25 @@ os.makedirs(os.path.dirname(CACHE), exist_ok=True)
 GAP_MIN_FALLBACK = 1.0     # 여백은 실측에서 「자유」로 나왔다. 겹침만 막는다.
 
 
-def _rules():
-    return rules.load(CACHE)
+# 짚어준 상자로 쌓는 코퍼스는 기본 캐시와 따로 둔다. 자동 검출한 분포와
+# 섞으면 규칙이 어느 방법에서 나왔는지 말할 수 없다.
+GROUNDED = os.path.join(os.path.dirname(CACHE), 'grounded.json')
 
 
-def _need():
+def _cache(a=None):
+    """도구마다 cache 인자로 다른 코퍼스를 볼 수 있다. 없으면 기본 캐시."""
+    p = (a or {}).get('cache')
+    return os.path.expanduser(p) if p else CACHE
+
+
+def _rules(a=None):
+    return rules.load(_cache(a))
+
+
+def _need(a=None):
     return {"ok": False,
             "error": "규칙이 없다. measure_corpus 로 포스터 디렉토리를 먼저 측정하라",
-            "cache": CACHE}
+            "cache": _cache(a)}
 
 
 def _lines(b):
@@ -129,17 +140,17 @@ def measure_corpus(args):
     if not raw:
         return {"ok": False, "error": "측정에 성공한 포스터가 없다", "failed": errors}
     r = rules.derive(raw)
-    rules.save(CACHE, raw, r)
-    return {"ok": True, "cache": CACHE, "n_found": len(paths), **r,
+    rules.save(_cache(args), raw, r)
+    return {"ok": True, "cache": _cache(args), "n_found": len(paths), **r,
             "n_failed": len(errors), "failed": errors,
             "note": ("실패한 포스터는 failed 에 이유와 함께 나온다. 조용히 빠지지 않는다.")}
 
 
 def show_rules(args):
-    R = _rules()
+    R = _rules(args)
     if not R:
-        return _need()
-    return {"ok": True, "cache": CACHE, **R}
+        return _need(args)
+    return {"ok": True, "cache": _cache(args), **R}
 
 
 def _candidate(args):
@@ -203,9 +214,9 @@ def _position(value, entry):
 
 
 def check_layout(args):
-    R = _rules()
+    R = _rules(args)
     if not R:
-        return _need()
+        return _need(args)
     sel = args.get("layer")
     forced, err = (_pick(R, sel) if sel is not None else (None, None))
     if err:
@@ -315,10 +326,10 @@ def style_card(args):
     참조와 어떻게 다른지를 함께 넘긴다. 「유파 공통 문법」 같은 해석은 쓰지
     않는다. 그건 이 숫자를 읽는 쪽의 몫이다.
     """
-    R = _rules()
+    R = _rules(args)
     if not R:
-        return _need()
-    d = json.load(open(CACHE))
+        return _need(args)
+    d = json.load(open(_cache(args)))
     raw = d.get("raw", {})
 
     refs = {}
@@ -390,7 +401,7 @@ def style_card(args):
                 card["reference"] = c
         out[key] = card
 
-    return {"ok": True, "cache": CACHE,
+    return {"ok": True, "cache": _cache(args),
             "n_posters": len(raw),
             "criteria": R.get("criteria"),
             "metrics": out,
@@ -409,9 +420,9 @@ def style_card(args):
 
 
 def place_text(args):
-    R = _rules()
+    R = _rules(args)
     if not R:
-        return _need()
+        return _need(args)
     sel = args.get("layer")
     band, err = _pick(R, sel)
     if err:
@@ -461,23 +472,80 @@ def place_text(args):
                      "고르지 않으면 대표 계층을 쓴다.")}
 
 
+def measure_boxes(args):
+    """짚어준 상자 안만 잰다. 어디를 잴지는 이 서버가 정하지 않는다.
+
+    부르는 쪽이 포스터를 보고 상자를 준다. 그것이 이 파이프라인의 설계다 —
+    덩어리를 찾는 일은 보는 쪽이 낫고, 그 안의 행간·정렬을 재는 일은
+    추정이 들어가면 안 되므로 코드가 한다.
+    """
+    import ground
+    path = os.path.expanduser(args.get("image") or "")
+    if not path or not os.path.exists(path):
+        return {"ok": False, "error": f"이미지를 찾을 수 없다: {path}"}
+    boxes = args.get("boxes") or []
+    if not boxes:
+        return {"ok": False, "error": "상자가 비었다. 포스터를 보고 타이포 덩어리를 짚어 달라"}
+    store = bool(args.get("store"))
+    cache = os.path.expanduser(args.get("cache")) if args.get("cache") else GROUNDED
+    try:
+        r = ground.ground(path, boxes, cache=cache,
+                          coords=args.get("coords", "norm"), store=store)
+    except Exception as e:
+        return {"ok": False, "error": f"{type(e).__name__}: {e}"}
+    r["note"] = ("상자 안에서 잰 값이다. lead_measured 는 베이스라인 간격의 중앙값, "
+                 "align 은 왼쪽·오른쪽·가운데 중 가장 고른 축이며 어느 것도 "
+                 f"{ground.boxmeasure.ALIGN_EPS}px 안에 들지 않으면 none 이다. "
+                 "n_lines 0 은 상자가 빗나갔거나 글자가 너무 작다는 뜻이다")
+    if not store:
+        r["hint"] = "store=true 로 주면 이 포스터를 코퍼스에 쌓고 규칙을 다시 뽑는다"
+    return r
+
+
 TOOLS = [
     {"name": "measure_corpus",
      "description": ("포스터 디렉토리를 측정해 조판 규칙을 뽑아 캐시에 저장한다. "
                      "값이 몰린 지표만 「제약」으로 채택하고, 흩어진 것은 「자유」로 기록한다. "
                      "다른 디자이너의 포스터를 넣으면 그 디자이너의 규칙이 나온다."),
      "inputSchema": {"type": "object", "properties": {
+         "cache": {"type": "string", "description": "볼 코퍼스 파일. 생략하면 기본 캐시. 짚어서 쌓은 코퍼스는 따로 있다"},
          "directory": {"type": "string", "description": "포스터 이미지가 있는 폴더"},
          "limit": {"type": "integer", "description": "앞에서 이 개수만 측정 (시험용)"}},
          "required": ["directory"]}},
+    {"name": "measure_boxes",
+     "description": ("포스터를 직접 보고 타이포 덩어리를 상자로 짚어 주면 그 안의 조판을 잰다. "
+                     "행간·베이스라인·x높이·정렬축을 상자마다 낸다. 상자 밖은 보지 않는다. "
+                     "store 로 쌓으면 짚어준 상자만으로 코퍼스와 규칙이 만들어진다. "
+                     "자동 검출(measure_corpus)과 달리 어디를 잴지는 부르는 쪽이 정한다."),
+     "inputSchema": {"type": "object", "properties": {
+         "image": {"type": "string", "description": "포스터 이미지 경로"},
+         "coords": {"type": "string", "enum": ["norm", "px"],
+                    "description": ("norm(기본)은 판면 대비 0~1 비율, px 는 원본 픽셀. "
+                                    "원본 해상도를 모르면 norm 을 써라")},
+         "store": {"type": "boolean",
+                   "description": "true 면 코퍼스에 쌓고 규칙을 다시 뽑는다 (기본 false)"},
+         "cache": {"type": "string",
+                   "description": "쌓을 코퍼스 파일. 생략하면 짚기 전용 캐시를 쓴다"},
+         "boxes": {"type": "array", "description": "눈에 보이는 타이포 덩어리 하나마다 상자 하나",
+                   "items": {"type": "object", "properties": {
+                       "id": {"type": "string", "description": "덩어리 이름 (예: 제목, 날짜)"},
+                       "role": {"type": "string",
+                                "description": "역할 (제목/부제/본문/일시/장소/출판정보 등). 기록만 한다"},
+                       "box": {"type": "array", "items": {"type": "number"},
+                               "minItems": 4, "maxItems": 4,
+                               "description": "[x1, y1, x2, y2]. 디센더와 발음기호까지 잉크 전체를 감싼다"}},
+                       "required": ["box"]}}},
+         "required": ["image", "boxes"]}},
     {"name": "show_rules",
      "description": "캐시에 저장된 규칙과 각 지표의 분포·표본 수·채택 여부를 보여준다.",
-     "inputSchema": {"type": "object", "properties": {}}},
+     "inputSchema": {"type": "object", "properties": {
+         "cache": {"type": "string", "description": "볼 코퍼스 파일. 생략하면 기본 캐시. 짚어서 쌓은 코퍼스는 따로 있다"},}}},
     {"name": "style_card",
      "description": ("AI 가 추론에 쓸 정량 데이터를 낸다. 대표값 하나가 아니라 흔들림·표본 수·"
                      "계층 수·제외된 것·참조와의 차이를 함께 준다. 해석과 결론은 담지 않는다. "
                      "사람이 읽을 리포트가 필요하면 show_rules 를 써라."),
      "inputSchema": {"type": "object", "properties": {
+         "cache": {"type": "string", "description": "볼 코퍼스 파일. 생략하면 기본 캐시. 짚어서 쌓은 코퍼스는 따로 있다"},
          "reference": {"type": "object",
                        "description": ("참조 코퍼스. {이름: 캐시경로}. 주면 지표마다 "
                                        "중앙값 차이와 신뢰구간이 갈리는 쌍 수를 함께 낸다"),
@@ -487,6 +555,7 @@ TOOLS = [
                      "모든 블록이 하나의 격자를 정수배로 공유하게 만든다. "
                      "가로 위치와 판면 구성은 계산하지 않는다."),
      "inputSchema": {"type": "object", "properties": {
+         "cache": {"type": "string", "description": "볼 코퍼스 파일. 생략하면 기본 캐시. 짚어서 쌓은 코퍼스는 따로 있다"},
          "layer": {"type": "integer", "description": ("쓸 행간 계층 번호(1부터). show_rules 의 layers 참조. "
                                                       "생략하면 대표 계층. 코퍼스는 본문인지 실무 정보인지 모른다")},
          "grid_lead": {"type": "number", "description": "격자 간격(px). 생략하면 가장 작은 활자에서 정한다"},
@@ -501,6 +570,7 @@ TOOLS = [
                      "행간 규칙이 여러 계층이면 계층 전체를 놓고 보고, 판정 보류인 계층에 드는 값은 "
                      "위반이 아니라 「보류」로 따로 보고한다."),
      "inputSchema": {"type": "object", "properties": {
+         "cache": {"type": "string", "description": "볼 코퍼스 파일. 생략하면 기본 캐시. 짚어서 쌓은 코퍼스는 따로 있다"},
          "layer": {"type": "integer", "description": ("이 계층으로만 검사한다(1부터). "
                                                       "생략하면 계층 전체를 놓고 본다")},
          "canvas": {"type": "object", "description": "판면 크기. 주면 마진과 글자 면적을 잰다",
@@ -518,7 +588,8 @@ TOOLS = [
          "required": ["blocks"]}},
 ]
 
-FUNCS = {"measure_corpus": measure_corpus, "show_rules": show_rules, "style_card": style_card,
+FUNCS = {"measure_corpus": measure_corpus, "measure_boxes": measure_boxes,
+         "show_rules": show_rules, "style_card": style_card,
          "place_text": place_text, "check_layout": check_layout}
 
 
@@ -527,7 +598,7 @@ def rpc(req):
     if m == "initialize":
         return {"jsonrpc": "2.0", "id": i, "result": {
             "protocolVersion": "2024-11-05", "capabilities": {"tools": {}},
-            "serverInfo": {"name": "brockmann", "version": "0.3.0"}}}
+            "serverInfo": {"name": "brockmann", "version": "0.4.0"}}}
     if m == "tools/list":
         return {"jsonrpc": "2.0", "id": i, "result": {"tools": TOOLS}}
     if m == "tools/call":

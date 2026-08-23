@@ -102,6 +102,11 @@ STRATA_RATIO = 3.0  # 성분 높이가 중앙값의 이 배를 넘으면 다른 
                     # 값이 아니라 분리하느냐 마느냐가 결정적이다. 3.0 은 얕은 봉우리.
 
 FRAG_WIDE = 0.40    # 이웃 글줄 폭의 이 비율 이하로 좁으면 글줄이 아니라 조각으로 본다
+FRAG_COVER = 0.35   # 제 폭 안에서 잉크가 든 칸이 이 비율 이하면 글줄이 아니라 조각이다.
+                    # 폭만으로는 「musica viva」 의 i 점 두 개를 못 거른다 — 점이
+                    # 멀리 떨어져 있어 폭이 몸통의 43%가 되고 FRAG_WIDE 를 넘긴다.
+                    # 글줄은 제 폭을 거의 채우지만 점은 그 안이 비어 있다.
+                    # 이 판에서 점은 0.12, 진짜 글줄은 0.63~0.92 로 갈렸다.
 
 INK_FRAC = 0.06     # 그 단 최대 잉크의 이 비율 이하는 얼룩으로 본다. 스윕 결과 0.02~0.10 평평, 0.20부터 줄 소실
 
@@ -142,6 +147,12 @@ def lines(g, th, x0, x1, min_h=2, body_h=4, mask=None):
     def wide(o):
         return o['span'][1] - o['span'][0]
 
+    def cover(o):
+        a, b = o['span']
+        if b <= a:
+            return 1.0
+        return float((m[o['s']:o['e'], a:b].sum(axis=0) > 0).mean())
+
     res = []
     i = 0
     while i < len(out):
@@ -155,7 +166,8 @@ def lines(g, th, x0, x1, min_h=2, body_h=4, mask=None):
             inside = (cur['span'][0] >= nb['span'][0] - 1
                       and cur['span'][1] <= nb['span'][1] + 1)
             small = (cur['h'] <= nb['h'] * 0.5
-                     and wide(cur) <= FRAG_WIDE * max(wide(nb), 1))
+                     and (wide(cur) <= FRAG_WIDE * max(wide(nb), 1)
+                          or cover(cur) <= FRAG_COVER))
             if inside and small and gap <= max(3, nb['h'] * 0.6) and (bd is None or gap < bd):
                 best, bd = j, gap
         if best is not None:
