@@ -15,6 +15,7 @@ let cmpOn = false, shown = [WHO[0]], sel = null, hov = null;
 let pos = {}, sim = [], panels = [], view = {x:0,y:0,k:1}, drag = null, pan = null;
 let EMAP = {};                       // 선 -> 가진 뇌 목록
 let NB = {};                         // 뇌 -> 마디 -> 이웃 목록
+let DIFF = {};                       // 마디 -> 판마다 이웃이 몇 개 다른가
 
 // ── 배치는 «하나» 만 만든다. 판마다 같은 자리에 있어야 눈이 따라간다 ──
 function layout(){
@@ -44,6 +45,14 @@ function layout(){
     });
     for (const k in m) m[k].sort();
     NB[w] = m;
+  });
+  DIFF = {};
+  if (shown.length>1) ids.forEach(function(id){
+    const sets = shown.map(w=>(NB[w]||{})[id]||[]);
+    const uni = {}; sets.forEach(s2=>s2.forEach(x=>{ uni[x]=(uni[x]||0)+1; }));
+    // 모든 판에 다 있는 이웃이 아니면 «다른» 것으로 센다
+    const d = Object.keys(uni).filter(x=>uni[x]<shown.length).length;
+    if (d) DIFF[id] = d;
   });
   sim.forEach(n=>{ n.s = by[n.id]; });
   for (let i=0;i<420;i++) step();
@@ -122,11 +131,12 @@ function draw(){
       const s = pos[e.a], t = pos[e.b];
       const all = Object.keys(e.own).length === shown.length;
       const lit = !sel || e.a===sel || e.b===sel;
-      ctx.globalAlpha = lit ? 0.85 : 0.06;
-      // 여럿이 다 가진 선은 회색으로 물러나고, 한쪽만 가진 선이 색을 얻는다
-      ctx.strokeStyle = (multi && !all) ? wcolor(P.who) : EDGE;
-      ctx.lineWidth = (multi && !all ? 1.4 : 1) + mine.r*4.2;
-      ctx.setLineDash(mine.sign<0 ? [7,4] : []);
+      // 구분은 둘뿐이다 — 모두에게 있는 선(옅은 회색)과 이 뇌에만 있는 선(색).
+      // 부호는 선에 싣지 않는다. 파선까지 얹으면 무엇이 무엇인지 안 갈린다.
+      const solo = multi && !all;
+      ctx.globalAlpha = lit ? (solo?0.92:0.42) : 0.05;
+      ctx.strokeStyle = solo ? wcolor(P.who) : EDGE;
+      ctx.lineWidth = (solo?1.6:0.9) + mine.r*(solo?4.4:2.2);
       ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(t.x,t.y); ctx.stroke();
     }
     ctx.setLineDash([]);
@@ -151,46 +161,35 @@ function draw(){
         ctx.fillStyle = INK;
         ctx.fillText(fmt(n.id,n.median), p.x, p.y+r+4+15/z);
       }
+      // 판을 여럿 놓았을 때, 이 마디의 이웃이 다른 판과 몇 개나 다른지
+      if (multi && DIFF[n.id]){
+        const bx = p.x+r+2/z, by = p.y-r-2/z, br = 7.5/z;
+        ctx.beginPath(); ctx.arc(bx,by,br,0,7);
+        ctx.fillStyle = css(GC[n.group]||'--grey'); ctx.globalAlpha = lit?0.95:0.12; ctx.fill();
+        ctx.fillStyle = css('--paper'); ctx.globalAlpha = lit?1:0.12;
+        ctx.font='700 '+(9.5/z)+'px "IBM Plex Mono", monospace';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(String(DIFF[n.id]), bx, by);
+        ctx.textBaseline='top';
+      }
       ctx.globalAlpha=1;
     });
     ctx.restore();
   });
 
-  // ── 판 사이를 잇는다 ─────────────────────────────────────────────
+  // ── 판 사이는 «고른 마디» 하나만 잇는다 ────────────────────────
   //
-  // 판만 갈라 놓으면 「왼쪽 덮음」과 「오른쪽 덮음」이 같은 마디라는 것이
-  // 눈에 안 들어온다. 같은 마디끼리 이어 준다. 그리고 그 선의 색이 답을
-  // 하나 더 준다 — 두 판에서 «이웃이 같으면» 회색, «다르면» 그 마디의 색.
-  if (multi){
-    const at2 = (P,id)=>({ x: P.cx+view.x+pos[id].x*P.k*view.k,
-                           y: P.cy+view.y+pos[id].y*P.k*view.k });
-    ctx.save();
-    for (let i=0;i<panels.length-1;i++){
-      const A = panels[i], Bp = panels[i+1];
-      const na = NB[A.who], nb = NB[Bp.who];
-      for (const id in pos){
-        const sa = na[id]||[], sb = nb[id]||[];
-        const same = sa.length===sb.length && sa.every(x=>sb.indexOf(x)>=0);
-        const diff = sa.filter(x=>sb.indexOf(x)<0).length + sb.filter(x=>sa.indexOf(x)<0).length;
-        const focus = !sel || sel===id;
-        const p1 = at2(A,id), p2 = at2(Bp,id);
-        ctx.setLineDash(same ? [2,6] : [5,4]);
-        ctx.strokeStyle = same ? HAIR : css(GC[(sim.find(n=>n.id===id)||{}).group]||'--grey');
-        ctx.lineWidth = same ? 1 : 1.2 + Math.min(diff,6)*0.42;
-        ctx.globalAlpha = sel===id ? 0.95 : (focus ? (same?0.30:0.55) : 0.07);
-        ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
-        if (!same && (sel===id || (!sel && diff>=3))){
-          const mx=(p1.x+p2.x)/2, my=(p1.y+p2.y)/2;
-          ctx.setLineDash([]); ctx.globalAlpha = 1;
-          ctx.fillStyle = css('--paper');
-          ctx.beginPath(); ctx.arc(mx,my,9,0,7); ctx.fill();
-          ctx.fillStyle = css(GC[(sim.find(n=>n.id===id)||{}).group]||'--grey');
-          ctx.font='600 10.5px "IBM Plex Mono", monospace';
-          ctx.textAlign='center'; ctx.textBaseline='middle';
-          ctx.fillText(String(diff), mx, my);
-        }
-      }
-    }
+  // 열다섯 마디를 모두 이으면 화면이 선으로 덮여 판 안의 선과 구분이 안 된다.
+  // 마디마다 다른지 같은지는 마디 옆 배지로 말하고, 선은 하나만 긋는다.
+  if (multi && (sel||hov)){
+    const id = sel || hov;
+    const col = css(GC[(sim.find(n=>n.id===id)||{}).group] || '--grey');
+    const pts = panels.map(P=>({ x:P.cx+view.x+pos[id].x*P.k*view.k,
+                                 y:P.cy+view.y+pos[id].y*P.k*view.k }));
+    ctx.save(); ctx.setLineDash([4,5]); ctx.strokeStyle = col;
+    ctx.lineWidth = 1.5; ctx.globalAlpha = 0.7;
+    for (let i=0;i<pts.length-1;i++){
+      ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[i+1].x,pts[i+1].y); ctx.stroke(); }
     ctx.restore();
   }
 
@@ -283,13 +282,11 @@ function refresh(){
   const k = document.getElementById('wkey');
   k.style.display = shown.length>1 ? 'block' : 'none';
   k.innerHTML =
-    '<div class="lgr"><span class="ln" style="border-top-width:3px;border-color:var(--edge)"></span>고른 뇌 모두에</div>'
-  + '<div class="lgr"><span class="ln" style="border-top-width:3px;border-color:var(--wA)"></span>그 뇌에만</div>'
-  + '<p class="lgt" style="margin-top:12px">판 사이</p>'
-  + '<div class="lgr"><span class="ln" style="border-top-width:1px;border-color:var(--hair);border-top-style:dotted"></span>이웃이 같다</div>'
-  + '<div class="lgr"><span class="ln" style="border-top-width:2px;border-color:var(--red);border-top-style:dashed"></span>이웃이 다르다</div>'
+    '<div class="lgr"><span class="ln" style="border-top-width:2px;border-color:var(--edge);opacity:.5"></span>고른 뇌 <b style="margin-left:3px">모두</b>에 있는 선</div>'
+  + '<div class="lgr"><span class="ln" style="border-top-width:3px;border-color:var(--wA)"></span>그 뇌<b style="margin-left:3px">에만</b> 있는 선</div>'
+  + '<div class="lgr"><span class="badge">3</span>이 마디의 이웃이 판마다 다른 개수</div>'
   + '<p class="note caveat" style="font-size:11px;margin-top:7px">판마다 마디 자리가 같다. '
-  + '판 사이 선의 숫자는 «이 마디의 이웃이 몇 개나 다른가» 다.</p>';
+  + '마디에 손을 올리면 판 사이가 점선으로 이어진다.</p>';
   document.getElementById('sgkey').style.display = shown.length>1 ? 'none' : 'block';
   document.getElementById('cmp').textContent = shown.length>1 ? '하나만 보기' : '나란히 놓고 보기';
   document.getElementById('cmp').setAttribute('aria-pressed', String(shown.length>1));
