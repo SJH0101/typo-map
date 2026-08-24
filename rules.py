@@ -329,6 +329,7 @@ def derive(raw, references=None):
     """
     import discrim
     import distinct
+    import relate
     rules, free = {}, {}
     exp = {}
     if references:
@@ -437,8 +438,11 @@ def derive(raw, references=None):
                     f'{e["eta2_null"]*100:.1f}% — {e["ratio"]}배). 다만 이 코퍼스가 남들 밖에 있는지는 '
                     f'따로 물어야 한다 — style_card 의 reference 를 보라.')
         (rules if d['verdict'] == '제약' else free)[key] = d
+    # 관계 지표. 값의 분포가 아니라 「어느 값이 어느 값과 함께 움직이는가」다.
+    # 코퍼스 하나에 숫자 하나가 나오므로 rules 에 넣지 않고 따로 낸다.
+    rel = relate.measure(raw, references) if references else None
     return dict(n_posters=len(raw), rules=rules, not_rules=free,
-                separability=sep, scope=exp or None,
+                separability=sep, scope=exp or None, relations=rel,
                 criteria=dict(cv_max=CV_MAX, n_min=N_MIN, layer_gap=LAYER_GAP,
                               auc_min=discrim.AUC_MIN,
                               scope_alpha=distinct.ALPHA if references else None,
