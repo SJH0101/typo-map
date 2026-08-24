@@ -23,11 +23,34 @@ def measure_corpus(args):
     raw = scan.collect(paths, errors=errors)
     if not raw:
         return {"ok": False, "error": "측정에 성공한 포스터가 없다", "failed": errors}
-    r = rules.derive(raw)
+    refs, missing = _refs(args)
+    r = rules.derive(raw, references=refs or None)
     rules.save(_cache(args), raw, r)
-    return {"ok": True, "cache": _cache(args), "n_found": len(paths), **r,
-            "n_failed": len(errors), "failed": errors,
-            "note": ("실패한 포스터는 failed 에 이유와 함께 나온다. 조용히 빠지지 않는다.")}
+    out = {"ok": True, "cache": _cache(args), "n_found": len(paths), **r,
+           "n_failed": len(errors), "failed": errors,
+           "note": ("실패한 포스터는 failed 에 이유와 함께 나온다. 조용히 빠지지 않는다.")}
+    if missing:
+        out["reference_missing"] = missing
+    if not refs:
+        out["note_scope"] = (
+            "reference 를 주지 않아 지표마다 «갈림/공통» 를 가리지 않았다. "
+            "다른 작가의 캐시를 주면 이 값이 이 사람의 선택인지 다들 그런 것인지 "
+            "함께 낸다 — 폰트 상수는 가장 안 흔들려서 규칙으로 먼저 채택된다.")
+    return out
+
+
+def _refs(args):
+    """{이름: 캐시경로} → {이름: 원자료}. 없는 것은 따로 알린다."""
+    refs, missing = {}, []
+    for name, path in (args.get("reference") or {}).items():
+        p = os.path.expanduser(path)
+        if not os.path.exists(p):
+            missing.append({"name": name, "path": p}); continue
+        try:
+            refs[name] = json.load(open(p))["raw"]
+        except Exception as e:
+            missing.append({"name": name, "path": p, "why": f"{type(e).__name__}: {e}"})
+    return refs, missing
 
 
 def show_rules(args):
@@ -142,9 +165,16 @@ TOOLS = [
     {"name": "measure_corpus",
      "description": ("포스터 디렉토리를 측정해 조판 규칙을 뽑아 캐시에 저장한다. "
                      "값이 몰린 지표만 「제약」으로 채택하고, 흩어진 것은 「자유」로 기록한다. "
+                     "reference 로 다른 작가의 캐시를 주면 «이 사람 것» 인지 «다들 그런 것» 인지 "
+                     "함께 가린다. "
                      "다른 디자이너의 포스터를 넣으면 그 디자이너의 규칙이 나온다."),
      "inputSchema": {"type": "object", "properties": {
          "cache": CACHE_ARG,
+         "reference": {"type": "object",
+                       "description": ("다른 작가의 캐시. {이름: 캐시경로}. 주면 지표마다 "
+                                       "«갈림/공통» 를 가린다 — 값이 몰려도 다른 작가와 "
+                                       "같으면 작가의 선택이 아니라 폰트·판형에서 오는 것이다"),
+                       "additionalProperties": {"type": "string"}},
          "directory": {"type": "string", "description": "포스터 이미지가 있는 폴더"},
          "limit": {"type": "integer", "description": "앞에서 이 개수만 측정 (시험용)"}},
          "required": ["directory"]}},

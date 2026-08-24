@@ -300,15 +300,35 @@ def _posters_for_discrim(raw):
     return out
 
 
-def derive(raw):
+def derive(raw, references=None):
     """원자료에서 분포를 내고 규칙 채택 여부를 판정한다.
 
-    판정이 둘이다. 변동계수는 「값이 모이는가」를 묻고, 판별력은 「자리를
-    섞은 것과 구분되는가」를 묻는다. 둘은 자주 엇갈린다 — 자세한 것은
-    discrim.py 첫머리와 docs/PART3.md 를 보라.
+    판정이 셋이다.
+
+        변동계수   이 코퍼스 안에서 값이 모이는가       (이 사람이 붙들었나)
+        판별력     자리를 섞은 배치와 구분되는가         (우연이 아닌가)
+        설명력     다른 작가와 다른가                  (이 사람 것인가)
+
+    앞의 둘은 자주 엇갈린다 — discrim.py 첫머리와 docs/PART3.md 를 보라.
+    셋째는 references 를 줄 때만 나온다. {이름: 원자료} 를 받는다.
+
+    셋째는 버리는 기준이 아니다. 「브로크만은 행간을 활자높이의 1.5배로
+    쓴다」는 호프만도 그래도 여전히 브로크만의 규칙이다. 채택은 앞의 둘로
+    하고, 셋째는 scope 로 «갈림/공통» 를 표시만 한다. 그것이 없으면 폰트
+    상수가 가장 먼저 규칙으로 채택된다 (distinct.py 첫머리).
     """
     import discrim
+    import distinct
     rules, free = {}, {}
+    exp = {}
+    if references:
+        per = {}
+        for key, (fn, _l, _u) in METRICS.items():
+            g = {'(이 코퍼스)': fn(raw)}
+            for nm, rr in references.items():
+                g[nm] = fn(rr)
+            per[key] = g
+        exp = distinct.by_metric(per)
     sep = discrim.separability(_posters_for_discrim(raw))
     n_all_posters = len(raw)
     for key, (fn, label, unit) in METRICS.items():
@@ -380,11 +400,31 @@ def derive(raw):
                     f'변동계수 {d["cv"]} 로는 흩어지지만 자리를 섞은 배치와는 '
                     f'구분된다 (AUC {v["auc"]}, 진짜 {v["real"]} 대 무작위 '
                     f'{v["null"]}). 값 하나로 못 박을 수는 없어도 방향은 있다.')
+        # 셋째 축. 채택을 바꾸지 않고 표시만 한다.
+        if key in exp:
+            e = exp[key]
+            d['scope'] = e['scope']
+            d['eta2'] = e['eta2']
+            d['eta2_null'] = e['eta2_null']
+            d['scope_of'] = e['corpora']
+            if e['scope'] == '공통':
+                d['note_scope'] = (
+                    f'이 지표는 참조 {e["n_corpora"]} 종을 가르지 못한다 '
+                    f'(설명력 {e["eta2"]*100:.1f}%, 딱지를 섞어도 '
+                    f'{e["eta2_null"]*100:.1f}% 는 나온다). 값이 몰리더라도 작가의 '
+                    f'선택이 아니라 폰트·판형·인쇄에서 오는 것일 수 있다.')
+            else:
+                d['note_scope'] = (
+                    f'이 지표는 참조 {e["n_corpora"]} 종을 가른다 '
+                    f'(설명력 {e["eta2"]*100:.1f}%, 무작위 딱지 '
+                    f'{e["eta2_null"]*100:.1f}%). 다만 이 코퍼스가 남들 밖에 있는지는 '
+                    f'따로 물어야 한다 — style_card 의 reference 를 보라.')
         (rules if d['verdict'] == '제약' else free)[key] = d
     return dict(n_posters=len(raw), rules=rules, not_rules=free,
-                separability=sep,
+                separability=sep, scope=exp or None,
                 criteria=dict(cv_max=CV_MAX, n_min=N_MIN, layer_gap=LAYER_GAP,
-                              auc_min=discrim.AUC_MIN))
+                              auc_min=discrim.AUC_MIN,
+                              scope_pct=distinct.PCT if references else None))
 
 
 def median_ci(a, boot=4000, seed=0):
