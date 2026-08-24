@@ -33,14 +33,24 @@ def _cap_h(b):
     return [base - c for c, base in zip(b['caps'], b['bases']) if c is not None]
 
 
+def _lead(b):
+    """행간은 «잰 값» 을 쓴다. 격자값은 「격자에 앉았나」라는 다른 질문이다.
+
+    격자값(lead)은 자기상관 창(5~60px)을 벗어나거나 단 안에 블록이 여럿이면
+    None 이 된다. 그것을 지표로 쓰니 브로크만 123장 중 64장이 행간을 한 값도
+    내지 못했다. 실측값으로 바꾸면 그 대부분이 살아난다.
+    """
+    return b.get('lead_measured') or b.get('lead')
+
+
 def m_lead_over_cap(raw):
     out = []
     for v in raw.values():
         for b in v['blocks']:
-            if b['lead'] and b['n'] >= 3:
+            if _lead(b) and b['n'] >= 3:
                 cs = _cap_h(b)
                 if cs:
-                    out.append(b['lead'] / float(np.median(cs)))
+                    out.append(_lead(b) / float(np.median(cs)))
     return out
 
 
@@ -48,10 +58,10 @@ def m_gap(raw):
     out = []
     for v in raw.values():
         for b in v['blocks']:
-            if b['lead'] and b['n'] >= 3:
+            if _lead(b) and b['n'] >= 3:
                 cs = _cap_h(b)
                 if cs:
-                    out.append(b['lead'] - float(np.median(cs)))
+                    out.append(_lead(b) - float(np.median(cs)))
     return out
 
 

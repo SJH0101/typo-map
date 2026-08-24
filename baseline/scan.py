@@ -174,6 +174,7 @@ def collect(paths, reader=None, progress=None, errors=None):
                 dict(x1=int(b['x1']), y1=int(b['y1']), x2=int(b['x2']), y2=int(b['y2']),
                      n=int(b['n']), xh=float(b['xh']),
                      lead=(None if b['lead'] is None else int(b['lead'])),
+                     lead_measured=b.get('lead_measured'),
                      bases=[int(l['base']) for l in b['lines']],
                      caps=[None if l['cap'] is None else int(l['cap']) for l in b['lines']],
                      xtops=[int(l['x_top']) for l in b['lines']]) for b in r['blocks']])

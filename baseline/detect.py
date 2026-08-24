@@ -60,6 +60,24 @@ SHADOW_H = 0.45     # 큰 블록 상자 높이의 이 비율 이하면 조각으
                     # 넘어 살아남았다.
 SHADOW_W = 0.45     # 폭도 함께 본다. 조각은 큰 글줄의 일부라 좁다.
 
+def _measured(bl):
+    """베이스라인 간격의 중앙값. 격자 맞추기와 무관한 «잰 값» 이다.
+
+    격자값(lead)은 자기상관이 봉우리를 못 찾으면 None 이 된다. 창이 5~60px
+    이라 82px 행간의 표제 블록은 아예 닿지 못하고, 단 전체의 잉크 프로파일을
+    쓰기 때문에 다른 블록이 섞여 봉우리가 뭉개지기도 한다. 그때 멀쩡한 실측값
+    까지 함께 버려지고 있었다 — 브로크만 코어에서 6줄 크레딧 블록의 실측
+    간격이 14.0 인데 lead 는 None 이었다.
+
+    measure/grid.py 첫머리에 「측정값은 건드리지 않는다, 격자는 별도 열로만
+    남긴다」고 적어 두었는데 지표가 격자값을 쓰고 있었다. 원칙대로 나눈다.
+    """
+    b = sorted(l['base'] for l in bl)
+    if len(b) < 2:
+        return None
+    return round(float(np.median(np.diff(b))), 1)
+
+
 def trim(g, th, frac=0.8, max_fringe=3):
     """스캔 테두리 제거.
        1) 폭의 frac 이상이 어두운 가장자리 = 테두리
@@ -368,7 +386,7 @@ def run(src, region, seeds=None):
           for bl in group(lines(gb, thb, cx0, cx1, mask=sm)):
             bl, lead, resid = apply_grid(bl, ink_col)
             x1, y1, x2, y2 = box(bl)
-            res.append(dict(lead=lead, grid_resid=round(resid, 2),x1=x1+region[0], y1=y1+oy, x2=x2+region[0], y2=y2+oy,
+            res.append(dict(lead=lead, lead_measured=_measured(bl), grid_resid=round(resid, 2),x1=x1+region[0], y1=y1+oy, x2=x2+region[0], y2=y2+oy,
                             n=len(bl), h=round(float(np.median([l['base']-l['top'] for l in bl])), 1),
                             xh=round(float(np.median([l['xh'] for l in bl])), 1),
                             lines=[dict(top=l['top']+oy, base=l['base']+oy,
@@ -403,7 +421,7 @@ def run(src, region, seeds=None):
                            threshold(polarity(g[:, max(0, x0b):max(1, x1b)].copy()))).sum(1).astype(float)
                 bl, lead, resid = apply_grid(bl, ink_col)
                 x1_, y1_, x2_, y2_ = box(bl)
-                res.append(dict(lead=lead, grid_resid=round(resid, 2),
+                res.append(dict(lead=lead, lead_measured=_measured(bl), grid_resid=round(resid, 2),
                                 x1=x1_+region[0], y1=y1_+region[1],
                                 x2=x2_+region[0], y2=y2_+region[1],
                                 n=len(bl), seeded=True,
