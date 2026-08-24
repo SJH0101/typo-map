@@ -35,13 +35,26 @@ canvas.drag{cursor:grabbing}
 #rail{top:18px;left:18px;width:250px;padding:16px 16px 13px;z-index:3}
 .brand{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
   font-weight:600;margin:0 0 12px}
-.who{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:14px}
-.who button{font:inherit;font-size:13px;font-weight:500;padding:7px 4px;cursor:pointer;
-  background:transparent;color:var(--dim);border:1px solid var(--hair);border-radius:2px;
-  transition:all .12s}
-.who button:hover{color:var(--ink);border-color:var(--dim)}
-.who button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.who button:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.q{width:100%;font:inherit;font-size:12.5px;padding:6px 9px;margin-bottom:7px;
+  background:transparent;color:var(--ink);border:1px solid var(--hair);border-radius:2px}
+.q::placeholder{color:var(--dim)}
+.q:focus{outline:none;border-color:var(--dim)}
+.list{max-height:238px;overflow-y:auto;border:1px solid var(--hair);border-radius:2px;
+  margin-bottom:7px}
+.list button{display:flex;align-items:center;gap:8px;width:100%;font:inherit;font-size:13px;
+  padding:8px 10px;cursor:pointer;background:transparent;color:var(--ink);border:0;
+  border-bottom:1px solid var(--hair);text-align:left}
+.list button:last-child{border-bottom:0}
+.list button:hover{background:var(--glow)}
+.list button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.list button:focus-visible{outline:2px solid var(--yellow);outline-offset:-2px}
+.list .mark{width:11px;height:11px;border-radius:2px;border:1.5px solid var(--dim);flex:none}
+.list button[aria-pressed="true"] .mark{border-color:transparent}
+.list .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list .meta{font-size:10.5px;color:var(--dim);font-family:"IBM Plex Mono",monospace;flex:none}
+.list button[aria-pressed="true"] .meta{color:var(--mute)}
+.list .no{color:var(--red)}
+.listnote{font-size:11px;color:var(--dim);margin:0 0 12px;line-height:1.5}
 .stat{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);
   padding:4px 0;border-top:1px solid var(--hair)}
 .stat b{color:var(--ink);font-weight:600}
@@ -56,8 +69,6 @@ canvas.drag{cursor:grabbing}
   background:transparent;color:var(--dim);border:1px solid var(--hair);border-radius:2px}
 .toggle button:disabled{opacity:.4;cursor:not-allowed}
 .sg{font-size:10px;color:var(--dim);margin-right:3px}
-.who{grid-template-columns:1fr 1fr}
-.who button.wide{grid-column:1/-1}
 .swatch{width:9px;height:9px;border-radius:2px;display:inline-block;flex:none}
 .swatch.sm{width:7px;height:7px;margin-right:2px}
 .cmprow{display:flex;align-items:center;gap:7px;font-size:12.5px;padding:5px 0;

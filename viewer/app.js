@@ -264,9 +264,7 @@ function detail(id){
 
 function refresh(){
   const b = B[shown[0]];
-  document.getElementById('sN').textContent = shown.map(w=>B[w].n).join(' · ');
   document.getElementById('sV').textContent = sim.length;
-  document.getElementById('sE').textContent = shown.map(w=>B[w].ok?B[w].edges.length:'—').join(' · ');
   document.getElementById('fl').innerHTML = b.cannot.map(t=>'<li>'+t+'</li>').join('');
   document.getElementById('rule').textContent = b.rule;
   const warn = document.getElementById('nowarn');
@@ -274,11 +272,7 @@ function refresh(){
   warn.style.display = bad.length ? 'block' : 'none';
   warn.innerHTML = bad.map(w=>'<b>'+w+'</b> '+B[w].n+'장 — 편상관을 재려면 최소 '
     + B[w].need + '장이 필요하다. <b>선이 없는 게 아니라 못 잰 것이다.</b>').join('<br>');
-  document.querySelectorAll('#who button').forEach(function(x){
-    const w = x.dataset.w, on = shown.indexOf(w)>=0;
-    x.setAttribute('aria-pressed', String(on));
-    x.style.borderLeft = (on && shown.length>1) ? '4px solid '+wcolor(w) : '';
-  });
+  listing();
   const k = document.getElementById('wkey');
   k.style.display = shown.length>1 ? 'block' : 'none';
   k.innerHTML =
@@ -322,20 +316,40 @@ addEventListener('pointerup', ()=>{ drag=null; pan=null; cv.classList.remove('dr
 cv.addEventListener('wheel', e=>{ e.preventDefault();
   view.k = Math.max(0.45, Math.min(2.4, view.k*(e.deltaY<0?1.09:0.917))); }, {passive:false});
 
-document.getElementById('who').innerHTML =
-  WHO.map(w=>'<button data-w="'+w+'" aria-pressed="false"'
-    + (B[w].pooled?' class="wide"':'')+'>'+w+'</button>').join('');
-document.querySelectorAll('#who button').forEach(function(b){
-  b.onclick = function(){
-    const w = b.dataset.w, i = shown.indexOf(w);
-    if (shown.length===1 && i<0){ shown=[w]; }
-    else if (i>=0){ if (shown.length>1) shown.splice(i,1); }
-    else if (shown.length<4){ shown.push(w); }
-    layout(); refresh(); if (sel) detail(sel);
-  };
-});
+// ── 작가 목록 ────────────────────────────────────────────────────
+// 버튼 격자로는 넷까지가 한계였다. 코퍼스는 앞으로 계속 늘어나므로 목록으로
+// 두고 찾기까지 붙인다. 판은 최대 넷까지만 나눈다 — 그 이상은 안 읽힌다.
+const MAX_PANEL = 4;
+
+function listing(){
+  const q = (document.getElementById('q').value||'').trim().toLowerCase();
+  const box = document.getElementById('who');
+  const hit = WHO.filter(w=>!q || w.toLowerCase().indexOf(q)>=0);
+  box.innerHTML = hit.length ? hit.map(function(w){
+    const b = B[w], on = shown.indexOf(w)>=0;
+    const meta = b.ok ? (b.n+'장 · 선'+b.edges.length)
+                      : '<span class="no">'+b.n+'장 · 선 못 잼</span>';
+    return '<button data-w="'+w+'" aria-pressed="'+on+'">'
+      + '<span class="mark" style="'+(on?'background:'+wcolor(w):'')+'"></span>'
+      + '<span class="nm">'+w+'</span><span class="meta">'+meta+'</span></button>';
+  }).join('') : '<button disabled><span class="nm" style="color:var(--dim)">없다</span></button>';
+  box.querySelectorAll('button[data-w]').forEach(function(b){
+    b.onclick = function(){
+      const w = b.dataset.w, i = shown.indexOf(w);
+      if (i>=0){ if (shown.length>1) shown.splice(i,1); }
+      else if (shown.length>=MAX_PANEL){ shown.shift(); shown.push(w); }
+      else shown.push(w);
+      layout(); refresh(); if (sel) detail(sel);
+    };
+  });
+  document.getElementById('ln').innerHTML = shown.length>1
+    ? ('판 '+shown.length+'개 · 최대 '+MAX_PANEL+'개까지 나란히 놓는다')
+    : ('작가를 더 누르면 나란히 놓고 견준다 · 모두 '+WHO.length+'명');
+  document.getElementById('q').style.display = WHO.length>7 ? 'block' : 'none';
+}
+document.getElementById('q').oninput = listing;
 document.getElementById('cmp').onclick = function(){
-  shown = shown.length>1 ? [shown[0]] : WHO.filter(w=>!B[w].pooled).slice(0,2);
+  shown = shown.length>1 ? [shown[0]] : WHO.slice(0,2);
   layout(); refresh(); if (sel) detail(sel);
 };
 [['rh','rule2','rc'],['fh','foot','fc']].forEach(function(t){

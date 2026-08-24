@@ -88,6 +88,40 @@ def add_designer(args):
     return out
 
 
+def pool_brains(args):
+    """코퍼스 여럿을 합쳐 하나의 뇌로. 어느 조합이든 된다.
+
+    한 작가로는 표본이 모자라 안 보이던 관계가 합치면 보일 수 있다. 다만
+    그냥 합치면 작가별 수준 차이가 가짜 선을 만들므로, 코퍼스마다 제 안에서
+    순위를 매긴 뒤 합쳐서 잰다 (brain.build_pooled 참조).
+    """
+    raws, missing = {}, []
+    for name, p in (args.get("corpora") or {}).items():
+        p = os.path.expanduser(p)
+        if not os.path.exists(p):
+            missing.append({"name": name, "path": p}); continue
+        d = json.load(open(p))
+        if "raw" not in d:
+            missing.append({"name": name, "why": "원자료가 없는 파일이다 (캐시를 줘라)"}); continue
+        raws[name] = d["raw"]
+    if len(raws) < 2:
+        return {"ok": False, "error": "합칠 코퍼스가 둘 이상 필요하다", "skipped": missing}
+    who = args.get("name") or ("합침: " + " + ".join(raws))
+    b = _brain.build_pooled(raws, who)
+    dst = args.get("save")
+    if dst:
+        dst = os.path.expanduser(dst)
+    else:
+        dst = os.path.join(os.path.dirname(_cache(args)), "brain-pool-" + _slug(who) + ".json")
+    json.dump(b, open(dst, "w"), ensure_ascii=False)
+    out = {"ok": True, "who": who, "brain": dst, "n_posters": b["n_posters"],
+           "n_edges": len(b["edges"]), "edges_estimable": b["edges_estimable"],
+           "pooled_from": b["pooled_from"]}
+    if missing:
+        out["skipped"] = missing
+    return out
+
+
 def list_brains(args):
     """만들어 둔 뇌 목록."""
     d = os.path.dirname(_cache(args))
@@ -181,6 +215,18 @@ TOOLS = [
     {"name": "list_brains",
      "description": "만들어 둔 뇌 목록. 어느 작가가 있고 몇 장이며 선을 잴 수 있는지 낸다.",
      "inputSchema": {"type": "object", "properties": {"cache": CACHE_ARG}}},
+    {"name": "pool_brains",
+     "description": ("코퍼스 여럿을 합쳐 하나의 뇌로 만든다. 한 작가로는 표본이 모자라 안 보이던 "
+                     "관계가 보일 수 있다. 그냥 합치면 작가별 값 수준 차이가 가짜 선을 만들므로 "
+                     "코퍼스마다 제 안에서 순위를 매긴 뒤 합쳐서 잰다. 그래서 여기 선은 "
+                     "«누구의 작업이든 한 사람 안에서 함께 움직이는» 관계지 어느 한 사람의 것이 아니다."),
+     "inputSchema": {"type": "object", "properties": {
+         "corpora": {"type": "object", "description": "{이름: 캐시경로}. 둘 이상",
+                     "additionalProperties": {"type": "string"}},
+         "name": {"type": "string", "description": "합친 뇌의 이름표"},
+         "save": {"type": "string", "description": "저장할 경로. 생략하면 캐시 옆에"},
+         "cache": CACHE_ARG},
+         "required": ["corpora"]}},
     {"name": "compare_brains",
      "description": ("뇌 둘 이상을 겹쳐 본다. 마디마다 값이 갈리는지, 선마다 누구에게 있는지를 낸다. "
                      "뇌 하나는 혼자 서므로 비교는 필요할 때만 부른다. "
@@ -194,4 +240,5 @@ TOOLS = [
 ]
 
 FUNCS = dict(style_brain=style_brain, compare_brains=compare_brains,
-             add_designer=add_designer, list_brains=list_brains)
+             add_designer=add_designer, list_brains=list_brains,
+             pool_brains=pool_brains)
