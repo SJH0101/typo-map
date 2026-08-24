@@ -179,6 +179,22 @@ def m_text_area(raw):
     return out
 
 
+def _place(raw, name):
+    """「어디에」 지표는 features 에서 한 번에 뽑는다 — 셈을 두 군데 두지 않는다."""
+    import features
+    X, _keys, names = features.matrix(raw)
+    v = X[:, names.index(name)]
+    return [float(x) for x in v if x == x]
+
+
+def m_center_x(raw):   return _place(raw, '무게x')
+def m_center_y(raw):   return _place(raw, '무게y')
+def m_spread_x(raw):   return _place(raw, '퍼짐x')
+def m_spread_y(raw):   return _place(raw, '퍼짐y')
+def m_axis_share(raw): return _place(raw, '축공유')
+def m_band(raw):       return _place(raw, '빈띠')
+
+
 def m_n_blocks(raw):
     return [len(v['blocks']) for v in raw.values() if v['blocks']]
 
@@ -226,6 +242,12 @@ METRICS = {
     'cap_range':     (m_cap_range,     '활자 크기 폭 (최대/최소)', '포스터'),
     'text_area':     (m_text_area,     '글자 면적 / 판면 면적', '포스터'),
     'n_blocks':      (m_n_blocks,      '블록 개수', '포스터'),
+    'center_x':      (m_center_x,      '글자 무게중심 가로 / 판면 폭', '포스터'),
+    'center_y':      (m_center_y,      '글자 무게중심 세로 / 판면 높이', '포스터'),
+    'spread_x':      (m_spread_x,      '덩어리 흩어짐 가로 / 판면 폭', '포스터'),
+    'spread_y':      (m_spread_y,      '덩어리 흩어짐 세로 / 판면 높이', '포스터'),
+    'axis_share':    (m_axis_share,    '왼쪽 축을 공유하는 덩어리 비율', '포스터'),
+    'band':          (m_band,          '가장 넓은 빈 가로 띠 / 판면 높이', '포스터'),
     'ground_share':  (m_ground_share,  '최빈색 점유율', '포스터'),
     'n_colors':      (m_n_colors,      '색 수 (2% 이상 쓰인)', '포스터'),
     'saturation':    (m_saturation,    '채도 중앙값', '포스터'),

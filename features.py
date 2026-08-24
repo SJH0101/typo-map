@@ -13,11 +13,19 @@ import numpy as np
 
 NAMES = ['색수', '밝기', '최빈색', '채도', '무채색',
          '마진좌', '마진우', '마진상', '마진하',
-         '덮음', '블록수', '단수', '활자폭', '행간비', '어센더비']
+         '덮음', '블록수', '단수', '활자폭', '행간비', '어센더비',
+         '무게x', '무게y', '퍼짐x', '퍼짐y', '축공유', '빈띠']
 
 MARGIN = ['마진좌', '마진우', '마진상', '마진하']
 CONTENT = ['덮음', '블록수', '단수', '활자폭', '행간비', '어센더비']
 COLOR = ['색수', '밝기', '최빈색', '채도', '무채색']
+# 「어디에」 — 마진은 글자 영역의 «바깥 경계» 일 뿐이라, 그 안에서 덩어리가
+# 어디에 앉고 무슨 축에 서는지는 아무것도 말하지 않았다. 그래서 뇌에서 값을
+# 뽑아 그림을 그리면 놓을 자리를 렌더러가 임의로 정할 수밖에 없었고, 뽑을
+# 때 0.08 이던 관계가 그리고 나면 부호까지 뒤집혔다.
+PLACE = ['무게x', '무게y', '퍼짐x', '퍼짐y', '축공유', '빈띠']
+
+AXIS_EPS = 2.0    # 이 픽셀 안이면 같은 정렬축으로 본다 (안티에일리어싱 폭)
 
 _IX = {n: i for i, n in enumerate(NAMES)}
 
@@ -59,13 +67,45 @@ def vector(r):
            for cp, t, base in zip(b['caps'], b['xtops'], b['bases'])
            if cp is not None and base - t > 0 and (base - cp) >= (base - t)]
 
+    # ── 어디에 ────────────────────────────────────────────────────
+    gx = gy = sx = sy = ax = gap = nan
+    if bs and sz and sz[0] > 0 and sz[1] > 0 and abs(r.get('angle', 0)) < 1:
+        W, H = float(sz[0]), float(sz[1])
+        box = [(b['x1'], b['y1'], b['x2'], b['y2']) for b in bs]
+        a = np.array([max(0, x2 - x1) * max(0, y2 - y1) for x1, y1, x2, y2 in box], float)
+        cx = np.array([(x1 + x2) / 2 for x1, _y1, x2, _y2 in box], float)
+        cy = np.array([(y1 + y2) / 2 for _x1, y1, _x2, y2 in box], float)
+        if a.sum() > 0:
+            gx = float((cx * a).sum() / a.sum() / W)      # 잉크 무게중심
+            gy = float((cy * a).sum() / a.sum() / H)
+        if len(bs) >= 2:
+            sx = float(np.std(cx) / W)                    # 덩어리가 얼마나 흩어졌나
+            sy = float(np.std(cy) / H)
+            # 왼쪽 축을 몇 개가 공유하나 — 가장 큰 무리 / 전체
+            xs = sorted(b['x1'] for b in bs)
+            g, best = [xs[0]], 1
+            for x in xs[1:]:
+                if x - g[-1] <= AXIS_EPS:
+                    g.append(x)
+                else:
+                    best = max(best, len(g)); g = [x]
+            ax = float(max(best, len(g)) / len(bs))
+            # 글자 영역 안의 가장 넓은 «빈 가로 띠» — 판을 가르는 그 틈
+            iv = sorted((b['y1'], b['y2']) for b in bs)
+            top, bot, cur, mx = iv[0][0], max(v[1] for v in iv), iv[0][1], 0.0
+            for y1, y2 in iv[1:]:
+                mx = max(mx, y1 - cur)
+                cur = max(cur, y2)
+            gap = float(mx / H) if bot > top else nan
+
     return [float(c.get('n_colors', nan)), float(c.get('value', nan)),
             float(c.get('ground_share', nan)), float(c.get('saturation', nan)),
             float(c.get('gray_share', nan)),
             *m, area, float(len(bs)), float(r.get('n_columns') or nan),
             (max(xh) / min(xh) if len(xh) >= 2 and min(xh) > 0 else nan),
             (float(np.median(lead)) if lead else nan),
-            (float(np.median(asc)) if asc else nan)]
+            (float(np.median(asc)) if asc else nan),
+            gx, gy, sx, sy, ax, gap]
 
 
 def matrix(raw):
