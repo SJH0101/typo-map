@@ -239,6 +239,75 @@ def build(raw, who, derived=None):
         how_to_use=_howto())
 
 
+def build_pooled(raws, who='합침'):
+    """코퍼스 여럿을 합쳐 하나의 뇌로. 마디 값은 실제 단위, 선은 «작가 안 순위» 로 잰다.
+
+    그냥 합치면 안 된다. 작가마다 값의 수준이 달라서, 한 사람 «안에서» 는
+    아무 관계도 없는 두 마디가 합쳤을 때만 이어지는 일이 생긴다 (심슨의 역설).
+    네 코퍼스 283장으로 실측하니 합쳤을 때만 나온 선 6개 중 3개가 그것이었다 —
+    최빈색–채도, 마진우–마진하, 덮음–블록수 는 작가 안에서 순위로 바꾸자 사라졌다.
+
+    그래서 선은 코퍼스마다 제 안에서 순위를 매겨 0~1 로 정규화한 뒤 합쳐서
+    잰다. 작가별 수준 차이가 지워지므로 남는 것은 «누구의 작업이든 한 사람
+    안에서 함께 움직이는» 관계다. 마디의 값은 그대로 합쳐 실제 단위로 낸다.
+
+    이렇게 재니 앞의 3개는 살아남았고(표본만 모자랐던 것) 최빈색–블록수 가
+    새로 나왔다 — 한 작가로는 표본이 모자라 안 보이던 관계다.
+    """
+    pool = {}
+    for nm, raw in raws.items():
+        for k, v in raw.items():
+            pool[f'{nm}__{k}'] = v
+    R = rules.derive(pool)
+    ent = {**R['rules'], **R['not_rules']}
+    nodes = []
+    for name, key in METRIC.items():
+        v = ent.get(key)
+        if not v:
+            continue
+        nodes.append(dict(
+            id=name, group=GROUP.get(name, '기타'), label=v.get('label'),
+            unit=v.get('unit'), median=v.get('median'), lo=v.get('lo'), hi=v.get('hi'),
+            cv=v.get('cv'), verdict=v.get('verdict'), note=NOTE.get(name),
+            n=v.get('n'), n_posters=v.get('n_posters'), of=R['n_posters']))
+
+    Z = []
+    for nm, raw in raws.items():
+        X, _k, _n = features.matrix(raw)
+        Y = np.full_like(X, np.nan)
+        for j in range(X.shape[1]):
+            ok = ~np.isnan(X[:, j])
+            if ok.sum() < 5:
+                continue
+            Y[ok, j] = (X[ok, j].argsort().argsort() + 1.0) / (ok.sum() + 1.0)
+        Z.append(Y)
+    Z = np.vstack(Z)
+
+    raw_es = edges(Z)
+    ns = [e['n'] for e in raw_es]
+    need = N_PER_NODE * len(nodes)
+    estimable = bool(ns) and int(np.median(ns)) >= need
+    es = [{k: e[k] for k in ('a', 'b', 'r', 'p', 'n', 'sign')}
+          for e in raw_es if e['keep']] if estimable else []
+    low = [n['id'] for n in nodes if (n['n_posters'] or 0) < R['n_posters'] * 0.9]
+    lim = _limits(nodes, es, low, estimable, need, ns)
+    lim.insert(0, f'코퍼스 {len(raws)}개를 합쳐 만든 뇌다 ({", ".join(raws)}). 선은 코퍼스마다 '
+                  f'제 안에서 순위를 매긴 뒤 합쳐서 쟀다 — 작가별 수준 차이가 만드는 가짜 선을 '
+                  f'막기 위해서다. 그래서 여기 선은 «누구의 작업이든 한 사람 안에서 함께 움직이는» '
+                  f'관계지, 어느 한 사람의 것이 아니다.')
+    return dict(who=who, n_posters=R['n_posters'], pooled_from=list(raws),
+                nodes=nodes, edges=es, edges_estimable=estimable,
+                edges_need=need, edges_have=(int(np.median(ns)) if ns else 0),
+                criteria=dict(**{k: v for k, v in R.get('criteria', {}).items() if v is not None},
+                              edge_fdr=FDR, edge_min_pair=MIN_PAIR, edge_n_null=N_NULL,
+                              edge_shrink=SHRINK, edge_rule=EDGE_RULE + POOL_RULE),
+                cannot_say=lim, how_to_use=_howto())
+
+
+POOL_RULE = (' 합친 뇌에서는 코퍼스마다 제 안에서 순위를 매긴 뒤 합쳐서 잰다 — '
+             '작가별 수준 차이가 만드는 가짜 선을 막기 위해서다.')
+
+
 EDGE_RULE = ('한 작가 안에서 두 마디를 포스터마다 짝지어 «편상관» 을 잰다. '
              '나머지 마디를 전부 붙들고도 남는 관계만 긋는 것이라 A–B–C 가 있을 때 '
              'A–C 가 딸려 그어지지 않는다. 귀무모형은 열마다 따로 섞어 짝을 전부 끊고 '
