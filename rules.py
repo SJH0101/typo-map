@@ -406,25 +406,33 @@ def derive(raw, references=None):
             d['scope'] = e['scope']
             d['eta2'] = e['eta2']
             d['eta2_null'] = e['eta2_null']
+            d['eta2_ratio'] = e['ratio']
+            d['scope_pct'] = e['pct']
             d['scope_of'] = e['corpora']
-            if e['scope'] == '공통':
+            if e['scope'] == '경계':
+                d['note_scope'] = (
+                    f'문턱에 걸쳐 있다 (설명력 {e["eta2"]*100:.1f}%, 무작위 딱지 '
+                    f'{e["eta2_null"]*100:.1f}% — {e["ratio"]}배). 참조를 조금만 바꿔도 '
+                    f'판정이 뒤집힌다. 갈린다고도 안 갈린다고도 적을 수 없다.')
+            elif e['scope'] == '공통':
                 d['note_scope'] = (
                     f'이 지표는 참조 {e["n_corpora"]} 종을 가르지 못한다 '
                     f'(설명력 {e["eta2"]*100:.1f}%, 딱지를 섞어도 '
-                    f'{e["eta2_null"]*100:.1f}% 는 나온다). 값이 몰리더라도 작가의 '
-                    f'선택이 아니라 폰트·판형·인쇄에서 오는 것일 수 있다.')
+                    f'{e["eta2_null"]*100:.1f}% 는 나온다 — {e["ratio"]}배). 값이 몰리더라도 '
+                    f'작가의 선택이 아니라 폰트·판형·인쇄에서 오는 것일 수 있다.')
             else:
                 d['note_scope'] = (
                     f'이 지표는 참조 {e["n_corpora"]} 종을 가른다 '
                     f'(설명력 {e["eta2"]*100:.1f}%, 무작위 딱지 '
-                    f'{e["eta2_null"]*100:.1f}%). 다만 이 코퍼스가 남들 밖에 있는지는 '
+                    f'{e["eta2_null"]*100:.1f}% — {e["ratio"]}배). 다만 이 코퍼스가 남들 밖에 있는지는 '
                     f'따로 물어야 한다 — style_card 의 reference 를 보라.')
         (rules if d['verdict'] == '제약' else free)[key] = d
     return dict(n_posters=len(raw), rules=rules, not_rules=free,
                 separability=sep, scope=exp or None,
                 criteria=dict(cv_max=CV_MAX, n_min=N_MIN, layer_gap=LAYER_GAP,
                               auc_min=discrim.AUC_MIN,
-                              scope_pct=distinct.PCT if references else None))
+                              scope_alpha=distinct.ALPHA if references else None,
+                              scope_min_ratio=distinct.MIN_RATIO if references else None))
 
 
 def median_ci(a, boot=4000, seed=0):

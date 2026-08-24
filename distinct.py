@@ -29,8 +29,23 @@ CV 는 «이 코퍼스 안에서 몰렸나» 를 묻고 discrim 은 «무작위 
 """
 import numpy as np
 
-N_NULL = 200      # 딱지를 몇 번 섞어 볼 것인가. 평균만 다시 내므로 싸다
-PCT = 95          # 귀무 분포의 이 분위를 넘으면 «갈림» 로 본다
+N_NULL = 2000     # 딱지를 몇 번 섞어 볼 것인가. 평균만 다시 내므로 싸다.
+                  # 아래 보정된 분위를 안정적으로 잡으려면 200 으로는 모자란다.
+ALPHA = 0.05      # 지표 하나를 볼 때의 위험. 아래에서 시험 횟수로 나눈다.
+                  # 지표 17개를 각각 95분위로 자르면 하나쯤은 우연히 통과한다
+                  # (1 − 0.95^17 = 58%). 실제로 그랬다 — 로제 코퍼스에 5장을
+                  # 더 넣자 어센더/x높이가 «공통» 에서 «갈림» 으로 뒤집혔다.
+BAND = 0.25       # 배수가 MIN_RATIO 의 이 비율 안쪽이면 «경계» 로 따로 낸다.
+                  # 최빈색 점유율이 코퍼스마다 1.89~2.16 배로 문턱에 걸쳐
+                  # 판정이 뒤집혔다. 같은 지표가 참조를 어느 순서로 놓느냐에
+                  # 따라 갈림도 되고 공통도 되면, 둘 중 하나로 적는 것 자체가
+                  # 사실을 넘는 말이다. 경계는 경계라고 적는다.
+MIN_RATIO = 2.0   # 설명력이 귀무 문턱의 이 배는 되어야 한다. 분위만으로는
+                  # 「우연보다 크다」까지만 말하고 「쓸 만큼 크다」를 말하지
+                  # 못한다. 위의 가짜 통과는 설명력 0.57%, 중앙값 차이가
+                  # 1.375 대 1.396 이었다 — x높이 10px 측정에서 1.5% 차이다.
+                  # 표본이 크면 사소한 차이도 귀무를 넘는다. 코퍼스 4종에서
+                  # 확실한 지표들의 배수는 3.2~5.0 이었고 이것은 1.84 였다.
 MIN_PER = 5       # 코퍼스마다 이만큼은 있어야 센다
 MIN_CORPORA = 3   # 둘로는 우연히 갈릴 수 있다
 SEED = 20260824
@@ -47,8 +62,11 @@ def eta2(groups):
     return float(ssb / sst)
 
 
-def explained(groups, n_null=N_NULL, seed=SEED):
-    """실제 eta2 와, 코퍼스 딱지를 섞었을 때의 분포를 함께 낸다."""
+def explained(groups, n_null=N_NULL, seed=SEED, n_tests=1):
+    """실제 eta2 와, 코퍼스 딱지를 섞었을 때의 분포를 함께 낸다.
+
+    n_tests 에 함께 시험하는 지표 수를 주면 분위를 그만큼 올린다.
+    """
     gs = [np.asarray(g, dtype=float) for g in groups]
     gs = [g for g in gs if len(g) >= MIN_PER]
     if len(gs) < MIN_CORPORA:
@@ -70,17 +88,32 @@ def explained(groups, n_null=N_NULL, seed=SEED):
             null.append(v)
     if not null:
         return None
-    thr = float(np.percentile(null, PCT))
+    pct = 100.0 * (1.0 - ALPHA / max(1, n_tests))
+    thr = float(np.percentile(null, pct))
+    ratio = (e / thr) if thr > 0 else None
+    if ratio is None:
+        scope = '공통'
+    elif abs(ratio - MIN_RATIO) <= MIN_RATIO * BAND:
+        scope = '경계'
+    elif e > thr and ratio >= MIN_RATIO:
+        scope = '갈림'
+    else:
+        scope = '공통'
     return dict(eta2=round(e, 4), eta2_null=round(thr, 4),
-                n_corpora=len(gs), n=int(sum(sizes)),
-                scope=('갈림' if e > thr else '공통'))
+                ratio=(None if ratio is None else round(ratio, 2)),
+                pct=round(pct, 3), n_tests=int(n_tests),
+                n_corpora=len(gs), n=int(sum(sizes)), scope=scope)
 
 
 def by_metric(values_by_corpus):
-    """{지표: {코퍼스: 값목록}} → {지표: 설명력}. 셀 수 없는 지표는 뺀다."""
+    """{지표: {코퍼스: 값목록}} → {지표: 설명력}. 셀 수 없는 지표는 뺀다.
+
+    여러 지표를 한꺼번에 시험하므로 그 수를 문턱에 반영한다.
+    """
+    n_tests = len(values_by_corpus)
     out = {}
     for key, per in values_by_corpus.items():
-        r = explained(list(per.values()))
+        r = explained(list(per.values()), n_tests=n_tests)
         if r:
             r['corpora'] = [n for n, v in per.items() if len(v) >= MIN_PER]
             out[key] = r
