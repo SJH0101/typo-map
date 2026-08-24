@@ -302,3 +302,13 @@ API 키가 필요하지 않다. 이 저장소가 MCP 서버이므로 **클로드
 ```bash
 TYPO_MCP_CACHE=~/.typo-mcp/hofmann.json claude mcp add hofmann -- python /경로/server.py
 ```
+
+## 뇌 뷰어
+
+`viewer/` 에 있다. `python viewer/build.py` 로 한 파일 HTML 을 굽는다 —
+CSP 때문에 바깥에서 아무것도 못 불러오므로 뇌 데이터까지 안에 박는다.
+
+작가를 여러 개 고르면 판을 갈라 나란히 놓는다. 마디 배치는 하나만 만들어
+모든 판이 같은 자리를 쓰므로, 왼쪽 「덮음」에서 오른쪽 「덮음」으로 눈이
+바로 건너간다. 고른 뇌 모두에 있는 선은 회색으로 물러나고 한쪽에만 있는
+선이 색을 얻는다.

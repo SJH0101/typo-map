@@ -1,0 +1,42 @@
+<div id="stage"><canvas id="cv"></canvas></div>
+
+<div class="panel" id="rail">
+  <p class="brand">타이포 브레인</p>
+  <div class="who" id="who"></div>
+  <div class="stat"><span>포스터</span><b class="num" id="sN">—</b></div>
+  <div class="stat"><span>마디</span><b class="num" id="sV">—</b></div>
+  <div class="stat"><span>직접 연결</span><b class="num" id="sE">—</b></div>
+  <div class="lg">
+    <p class="lgt">마디</p>
+    <div class="lgr"><span class="dot" style="background:var(--red)"></span>색</div>
+    <div class="lgr"><span class="dot" style="background:var(--blue)"></span>마진</div>
+    <div class="lgr"><span class="dot" style="background:var(--grey)"></span>조판</div>
+    <p class="lgt" style="margin-top:12px">선</p>
+    <div id="sgkey">
+      <div class="lgr"><span class="ln" style="border-top-width:3px;border-color:var(--edge)"></span>같이 오른다</div>
+      <div class="lgr"><span class="ln" style="border-top-width:2px;border-color:var(--edge);border-top-style:dashed"></span>반대로 움직인다</div>
+      <div class="lgr" style="color:var(--dim);font-size:11px">굵기 = 편상관 세기</div>
+    </div>
+    <div id="wkey" style="display:none"></div>
+    <div class="toggle">
+      <button id="cmp" aria-pressed="false">나란히 놓고 보기</button>
+    </div>
+    <p class="warn" id="nowarn" style="display:none;margin-top:10px"></p>
+  </div>
+</div>
+
+<div class="panel" id="detail"></div>
+
+<div class="panel" id="rule2">
+  <div class="fh" id="rh"><span>선은 어떻게 정했나</span><span id="rc">＋</span></div>
+  <div class="fb"><p id="rule" class="note"></p>
+    <p class="note" style="margin-top:9px">「그에게만」 = 그 쌍이 다른 세 작가의 뇌에서는 살아남지 않았다.</p></div>
+</div>
+
+<div class="panel" id="foot">
+  <div class="fh" id="fh"><span>말할 수 없는 것</span><span id="fc">＋</span></div>
+  <div class="fb"><ul id="fl"></ul></div>
+</div>
+
+<div id="tip"></div>
+<p class="hint">작가 버튼을 여러 개 눌러 나란히 놓습니다 · 마디를 끌면 모든 판에서 함께 움직입니다</p>
