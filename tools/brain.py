@@ -20,6 +20,28 @@ def _path(cache):
     return os.path.join(d, 'brain-' + f)
 
 
+def compare_brains(args):
+    """뇌 둘 이상을 겹쳐 본다. 비교는 여기서만 한다 — 뇌 자체는 혼자 선다."""
+    got, missing = {}, []
+    for name, p in (args.get("brains") or {}).items():
+        p = os.path.expanduser(p)
+        bp = p if os.path.basename(p).startswith('brain-') else _path(p)
+        if not os.path.exists(bp):
+            missing.append({"name": name, "path": bp}); continue
+        b = json.load(open(bp))
+        if not b.get("edges_estimable", True):
+            missing.append({"name": name, "why": f'선을 잴 수 없는 뇌다 '
+                            f'({b.get("edges_have")}장, {b.get("edges_need")}장 필요)'})
+            continue
+        got[name] = b
+    if len(got) < 2:
+        return {"ok": False, "error": "겹칠 뇌가 둘 이상 필요하다", "skipped": missing}
+    r = _brain.compare(got)
+    if missing:
+        r["skipped"] = missing
+    return {"ok": True, **r}
+
+
 def style_brain(args):
     """뇌를 낸다. 없으면 만든다 (build=true 면 있어도 다시 만든다)."""
     cache = _cache(args)
@@ -30,13 +52,8 @@ def style_brain(args):
         b = json.load(open(bp))
     else:
         d = json.load(open(cache))
-        refs = {}
-        for name, p in (args.get("reference") or {}).items():
-            p = os.path.expanduser(p)
-            if os.path.exists(p):
-                refs[name] = json.load(open(p))["raw"]
         b = _brain.build(d["raw"], args.get("who") or os.path.basename(cache)[:-5],
-                         references=refs or None, derived=d.get("rules"))
+                         derived=d.get("rules"))
         json.dump(b, open(bp, "w"), ensure_ascii=False)
     if args.get("view") == "edges":
         b = {k: v for k, v in b.items() if k != "nodes"}
@@ -59,11 +76,17 @@ TOOLS = [
          "view": {"type": "string", "enum": ["all", "nodes", "edges"],
                   "description": "all(기본) · nodes 만 · edges 만"},
          "build": {"type": "boolean",
-                   "description": "이미 만들어 둔 뇌가 있어도 다시 만든다. 순열 4000번이라 느리다"},
-         "reference": {"type": "object",
-                       "description": ("다른 작가의 캐시 {이름: 경로}. 주면 선마다 «그에게만인가» 를 "
-                                       "가린다. 없으면 기계적인 선과 양식적인 선이 섞인다"),
-                       "additionalProperties": {"type": "string"}}}}},
+                   "description": "이미 만들어 둔 뇌가 있어도 다시 만든다. 순열 2000번이라 느리다"}}}},
+    {"name": "compare_brains",
+     "description": ("뇌 둘 이상을 겹쳐 본다. 마디마다 값이 갈리는지, 선마다 누구에게 있는지를 낸다. "
+                     "뇌 하나는 혼자 서므로 비교는 필요할 때만 부른다. "
+                     "여럿에게 다 나온 선은 셈법에서 오는 것일 가능성이 높고, 한 명에게만 나온 선은 "
+                     "그의 것일 수도 표본이 작아 남들에게서 안 잡힌 것일 수도 있다."),
+     "inputSchema": {"type": "object", "properties": {
+         "brains": {"type": "object",
+                    "description": "{이름: 캐시경로 또는 뇌파일경로}. 둘 이상 필요하다",
+                    "additionalProperties": {"type": "string"}}},
+         "required": ["brains"]}},
 ]
 
-FUNCS = dict(style_brain=style_brain)
+FUNCS = dict(style_brain=style_brain, compare_brains=compare_brains)

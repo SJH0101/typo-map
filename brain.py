@@ -19,6 +19,16 @@ rules.py 는 값의 목록을 낸다. 「행간 1.42배」「마진 3.7%」 같�
 **자기가 모르는 것을 함께 싣는다.** cannot_say 가 그것이다. 오늘 하루에만
 귀무모형 없이 본 숫자로 판단을 여섯 번 뒤집었다. 뇌를 받아 쓰는 쪽이
 그 한계를 모르면 같은 실수를 반복한다.
+
+**뇌 하나는 혼자 선다.** 다른 작가가 없어도 마디와 선이 다 나온다. 처음에는
+「이 사람에게만 있는 선」을 붉게 칠했는데, 그러면 작가 한 명만 넣었을 때
+주된 시각 신호가 통째로 사라졌다. 비교는 뇌의 성질이 아니라 뇌 «둘» 에
+하는 일이므로 compare() 로 따로 뺐다.
+
+선은 **편상관**으로 긋는다. 전체 상관으로 그으면 A–B–C 가 있을 때 A–C 도
+그어진다. 마진과 덮음이 이어진 것도 둘이 직접 얽혀서가 아니라 같은 검출
+상자에서 나오기 때문이었다. 나머지 마디를 전부 붙들고도 남는 관계만 그으면
+«직접» 연결만 살아남는다.
 """
 import numpy as np
 
@@ -26,7 +36,12 @@ import features
 import rules
 
 MIN_PAIR = 20      # 쌍마다 둘 다 실제로 잰 포스터가 이만큼은 있어야 본다
-N_NULL = 4000
+N_NULL = 2000
+SHRINK = 0.1     # 상관 행렬 수축. 결측 때문에 쌍마다 표본이 달라 특이해질 수 있다
+N_PER_NODE = 3   # 편상관을 믿으려면 표본이 마디 수의 이 배는 되어야 한다.
+                 # 마디 15개면 45장. 로제 25장·루더 27장으로 돌리니 선이 0개
+                 # 나왔는데, 관계가 없어서가 아니라 15x15 정밀도 행렬을 추정할
+                 # 표본이 없어서다. 0을 조용히 돌려주면 «없다» 로 읽힌다.
 FDR = 0.05
 SEED = 20260824
 
@@ -95,32 +110,83 @@ def _rank(a):
     return a.argsort().argsort() + 1.0
 
 
-def edges(X, min_pair=MIN_PAIR, n_null=N_NULL, seed=SEED, fdr=FDR):
-    """한 작가 «안» 에서 같이 움직이는 쌍을 찾는다. 참조 코퍼스가 필요 없다.
+def _ranks(X, min_pair=MIN_PAIR):
+    """열마다 순위로 바꾼다. 결측은 그대로 둔다."""
+    R = np.full(X.shape, np.nan)
+    for j in range(X.shape[1]):
+        ok = ~np.isnan(X[:, j])
+        if ok.sum() < min_pair:
+            continue
+        R[ok, j] = X[ok, j].argsort().argsort() + 1.0
+    return R
 
-    귀무모형은 한 쪽 열만 포스터 사이에서 섞는다. 각 속성의 분포는 그대로
-    두고 짝만 끊는 것이라, 「원래 그런 값이라서」와 「같이 다녀서」가 갈린다.
+
+def _corr(R, masks):
+    """쌍마다 둘 다 잰 포스터만으로 순위 상관 행렬."""
+    P = R.shape[1]
+    C = np.eye(P)
+    for i in range(P):
+        for j in range(i + 1, P):
+            ok = masks[i] & masks[j]
+            if ok.sum() < MIN_PAIR:
+                continue
+            a, b = R[ok, i], R[ok, j]
+            a = a - a.mean(); b = b - b.mean()
+            d = np.linalg.norm(a) * np.linalg.norm(b)
+            C[i, j] = C[j, i] = 0.0 if d == 0 else float(a @ b) / d
+    return C
+
+
+def _partial(C, shrink=SHRINK):
+    """편상관 — 나머지 마디를 전부 붙들고도 남는 관계.
+
+    수축은 행렬이 특이해지는 것을 막는다. 결측 때문에 쌍마다 표본이 달라
+    상관 행렬이 그대로는 양정치가 아닐 수 있다.
+    """
+    P = C.shape[0]
+    Cs = (1 - shrink) * C + shrink * np.eye(P)
+    w = np.linalg.eigvalsh(Cs)
+    if w.min() <= 1e-8:
+        Cs = Cs + (abs(w.min()) + 1e-6) * np.eye(P)
+    T = np.linalg.inv(Cs)
+    d = np.sqrt(np.outer(np.diag(T), np.diag(T)))
+    Pc = -T / d
+    np.fill_diagonal(Pc, 1.0)
+    return Pc
+
+
+def edges(X, min_pair=MIN_PAIR, n_null=N_NULL, seed=SEED, fdr=FDR):
+    """한 작가 «안» 에서 직접 이어진 쌍을 찾는다. 다른 작가가 필요 없다.
+
+    귀무모형은 열마다 따로 섞는다. 각 마디의 분포는 그대로 두고 짝만 전부
+    끊은 뒤 같은 셈을 반복하므로, 「원래 그런 값이라서」와 「같이 다녀서」가
+    갈린다. 105쌍을 한꺼번에 시험하니 FDR 로 자른다.
     """
     P = X.shape[1]
+    R = _ranks(X, min_pair)
+    masks = [~np.isnan(R[:, j]) for j in range(P)]
+    Pc = _partial(_corr(R, masks))
+
     rnd = np.random.RandomState(seed)
+    null = np.empty((n_null, P, P))
+    for t in range(n_null):
+        S = np.full_like(R, np.nan)
+        for j in range(P):
+            v = R[masks[j], j]
+            S[masks[j], j] = rnd.permutation(v)
+        null[t] = np.abs(_partial(_corr(S, masks)))
+
     out = []
     for i in range(P):
         for j in range(i + 1, P):
-            ok = ~np.isnan(X[:, i]) & ~np.isnan(X[:, j])
-            if ok.sum() < min_pair:
+            n = int((masks[i] & masks[j]).sum())
+            if n < min_pair:
                 continue
-            a, b = X[ok, i], X[ok, j]
-            if a.std() == 0 or b.std() == 0:
-                continue
-            ra, rb = _rank(a), _rank(b)
-            ca = ra - ra.mean(); cb = rb - rb.mean()
-            r = abs(float(ca @ cb) / (np.linalg.norm(ca) * np.linalg.norm(cb)))
-            # 순열을 한꺼번에 — 섞어도 노름이 같으므로 행렬곱 한 번이면 된다
-            perm = np.array([rnd.permutation(cb) for _ in range(n_null)])
-            nulls = np.abs(perm @ ca) / (np.linalg.norm(ca) * np.linalg.norm(cb))
-            p = (float((nulls >= r).sum()) + 1) / (n_null + 1)
+            r = abs(float(Pc[i, j]))
+            p = (float((null[:, i, j] >= r).sum()) + 1) / (n_null + 1)
             out.append(dict(a=features.NAMES[i], b=features.NAMES[j],
-                            r=round(r, 3), p=round(p, 5), n=int(ok.sum())))
+                            r=round(r, 3), p=round(p, 5), n=n,
+                            sign=int(np.sign(Pc[i, j]))))
     if not out:
         return []
     ps = np.array([e['p'] for e in out])
@@ -133,9 +199,12 @@ def edges(X, min_pair=MIN_PAIR, n_null=N_NULL, seed=SEED, fdr=FDR):
     return out
 
 
-def build(raw, who, references=None, derived=None):
-    """원자료 하나에서 뇌 하나. references 를 주면 선마다 «누구에게도» 를 붙인다."""
-    R = derived or rules.derive(raw, references=references)
+def build(raw, who, derived=None):
+    """원자료 하나에서 뇌 하나. 다른 작가가 필요 없다.
+
+    비교는 여기 들어가지 않는다 — compare() 로 뇌 «둘 이상» 에 하는 일이다.
+    """
+    R = derived or rules.derive(raw)
     ent = {**R['rules'], **R['not_rules']}
     X, keys, _ = features.matrix(raw)
 
@@ -148,33 +217,83 @@ def build(raw, who, references=None, derived=None):
             id=name, group=GROUP.get(name, '기타'), label=v.get('label'),
             unit=v.get('unit'), median=v.get('median'),
             lo=v.get('lo'), hi=v.get('hi'), cv=v.get('cv'),
-            verdict=v.get('verdict'), scope=v.get('scope'), note=NOTE.get(name),
+            verdict=v.get('verdict'), note=NOTE.get(name),
             n=v.get('n'), n_posters=v.get('n_posters'), of=R['n_posters']))
 
-    es = [e for e in edges(X) if e['keep']]
-    if references:
-        for name, rr in references.items():
-            Y, _k, _n = features.matrix(rr)
-            other = {(e['a'], e['b']) for e in edges(Y) if e['keep']}
-            for e in es:
-                e.setdefault('also', [])
-                if (e['a'], e['b']) in other:
-                    e['also'].append(name)
-    for e in es:
-        e['also'] = e.get('also', [])
-        e['exclusive'] = (references is not None) and not e['also']
-        e.pop('keep', None)
-
+    raw_es = edges(X)
+    ns = [e['n'] for e in raw_es]
+    need = N_PER_NODE * len(nodes)
+    estimable = bool(ns) and int(np.median(ns)) >= need
+    es = [{k: e[k] for k in ('a', 'b', 'r', 'p', 'n', 'sign')}
+          for e in raw_es if e['keep']] if estimable else []
     low = [n['id'] for n in nodes if (n['n_posters'] or 0) < R['n_posters'] * 0.9]
     return dict(
         who=who, n_posters=R['n_posters'], nodes=nodes, edges=es,
-        criteria=dict(**R.get('criteria', {}), edge_fdr=FDR,
-                      edge_min_pair=MIN_PAIR, edge_n_null=N_NULL),
-        cannot_say=_limits(nodes, es, low, references),
+        criteria=dict(**{k: v for k, v in R.get('criteria', {}).items() if v is not None},
+                      edge_fdr=FDR, edge_min_pair=MIN_PAIR, edge_n_null=N_NULL,
+                      edge_shrink=SHRINK, edge_rule=EDGE_RULE),
+        edges_estimable=estimable,
+        edges_need=need,
+        edges_have=(int(np.median(ns)) if ns else 0),
+        cannot_say=_limits(nodes, es, low, estimable, need, ns),
         how_to_use=_howto())
 
 
-def _limits(nodes, es, low, references):
+EDGE_RULE = ('한 작가 안에서 두 마디를 포스터마다 짝지어 «편상관» 을 잰다. '
+             '나머지 마디를 전부 붙들고도 남는 관계만 긋는 것이라 A–B–C 가 있을 때 '
+             'A–C 가 딸려 그어지지 않는다. 귀무모형은 열마다 따로 섞어 짝을 전부 끊고 '
+             '같은 셈을 반복한다 — 각 마디의 분포는 그대로 두므로 「원래 그런 값이라서」와 '
+             '「같이 다녀서」가 갈린다. 105쌍을 한꺼번에 보므로 FDR 로 자른다.')
+
+
+def compare(brains):
+    """뇌 둘 이상을 겹쳐 본다. 비교는 여기서만 한다.
+
+    {이름: 뇌} 를 받아, 마디마다 값이 갈리는지 · 선마다 누구에게 있는지를 낸다.
+    뇌 자체는 건드리지 않는다 — 비교는 뇌의 성질이 아니라 뇌들 사이의 일이다.
+    """
+    names = list(brains)
+    nodes = {}
+    for nm in names:
+        for n in brains[nm]['nodes']:
+            nodes.setdefault(n['id'], {})[nm] = n
+    out_n = []
+    for nid, per in nodes.items():
+        vals = {nm: v.get('median') for nm, v in per.items() if v.get('median') is not None}
+        if len(vals) < 2:
+            continue
+        lo, hi = min(vals.values()), max(vals.values())
+        out_n.append(dict(id=nid, medians=vals,
+                          spread=(round(hi / lo, 3) if lo else None),
+                          verdicts={nm: v.get('verdict') for nm, v in per.items()}))
+    seen = {}
+    for nm in names:
+        for e in brains[nm]['edges']:
+            seen.setdefault(tuple(sorted((e['a'], e['b']))), {})[nm] = e
+    out_e = []
+    for (a, b), per in seen.items():
+        out_e.append(dict(a=a, b=b, who=sorted(per),
+                          only=(sorted(per)[0] if len(per) == 1 else None),
+                          r={nm: e['r'] for nm, e in per.items()},
+                          all_of_them=(len(per) == len(names))))
+    out_e.sort(key=lambda e: (len(e['who']), -max(e['r'].values())))
+    return dict(corpora={nm: brains[nm]['n_posters'] for nm in names},
+                nodes=out_n, edges=out_e,
+                note=('한 명에게만 나온 선은 «그의 것» 일 수도 있고 표본이 작아 '
+                      '남들에게서 안 잡힌 것일 수도 있다. 코퍼스 크기를 함께 보라. '
+                      '모두에게 나온 선은 셈법에서 오는 것일 가능성이 높다.'))
+
+
+def _limits(nodes, es, low, estimable=True, need=0, ns=()):
+    if not estimable:
+        import numpy as _np
+        have = int(_np.median(ns)) if len(ns) else 0
+        return [f'**선을 잴 수 없었다.** 편상관은 마디 {len(nodes)}개를 서로 붙들고 재므로 '
+                f'표본이 최소 {need}장은 있어야 하는데 쌍마다 중앙 {have}장뿐이다. '
+                f'선이 0개인 것은 «관계가 없다» 가 아니라 «잴 수 없다» 는 뜻이다. '
+                f'포스터를 늘리거나, 마디를 줄여서 다시 재라.'] + [
+                '마디의 값과 판정은 그대로 쓸 수 있다 — 그쪽은 마디마다 따로 재므로 '
+                '표본이 적어도 성립한다. 다만 판정 보류가 많을 것이다.']
     out = [
         '선은 «함께 움직인다» 까지다. 어느 쪽이 먼저인지는 상관으로 알 수 없다 — '
         '「마진을 먼저 정하고 내용을 담는다」 같은 말은 이 데이터가 뒷받침하지 않는다.',
@@ -188,9 +307,9 @@ def _limits(nodes, es, low, references):
         out.append(f'다음 마디는 일부 포스터에서만 값이 나왔다 — {", ".join(low)}. '
                    f'그 마디에 걸린 선은 표본이 그만큼 적고, 값이 나온 포스터가 '
                    f'무작위 표본도 아니다 (검출이 쉬운 쪽에 쏠린다).')
-    if not references:
-        out.append('참조 코퍼스를 주지 않아 «이 사람만의 선» 을 가리지 않았다. '
-                   '지금 선들은 기계적인 것과 양식적인 것이 섞여 있다.')
+    out.append('이 뇌는 혼자 선다 — 다른 작가와 견주지 않았다. 그래서 여기 선이 '
+               '«그만의 것» 이라는 뜻은 아니다. 셈법에서 오는 선(같은 히스토그램에서 '
+               '나온 색 지표끼리 같은 것)이 섞여 있다. 가리려면 compare 로 뇌를 겹쳐라.')
     out.append('색 지표는 포스터가 아니라 포스터의 스캔에서 나온다. 같은 출처의 '
                '코퍼스끼리만 견줄 수 있다.')
     return out
