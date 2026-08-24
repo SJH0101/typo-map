@@ -303,6 +303,20 @@ API 키가 필요하지 않다. 이 저장소가 MCP 서버이므로 **클로드
 TYPO_MCP_CACHE=~/.typo-mcp/hofmann.json claude mcp add hofmann -- python /경로/server.py
 ```
 
+## 작가를 늘리기
+
+폴더 하나면 된다. `add_designer` 가 측정·규칙 채택·뇌 만들기를 한 번에 한다.
+
+```json
+{"name": "켈러", "directory": "/포스터/켈러"}
+```
+
+포스터가 적으면 선을 못 잰다 — 마디 15개를 서로 붙들고 재려면 45장은
+있어야 한다. 그때는 `warning` 으로 알린다. **선이 0개인 것과 못 잰 것은
+다르다.** `list_brains` 로 만들어 둔 뇌를 본다.
+
+뷰어는 `brain-*.json` 을 전부 주우므로 늘린 작가가 그대로 들어온다.
+
 ## 뇌 뷰어
 
 `viewer/` 에 있다. `python viewer/build.py` 로 한 파일 HTML 을 굽는다 —

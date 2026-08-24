@@ -20,6 +20,95 @@ def _path(cache):
     return os.path.join(d, 'brain-' + f)
 
 
+def _slug(name):
+    """파일 이름으로 쓸 수 있게. 한글은 그대로 두고 경로에 못 쓰는 것만 뺀다."""
+    bad = '/\\:*?"<>|'
+    return ''.join(c for c in name.strip() if c not in bad).replace(' ', '_') or 'corpus'
+
+
+def add_designer(args):
+    """폴더 하나로 작가를 늘린다 — 측정 · 규칙 · 뇌까지 한 번에.
+
+    새 작가를 붙이는 데 필요한 것은 포스터 폴더와 이름뿐이다. 나머지는
+    이미 있는 조각을 순서대로 부른다.
+    """
+    import glob
+    import rules as _rules
+    from baseline import scan
+
+    name = (args.get("name") or "").strip()
+    d = os.path.expanduser(args.get("directory") or "")
+    if not name:
+        return {"ok": False, "error": "작가 이름이 필요하다"}
+    if not d or not os.path.isdir(d):
+        return {"ok": False, "error": f"디렉토리를 찾을 수 없다: {d}"}
+
+    pats = ("*.jpg", "*.jpeg", "*.png", "*.JPG", "*.PNG")
+    rec = args.get("recursive", True)
+    paths = sorted(p for q in pats for p in
+                   (glob.glob(os.path.join(d, "**", q), recursive=True) if rec
+                    else glob.glob(os.path.join(d, q))))
+    if args.get("limit"):
+        paths = paths[:int(args["limit"])]
+    if not paths:
+        return {"ok": False, "error": f"이미지가 없다: {d}"}
+
+    slug = _slug(name)
+    cache = os.path.join(os.path.dirname(_cache(args)), slug + ".json")
+    errors = []
+    raw = scan.collect(paths, errors=errors)
+    if not raw:
+        return {"ok": False, "error": "측정에 성공한 포스터가 없다", "failed": errors}
+    # 폴더 구조를 이름에 담는다 — 나중에 계열별로 나눠 볼 수 있다
+    keyed = {}
+    for p in paths:
+        b = os.path.basename(p)
+        if b not in raw:
+            continue
+        rel = os.path.relpath(p, d)
+        keyed["__".join(rel.split(os.sep)) if os.sep in rel else b] = raw[b]
+
+    R = _rules.derive(keyed)
+    _rules.save(cache, keyed, R)
+    b = _brain.build(keyed, name, derived=R)
+    bp = _path(cache)
+    json.dump(b, open(bp, "w"), ensure_ascii=False)
+
+    out = {"ok": True, "who": name, "cache": cache, "brain": bp,
+           "n_found": len(paths), "n_measured": len(keyed),
+           "n_failed": len(errors), "failed": errors[:10],
+           "n_nodes": len(b["nodes"]), "n_edges": len(b["edges"]),
+           "edges_estimable": b["edges_estimable"],
+           "rules": list(R["rules"]),
+           "note": "이제 style_brain 에 cache 로 이 경로를 주면 이 작가의 뇌가 나온다."}
+    if not b["edges_estimable"]:
+        out["warning"] = (f'포스터 {b["n_posters"]}장으로는 선을 잴 수 없다 '
+                          f'(마디 {len(b["nodes"])}개를 서로 붙들고 재려면 '
+                          f'{b["edges_need"]}장 필요). 마디의 값은 쓸 수 있다.')
+    return out
+
+
+def list_brains(args):
+    """만들어 둔 뇌 목록."""
+    d = os.path.dirname(_cache(args))
+    out = []
+    for f in sorted(os.listdir(d)):
+        if not (f.startswith("brain-") or f.endswith(".json")):
+            continue
+        p = os.path.join(d, f)
+        try:
+            b = json.load(open(p))
+        except Exception:
+            continue
+        if not isinstance(b, dict) or "nodes" not in b or "edges" not in b or not b.get("who"):
+            continue
+        out.append(dict(who=b.get("who"), file=p, n_posters=b.get("n_posters"),
+                        n_edges=len(b.get("edges") or []),
+                        estimable=b.get("edges_estimable"),
+                        pooled=bool(b.get("pooled_from"))))
+    return {"ok": True, "dir": d, "brains": out}
+
+
 def compare_brains(args):
     """뇌 둘 이상을 겹쳐 본다. 비교는 여기서만 한다 — 뇌 자체는 혼자 선다."""
     got, missing = {}, []
@@ -77,6 +166,21 @@ TOOLS = [
                   "description": "all(기본) · nodes 만 · edges 만"},
          "build": {"type": "boolean",
                    "description": "이미 만들어 둔 뇌가 있어도 다시 만든다. 순열 2000번이라 느리다"}}}},
+    {"name": "add_designer",
+     "description": ("포스터 폴더 하나로 새 작가를 늘린다. 측정·규칙 채택·뇌 만들기를 "
+                     "한 번에 한다. 이름과 폴더만 주면 된다. "
+                     "포스터가 적으면 선을 못 재는데(마디 수의 3배는 필요) 그때는 "
+                     "warning 으로 알린다 — 선이 0개인 것과 못 잰 것은 다르다."),
+     "inputSchema": {"type": "object", "properties": {
+         "name": {"type": "string", "description": "작가 이름. 뇌의 이름표가 된다"},
+         "directory": {"type": "string", "description": "포스터 이미지가 있는 폴더"},
+         "recursive": {"type": "boolean", "description": "하위 폴더까지 훑는다 (기본 true)"},
+         "limit": {"type": "integer", "description": "앞에서 이 개수만 (시험용)"},
+         "cache": CACHE_ARG},
+         "required": ["name", "directory"]}},
+    {"name": "list_brains",
+     "description": "만들어 둔 뇌 목록. 어느 작가가 있고 몇 장이며 선을 잴 수 있는지 낸다.",
+     "inputSchema": {"type": "object", "properties": {"cache": CACHE_ARG}}},
     {"name": "compare_brains",
      "description": ("뇌 둘 이상을 겹쳐 본다. 마디마다 값이 갈리는지, 선마다 누구에게 있는지를 낸다. "
                      "뇌 하나는 혼자 서므로 비교는 필요할 때만 부른다. "
@@ -89,4 +193,5 @@ TOOLS = [
          "required": ["brains"]}},
 ]
 
-FUNCS = dict(style_brain=style_brain, compare_brains=compare_brains)
+FUNCS = dict(style_brain=style_brain, compare_brains=compare_brains,
+             add_designer=add_designer, list_brains=list_brains)

@@ -12,21 +12,28 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE = os.path.join(os.path.expanduser('~'), '.typo-mcp')
-BRAINS = [('brockmann', '브로크만'), ('corpus', '호프만'), ('rose', '로제'),
-          ('ruder', '루더'), ('pooled', '네 작가 합침')]
+ORDER = ['brockmann', 'corpus', 'rose', 'ruder', 'pooled']   # 아는 것은 이 순서로
 
 
-def collect():
+def collect(cache=CACHE):
+    """brain-*.json 을 전부 줍는다. add_designer 로 늘린 작가도 그대로 들어온다."""
+    files = [f for f in os.listdir(cache) if f.startswith('brain-') and f.endswith('.json')]
+    def rank(f):
+        s = f[6:-5]
+        return (ORDER.index(s) if s in ORDER else len(ORDER), f)
     out = {}
-    for f, ko in BRAINS:
-        p = os.path.join(CACHE, f'brain-{f}.json')
-        if not os.path.exists(p):
+    for f in sorted(files, key=rank):
+        try:
+            b = json.load(open(os.path.join(cache, f)))
+        except Exception:
             continue
-        b = json.load(open(p))
-        out[ko] = dict(who=ko, n=b['n_posters'], nodes=b['nodes'], edges=b['edges'],
-                       cannot=b['cannot_say'], rule=b['criteria']['edge_rule'],
-                       ok=b['edges_estimable'], need=b['edges_need'],
-                       have=b['edges_have'], pooled=bool(b.get('pooled_from')))
+        if not b.get('who') or 'nodes' not in b or 'edges' not in b:
+            continue
+        out[b['who']] = dict(
+            who=b['who'], n=b['n_posters'], nodes=b['nodes'], edges=b['edges'],
+            cannot=b['cannot_say'], rule=b['criteria']['edge_rule'],
+            ok=b['edges_estimable'], need=b['edges_need'],
+            have=b['edges_have'], pooled=bool(b.get('pooled_from')))
     return out
 
 
