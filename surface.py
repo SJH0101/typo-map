@@ -290,3 +290,111 @@ ROOTS = {'brockmann': '~/Documents/연구2/브로크만 정리',
          'corpus': '~/Documents/연구2/호프만정리',
          'rose': '~/Documents/연구2/로제정리',
          'ruder': '~/Documents/연구2/루더정리'}
+
+
+# ── 관계 ─────────────────────────────────────────────────────
+# 몫은 색 지표가 이미 알고 있었다 (바탕↔최빈색 +0.50, 사진↔색수 +0.43).
+# 나눔의 값어치는 나누기 «전에는 물을 수 없던 것» 에 있다.
+#
+# 「엄격한 격자」는 활자끼리의 얘기가 아니다. **색면 끝과 글줄 끝이 같은
+# 선에 서느냐** 가 브로크만 Opernhaus 시리즈가 하는 일이고, 우리는 그것을
+# 한 번도 못 물어봤다. 활자만 있을 때는 물을 수가 없었다.
+REL_TOL = 0.012    # 판 너비/높이의 이 비율 안이면 같은 선에 선 것으로 본다
+REL_NULL = 40      # 활자 상자를 흩뿌려 보는 횟수. 우연히 맞는 몫을 뺀다
+
+
+def _edges(mask, min_px):
+    """덩어리마다 외접상자의 네 모서리. (세로선들, 가로선들)"""
+    lab, n = ndimage.label(mask)
+    V, Hh = [], []
+    for i in range(1, n + 1):
+        m = lab == i
+        if m.sum() < min_px:
+            continue
+        ys, xs = np.where(m)
+        V += [xs.min(), xs.max()]
+        Hh += [ys.min(), ys.max()]
+    return V, Hh
+
+
+def _hit(vals, lines, tol):
+    """vals 중 lines 의 어느 선과 tol 안에 있는 것의 몫."""
+    if not len(vals) or not len(lines):
+        return None
+    L = np.asarray(lines, float)
+    return float(np.mean([np.min(np.abs(L - v)) <= tol for v in vals]))
+
+
+def relations(path, blocks=(), work=WORK, seed=20260830):
+    """활자와 «활자 아닌 것» 사이의 관계. split 을 한 번 더 부르지 않는다."""
+    s = split(path, blocks, work)
+    if not s:
+        return None
+    w, h = s['size']
+    W, H = s['orig_size']
+    M = s['masks']
+    mn = MIN_REGION * w * h
+    fv, fh = _edges(M['색면'], mn)
+    pv, ph = _edges(M['사진'], mn)
+    V, Hh = fv + pv, fh + ph                      # 색면·사진의 모서리 전부
+    tol_x, tol_y = w * REL_TOL, h * REL_TOL
+
+    bs = [(b['x1'] * w / W, b['y1'] * h / H, b['x2'] * w / W, b['y2'] * h / H)
+          for b in blocks if b['x2'] > b['x1'] and b['y2'] > b['y1']]
+    out = {}
+    if not bs:
+        return dict(관계=None, 사진위=None)
+
+    def share(boxes):
+        xs = [c for b in boxes for c in (b[0], b[2])]
+        ys = [c for b in boxes for c in (b[1], b[3])]
+        return _hit(xs, V, tol_x), _hit(ys, Hh, tol_y)
+
+    gx, gy = share(bs)
+    # 귀무 — 상자 크기는 그대로 두고 자리만 흩는다 (discrim 과 같은 모형)
+    rnd = np.random.RandomState(seed)
+    nx, ny = [], []
+    for _ in range(REL_NULL):
+        rb = []
+        for x1, y1, x2, y2 in bs:
+            bw, bh = x2 - x1, y2 - y1
+            x = rnd.uniform(0, max(1e-6, w - bw)); y = rnd.uniform(0, max(1e-6, h - bh))
+            rb.append((x, y, x + bw, y + bh))
+        a, b = share(rb)
+        if a is not None:
+            nx.append(a)
+        if b is not None:
+            ny.append(b)
+
+    out['면맞음x'] = gx
+    out['면맞음y'] = gy
+    # «여유» — 우연히 맞는 몫을 뺀 것. 이것이 지표다.
+    out['면여유x'] = (gx - float(np.mean(nx))) if (gx is not None and nx) else None
+    out['면여유y'] = (gy - float(np.mean(ny))) if (gy is not None and ny) else None
+
+    # 활자가 무엇 «위» 에 앉았나 — 상자 둘레를 본다.
+    # 마스크끼리 겹쳐 보면 안 된다. 활자를 빼고 나머지를 나눴으므로 활자와
+    # 사진은 정의상 겹치지 않는다 — 처음에 사진위가 전부 0 에 붙었다.
+    ring = max(2, int(0.02 * min(w, h)))
+    tot = 0.0
+    on = {'사진': 0.0, '색면': 0.0, '바탕': 0.0}
+    for x1, y1, x2, y2 in bs:
+        a = (x2 - x1) * (y2 - y1)
+        X1, Y1 = int(max(0, x1 - ring)), int(max(0, y1 - ring))
+        X2, Y2 = int(min(w, x2 + ring)), int(min(h, y2 + ring))
+        box = np.zeros((h, w), bool)
+        box[int(y1):int(y2), int(x1):int(x2)] = True
+        out_ = np.zeros((h, w), bool)
+        out_[Y1:Y2, X1:X2] = True
+        r = out_ & ~box
+        n = float(r.sum())
+        if n <= 0:
+            continue
+        tot += a
+        best = max(on, key=lambda k: (M[k] & r).sum())
+        if (M[best] & r).sum() / n >= 0.4:
+            on[best] += a
+    if tot > 0:
+        for k, v in on.items():
+            out[k + '위'] = float(v / tot)
+    return out
