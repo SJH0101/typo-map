@@ -71,3 +71,48 @@ def boxes_norm(lines, size):
     """묶은 블록을 0~1 좌표로. measure.ground 가 먹는 꼴."""
     W, H = size
     return [[b[0] / W, b[1] / H, b[2] / W, b[3] / H] for b in group(lines)]
+
+
+# ── 단 ──────────────────────────────────────────────────────
+# 짚어주는 경로(measure/ground.py)는 「열은 짚어주지 않았으므로 재지 않는다」로
+# 설계돼 있어 n_columns 가 None 이다. 그래서 갈아끼운 뒤 단수가 100% 결측이
+# 됐다. Surya 줄의 x 범위로 직접 센다 — 줄이 가로로 어디에 걸쳐 있는지만
+# 보면 되고, 잉크를 다시 볼 필요가 없다.
+COL_GAP = 0.02    # 판 너비의 이 비율보다 넓은 «아무 줄도 안 걸친 세로 띠» 를 단 경계로 본다
+COL_MIN = 0.05    # 이보다 좁은 단은 세지 않는다 (쪽번호·여백 글자)
+COL_H = 1.6       # 줄 높이가 중앙값의 이 배를 넘으면 표제로 보고 단 세기에서 뺀다.
+                  # 판을 가로지르는 표제 한 줄이 폭 전체를 덮어 늘 «1단» 이 나왔다.
+                  # 옛 detect.py 가 크기 계층 «안에서» 단을 센 이유가 이것이다.
+COL_W = 0.75      # 폭이 판의 이 비율을 넘는 줄도 뺀다 (가로지르는 줄)
+
+
+def columns(lines, W):
+    """본문 크기 줄들의 x 범위만 보고 단 수를 센다."""
+    L = [_norm(b) for b in lines]
+    if not L:
+        return 0
+    h = np.median([b[3] - b[1] for b in L])
+    body = [b for b in L
+            if (b[3] - b[1]) <= COL_H * h and (b[2] - b[0]) <= COL_W * W]
+    L = body or L
+    cov = np.zeros(int(W) + 1, bool)
+    for x1, _y1, x2, _y2 in L:
+        cov[max(0, int(x1)):min(int(W), int(x2)) + 1] = True
+    runs, i, n = [], 0, len(cov)
+    while i < n:
+        if cov[i]:
+            j = i
+            while j < n and cov[j]:
+                j += 1
+            runs.append((i, j)); i = j
+        else:
+            i += 1
+    if not runs:
+        return 0
+    merged = [list(runs[0])]
+    for a, b in runs[1:]:
+        if a - merged[-1][1] <= COL_GAP * W:
+            merged[-1][1] = b
+        else:
+            merged.append([a, b])
+    return sum(1 for a, b in merged if (b - a) >= COL_MIN * W)
