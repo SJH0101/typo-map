@@ -22,13 +22,47 @@ FACE = ['/System/Library/Fonts/Helvetica.ttc',
         '/System/Library/Fonts/Supplemental/Arial.ttf']
 GUTTER = 0.035                   # 단 사이 틈 (판면 폭 대비)
 
-TITLE = ['musica viva', 'konzert', 'ausstellung', 'juni-festwochen', 'opernhaus']
-NAMES = ['anton webern', 'alban berg', 'arnold schönberg', 'igor strawinsky',
-         'béla bartók', 'paul hindemith', 'olivier messiaen', 'frank martin']
-LINES = ['tonhalle grosser saal', 'dienstag 20.15 uhr', 'kunstgewerbemuseum zürich',
-         'musikalische leitung', 'inszenierung', 'bühnenbild und kostüme',
-         'vorverkauf tonhalle', 'karten fr. 3.- bis 12.-', 'eintritt frei',
-         'geöffnet täglich 10-12 und 14-18 uhr', 'schweizerische erstaufführung']
+# 한 장에 들어갈 «한 벌» 을 짠다. 낱말 주머니에서 중복 허용으로 뽑으면
+# 같은 문구가 네 번씩 나오고, 사람 눈에는 그것이 제일 먼저 걸린다.
+TITLE = ['musica viva', 'juni-festwochen', 'konzert der tonhalle',
+         'ausstellung', 'opernhaus zürich']
+SUB = ['13. konzert der tonhalle-gesellschaft', 'sinfoniekonzert',
+       'kammermusik-abend', 'schweizerische erstaufführung', 'neuinszenierung']
+VENUE = ['tonhalle grosser saal zürich', 'kunstgewerbemuseum zürich',
+         'schauspielhaus zürich', 'helmhaus zürich', 'kongresshaus zürich']
+WHEN = ['dienstag 8. januar 1957', 'donnerstag 26. märz 1959', 'samstag 14. juni 1958',
+        'mittwoch 3. oktober 1962', 'freitag 21. november 1964']
+HOUR = ['20.15 uhr', '20.00 uhr', '17.30 uhr']
+COMPOSER = ['anton webern', 'alban berg', 'arnold schönberg', 'igor strawinsky',
+            'béla bartók', 'paul hindemith', 'olivier messiaen', 'frank martin',
+            'karlheinz stockhausen', 'jacques wildberger', 'wolfgang fortner']
+WORK = ['sechs stücke für orchester', 'kammerkonzert', 'variationen op. 31',
+        'agon', 'musik für saiteninstrumente', 'turangalîla-sinfonie',
+        'petite symphonie concertante', 'gruppen für drei orchester']
+ROLE = ['musikalische leitung', 'inszenierung', 'bühnenbild', 'kostüme',
+        'choreographie', 'solist', 'chorleitung']
+PERSON = ['hans rosbaud', 'erich schmid', 'charles dutoit', 'paul burkhard',
+          'nicolas beriozoff', 'max stubenrauch', 'elisabeth liechti']
+SALE = ['vorverkauf tonhalle, hug, jecklin', 'karten fr. 3.- bis 12.-',
+        'eintritt frei', 'geöffnet täglich 10-12 und 14-18 uhr',
+        'tonhallekasse und depositenkasse']
+
+
+def _content(rnd, nblk):
+    """역할이 있는 덩어리 한 벌. 문구는 겹치지 않게 뽑는다."""
+    pick = lambda pool, k: list(rnd.choice(pool, size=min(k, len(pool)), replace=False))
+    out = [('부제', pick(SUB, 1)),
+           ('일시', [rnd.choice(WHEN) + '  ' + rnd.choice(HOUR)]),
+           ('장소', pick(VENUE, 1))]
+    cs = pick(COMPOSER, int(rnd.randint(3, 7)))
+    ws = pick(WORK, len(cs))
+    out.append(('작곡가', [f'{c}  {w}' if rnd.rand() < 0.5 else c for c, w in zip(cs, ws)]))
+    rs = pick(ROLE, int(rnd.randint(2, 5)))
+    ps = pick(PERSON, len(rs))
+    out.append(('크레딧', [f'{r}  {p}' for r, p in zip(rs, ps)]))
+    out.append(('실무', pick(SALE, int(rnd.randint(1, 4)))))
+    rnd.shuffle(out)
+    return out[:max(1, nblk - 1)]
 
 
 _CACHE = {}
@@ -126,6 +160,18 @@ def spec(v, seed=0):
     used = np.zeros((cols, rows), bool)
     main_col = int(np.clip(round(gx * cols - 0.5), 0, cols - 1))
 
+    # 축을 미리 배분한다. 축공유는 «가장 큰 무리 / 전체» 이므로, 주 축에
+    # 그만큼 몰아주고 나머지를 다른 단에 흩는다. 블록마다 그때그때 정하면
+    # 축이 넷 다섯으로 늘어나 판이 흐트러진다.
+    def axes_for(k):
+        big = max(1, int(round(k * axs)))
+        seq = [main_col] * big
+        rest = [c for c in range(cols) if c != main_col] or [main_col]
+        for i in range(k - big):
+            seq.append(rest[i % len(rest)])
+        rnd.shuffle(seq)
+        return seq
+
     # 빈 가로 띠를 미리 잡아 둔다 — 판을 위아래로 가르는 그 틈
     if band > 0.04:
         h0 = int(np.clip(round(band * H / unit), 1, max(1, rows - 3)))
@@ -150,8 +196,6 @@ def spec(v, seed=0):
             return None
         if prefer is not None:
             spots = [(c, r) for c, r in spots if c == prefer] or spots
-        elif rnd.rand() <= axs:                 # 축을 지키는 덩어리는 주 단으로
-            spots = [(c, r) for c, r in spots if c == main_col] or spots
         if not spots:
             return None
         w = np.array([score(c, r, h) for c, r in spots], float)
@@ -174,18 +218,17 @@ def spec(v, seed=0):
         return max(f.getlength(t) for t in x['text']) * (x['lead'] * (len(x['text']) - 1) + x['cap'])
 
     area = sum(area_of(x) for x in out)
-    guard = 0
-    while len(out) < nblk * 1.6 and area < target and guard < 120:
-        guard += 1
-        n = int(rnd.randint(1, 7))
-        src = NAMES if rnd.rand() < 0.35 else LINES
-        txt = [src[rnd.randint(len(src))] for _ in range(n)]
-        if cols > 1 and rnd.rand() < 0.35:       # 더러는 두 단을 걸친다
-            txt = [t + '  ' + src[rnd.randint(len(src))] for t in txt]
-        b = place(n, unit, cap_body, txt, jitter=sy)
-        if not b:
+    plan = _content(rnd, nblk)
+    cols_seq = axes_for(len(plan))
+    for (role, txt), c in zip(plan, cols_seq):
+        if area >= target and len(out) >= 3:
             break
-        b = dict(role='본문', **b)
+        b = place(len(txt), unit, cap_body, txt, prefer=c, jitter=sy)
+        if b is None:
+            b = place(len(txt), unit, cap_body, txt, jitter=sy)
+        if b is None:
+            continue
+        b = dict(role=role, **b)
         out.append(b)
         area += area_of(b)
     return dict(canvas=[W, H], margins=[mL, mR, mT, mB], cols=cols, unit=unit,
