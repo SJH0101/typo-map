@@ -52,11 +52,13 @@
 ### A — 시각 스타일로메트리
 
 - **CNN-based classification of illustrator style in graphic novels: Which features contribute most?**  
-  J Laubrock, D Dubray · 2018 · Int. Conf. Multimedia Modeling (Springer)  
-  요지: 그래픽노블 일러스트레이터를 CNN 으로 식별. 초록에 «to provide the foundation of a visual stylometry»  
-  **가깝다**: 제일 가깝다 — 작가 식별 + 시각 매체  
-  **차이**: 만화는 손그림이라 그림체가 남는다. CNN 특징이라 무엇 때문에 갈렸는지 못 말한다. 분류만 하고 생성으로 검증하지 않는다.  
-  *확인: 제목·초록 조각*
+  J Laubrock, D Dubray · 2019 · MMM 2019, LNCS 11296 (Springer)  
+  https://easychair.org/publications/preprint/BLds  
+  요지: Graphic Narrative Corpus 의 만화책 약 200권·5만 쪽을 일러스트레이터 약 200명으로 분류. Inception V3 의 어느 mixed-layer 까지 쓰는지를 바꿔가며 어느 층위 특징이 기여하는지 봤다. 정확도 92%(층0) → 97%(상위층). mixed-layer 5 위로는 과적합 조짐. 「page layout and coloring scheme are important contributors」 라고 명시.  
+  **가깝다**: 제일 가깝고, 우리 전제를 **뒷받침한다** — 작가를 가르는 데 «판면 배치» 가 기여한다는 것을 5만 쪽 규모로 보였다. 초록에 「CNN features are general enough to provide the foundation of a visual stylometry」.  
+  **차이**: ① 배치가 «기여한다» 까지고 «배치의 무엇이» 는 못 말한다 — CNN 특징이라 읽을 수 없다. ② 분류만 하고 생성으로 되돌려 검증하지 않는다. ③ 만화는 손그림이라 그림체가 남는다. 실제로 색 배합과 텍스처 같은 중간층 특징으로 충분했다.  
+  쓰임: 적대적 선행연구가 아니라 근거로 인용한다 — 「배치가 작가를 나른다」는 우리 전제의 대규모 증거.  
+  *확인: 초록 전문 + 검색 요약. 본문 PDF 는 아직*
 - **On the track of visual style: A diachronic study of page composition in comics and its functional motivation**  
   J A Bateman, F O D Veloso, Y L Lau · 2021 · Visual Communication  
   요지: 만화 페이지 구성의 통시적 변화를 분석  
@@ -141,9 +143,11 @@
   *확인: 제목*
 - **PRISM: Learning Design Knowledge from Data for Stylistic Design Improvement**  
   2026 · arXiv 2601.11747  
-  요지: 데이터에서 디자인 지식을 배워 «양식적» 개선  
-  **가깝다**: 제목에 stylistic 이 있다 — 확인 필요  
-  *확인: 제목만*
+  https://arxiv.org/abs/2601.11747  
+  요지: 실제 디자인 데이터에서 지식 베이스를 만든다 — 디자인을 군집하고, 디자인 원리를 요약하고, 개선할 때 꺼내 쓴다. Crello 데이터셋. style alignment 평가에서 평균 순위 1.49.  
+  **가깝다**: 방법의 결이 가깝다 — 데이터에서 «디자인 원리» 를 뽑아 언어로 요약하고 다시 쓴다. 「VLM 은 미니멀리즘을 추상 디자인과 엮지만 디자이너는 형태와 색 선택을 강조한다」 는 문제의식도 우리와 비슷하다.  
+  **차이**: 결정적으로 다르다 — «양식» 이 명명된 범주(미니멀리즘 등)지 «개인» 이 아니다. 특정 디자이너를 기술하거나 귀속하지 않는다. 그리고 뽑은 원리가 맞는지 생성으로 반증하지 않고 선호 평가로 확인한다.  
+  *확인: 초록 전문*
 - **Aesthetics++: Refining Graphic Designs by Exploring Design Principles and Human Preference**  
   2022 · IEEE TVCG  
   *확인: 제목*
