@@ -78,9 +78,16 @@ def shuffle_layout(bs, W, H, rnd):
     return out
 
 
-def _auc(a, b, cap=600):
-    """진짜 a 가 무작위 b 보다 큰 쪽으로 얼마나 갈리나. 0.5 = 구분 못함."""
-    b = list(b)[:cap]
+def _auc(a, b, cap=600, seed=SEED):
+    """진짜 a 가 무작위 b 보다 큰 쪽으로 얼마나 갈리나. 0.5 = 구분 못함.
+
+    귀무를 앞에서부터 자르면 안 된다 — 귀무는 포스터 순서대로 쌓이므로
+    앞 600개는 첫 20장에서만 나온 것이 되고, 그 20장의 상자 크기 분포가
+    코퍼스 전체를 대표하지 않는다. 골고루 뽑는다.
+    """
+    b = list(b)
+    if len(b) > cap:
+        b = [b[i] for i in random.Random(seed).sample(range(len(b)), cap)]
     if not len(a) or not len(b):
         return 0.5
     s = sum(1 for x, y in itertools.product(a, b) if x > y) \
@@ -88,24 +95,34 @@ def _auc(a, b, cap=600):
     return s / (len(a) * len(b))
 
 
-def separability(posters, n_null=N_NULL, seed=SEED):
+def separability(posters, n_null=N_NULL, seed=SEED, feats=None):
     """posters = [(boxes, W, H), ...]  →  지표별 판별력.
 
     boxes 는 (x1, y1, x2, y2) 목록. 사람이 그린 것이든 VLM 이 짚은 것이든
     상관없다 — 자리가 실제 배치이기만 하면 된다.
+
+    feats 로 다른 지표 함수를 주면 그 묶음을 같은 귀무모형으로 잰다.
+    남의 지표를 우리 기준에 넣어 보려고 뚫어 둔 자리다 (ngo.py).
     """
+    fn = feats or layout_features        # 다른 지표 묶음도 같은 귀무로 잴 수 있게
     rnd = random.Random(seed)
     real, null = [], []
     for bs, W, H in posters:
         if not bs:
             continue
-        real.append(layout_features(bs, W, H))
+        v = fn(bs, W, H)
+        if not v:                        # 못 잰 판은 조용히 빠지지 않게 건너뛴다
+            continue
+        real.append(v)
         for _ in range(n_null):
-            null.append(layout_features(shuffle_layout(bs, W, H, rnd), W, H))
+            u = fn(shuffle_layout(bs, W, H, rnd), W, H)
+            if u:
+                null.append(u)
     if not real:
         return {}
+    keys = set(real[0]).intersection(*[set(x) for x in real[1:]], *[set(x) for x in null[:1]])
     out = {}
-    for k in real[0]:
+    for k in sorted(keys):
         a = np.array([x[k] for x in real]); b = np.array([x[k] for x in null])
         v = _auc(a, b)
         out[k] = dict(auc=round(max(v, 1 - v), 3),
