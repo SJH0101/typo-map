@@ -256,11 +256,37 @@ def render(path, blocks=(), work=WORK, alpha=0.55):
 
 
 def paths(root):
-    """캐시 열쇠(«폴더__파일») → 실제 경로. 코퍼스마다 이 꼴로 쌓여 있다."""
+    """캐시 열쇠 → 실제 경로.
+
+    열쇠는 대개 «폴더__파일» 인데, 나중에 다른 판형으로 더 넣은 것들은
+    «..__폴더__파일» 처럼 상대경로가 그대로 남아 있다 (로제 9장). 그래서
+    파일 이름만으로도 찾을 수 있게 둔다 — 이름이 겹치면 첫 것을 쓴다.
+    """
     import glob
     out = {}
     for f in glob.glob(os.path.join(os.path.expanduser(root), '**', '*.*'),
                        recursive=True):
-        if f.lower().endswith(('.jpg', '.jpeg', '.png')):
-            out[os.path.basename(os.path.dirname(f)) + '__' + os.path.basename(f)] = f
+        if not f.lower().endswith(('.jpg', '.jpeg', '.png')):
+            continue
+        out[os.path.basename(os.path.dirname(f)) + '__' + os.path.basename(f)] = f
+        out.setdefault(os.path.basename(f), f)
     return out
+
+
+def resolve(raw, root):
+    """캐시 열쇠 목록 → {열쇠: 경로}. 못 찾은 것은 빠진다."""
+    P = paths(root)
+    out = {}
+    for k in raw:
+        # 열쇠에는 «/» 가 없다. 폴더 구분자가 «__» 이므로 마지막 것 뒤가 파일
+        # 이름이다 — os.path.basename 은 열쇠를 통째로 돌려준다.
+        p = P.get(k) or P.get(k.rsplit('__', 1)[-1])
+        if p:
+            out[k] = p
+    return out
+
+
+ROOTS = {'brockmann': '~/Documents/연구2/브로크만 정리',
+         'corpus': '~/Documents/연구2/호프만정리',
+         'rose': '~/Documents/연구2/로제정리',
+         'ruder': '~/Documents/연구2/루더정리'}
