@@ -147,3 +147,85 @@ def measure(path, blocks=(), work=WORK):
         가로지름=round(float((xs.max() - xs.min() + 1) / w), 3),
         속결=(round(float(tex[inner].mean()), 4) if inner.any() else None),
         속색수=ncls)
+
+
+# ── 스케치인가 덩어리인가 ────────────────────────────────────────
+# 형상 지표 11개 중 8개가 네 작가에게 같게 나왔다 — 덩어리 하나가 판을
+# 가로지르고 가운데 있다. 그림을 통째로 한 덩어리로 보면 그럴 수밖에 없다.
+#
+# 그림 안에는 성질이 다른 두 가지가 섞여 있다.
+#
+#     선   붓자국·윤곽·가는 획      제 크기에 비해 «얇다»
+#     면   색면·실루엣·사진        제 크기에 비해 «두껍다»
+#
+# 처음에는 열기 연산으로 갈랐다 — 반지름 r 로 열어 살아남으면 면, 지워지면
+# 선. 안 됐다. 반지름이 고정이라 Das Plakat 의 «굵은» 붓자국이 통째로 면으로
+# 살아남았고 선 비율이 어느 판에서나 0.01 언저리였다.
+#
+# 두께를 절대값이 아니라 **제 크기 대비**로 봐야 한다. 거리변환의 중앙값을
+# √넓이로 나눈다. 꽉 찬 원판이면 0.5 근처, 가는 리본이면 0 에 가깝다.
+#
+#     붓자국 0.108 · 렌즈꼴 0.199 · 만화 0.237 · 삽화 0.293 · 사진 0.42~0.60
+#
+# 한 수로 스케치에서 사진까지 줄이 선다. 열기 방식이 못 하던 일이다.
+MIN_INK = 0.002      # 그림 안에서 이 비율 미만의 잉크는 세지 않는다
+
+
+def _pic(path, blocks, work=WORK):
+    """활자와 바탕을 뺀 «그림» 마스크. measure() 와 같은 얼개를 나눠 쓴다."""
+    seg = fields.segment(path, work=work)
+    if not seg['classes']:
+        return None
+    h, w = seg['classes'][0]['mask'].shape
+    im = Image.open(path).convert('RGB')
+    small = im.copy(); small.thumbnail((work, work)); small = small.resize((w, h))
+    g = np.asarray(small.convert('L'), np.float32) / 255.0
+    typ = _type_mask(blocks, seg['orig_size'], (w, h))
+    m0 = ndimage.uniform_filter(g, WIN)
+    tex = np.sqrt(np.maximum(ndimage.uniform_filter(g * g, WIN) - m0 * m0, 0))
+    flat = float(np.median(tex))
+    ground = np.zeros((h, w), bool); best = 0
+    for c in seg['classes']:
+        cl, n = ndimage.label(c['mask'])
+        for i in range(1, n + 1):
+            mm = cl == i
+            a = int(mm.sum())
+            if a <= best or a < MIN_PART * mm.size:
+                continue
+            inner = ndimage.binary_erosion(mm, np.ones((5, 5)))
+            if inner.any() and float(tex[inner].mean()) <= flat:
+                ground, best = mm, a
+    pic = ndimage.binary_opening(~typ & ~ground, np.ones((3, 3)))
+    return pic, tex, seg, (w, h)
+
+
+def sketch(path, blocks=(), work=WORK):
+    """그림이 «스케치» 쪽인가 «덩어리» 쪽인가."""
+    got = _pic(path, blocks, work)
+    if not got:
+        return None
+    pic, tex, seg, (w, h) = got
+    if pic.sum() < MIN_INK * pic.size:
+        return dict(두께비=None, 조각두께=None, n조각=0)
+    lab, n = ndimage.label(pic)
+    sz = ndimage.sum(pic, lab, range(1, n + 1))
+    keep = np.where(sz >= MIN_PART * pic.size)[0] + 1
+    if not len(keep):
+        return dict(두께비=None, 조각두께=None, n조각=0)
+
+    def thick(m):
+        d = ndimage.distance_transform_edt(m)
+        return float(np.median(d[m])) * 2 / max(np.sqrt(m.sum()), 1e-9)
+
+    big = lab == keep[int(np.argmax(sz[keep - 1]))]
+    ts = [thick(lab == k) for k in keep]
+    wts = np.array([sz[k - 1] for k in keep], float)
+    inner = ndimage.binary_erosion(big, np.ones((5, 5)))
+    return dict(
+        두께비=round(thick(big), 3),                       # 가장 큰 조각
+        조각두께=round(float(np.average(ts, weights=wts)), 3),  # 넓이로 가중한 평균
+        n조각=int(len(keep)),
+        속결=(round(float(tex[inner].mean()), 4) if inner.any() else None))
+
+
+SKETCH_NAMES = ['두께비', '조각두께', 'n조각', '속결']
