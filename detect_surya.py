@@ -116,3 +116,66 @@ def columns(lines, W):
         else:
             merged.append([a, b])
     return sum(1 for a, b in merged if (b - a) >= COL_MIN * W)
+
+
+# ── 재귀용 «한 번만 가르기» ────────────────────────────────────
+# group() 은 평평한 블록 목록을 만들려고 쓴다 — 크기·겹침·간격을 한꺼번에 보고
+# 최종 덩어리까지 붙인다. 재귀에는 안 맞는다. 빽빽한 일정표에서 84줄이 한
+# 덩어리가 되고, 자식이 하나면 멈추는 규칙과 물려 트리가 2마디에서 끝났다
+# (Opernhaus 1966: surya 84줄 → 트리 2마디).
+#
+# 재귀는 한 단계에 «한 번만» 갈라야 한다. 나머지는 아래에서 갈린다.
+# 무엇으로 가르나 — 가장 뚜렷한 틈 하나다. 셋 중 가장 뚜렷한 것을 고른다.
+#
+#     크기      크기 계층 사이의 가장 큰 틈 (제목과 본문)
+#     세로      줄 사이의 가장 큰 세로 틈
+#     가로      단 사이의 가장 큰 가로 틈
+#
+# 「가장 뚜렷한」은 문턱이 아니다 — 셋을 같은 잣대(틈 ÷ 이웃 간격의 중앙값)로
+# 재서 큰 쪽을 고른다. 어느 것도 뚜렷하지 않으면 안 가른다.
+SPLIT_MIN = 2.0   # 틈이 이웃 간격 중앙값의 이 배는 되어야 «가른다» 고 본다.
+                  # 1.0 이면 아무 데나 갈라지고, 크면 안 갈라진다. 2.0 은
+                  # 「이웃보다 두 배 벌어졌다」로, 조판에서 단·계층을 가르는
+                  # 최소한이다.
+
+
+def _gap_split(vals, keys):
+    """1차원 값들에서 가장 뚜렷한 틈을 찾는다. (자른 자리, 뚜렷함)"""
+    if len(vals) < 2:
+        return None, 0.0
+    o = np.argsort(vals)
+    v = np.asarray(vals, float)[o]
+    d = np.diff(v)
+    if not len(d) or np.median(d) <= 0:
+        return None, 0.0
+    i = int(np.argmax(d))
+    return float((v[i] + v[i + 1]) / 2), float(d[i] / np.median(d))
+
+
+def split_once(lines):
+    """줄상자들을 «한 번만» 가른다. 못 가르면 원래대로 하나."""
+    L = [_norm(b) for b in lines]
+    L = [b for b in L if (b[2] - b[0]) * (b[3] - b[1]) >= MIN_AREA]
+    if len(L) < 2:
+        return [L] if L else []
+    hs = [b[3] - b[1] for b in L]
+    ys = [(b[1] + b[3]) / 2 for b in L]
+    xs = [b[0] for b in L]
+    cands = []
+    for name, vals in (('크기', hs), ('세로', ys), ('가로', xs)):
+        cut, score = _gap_split(vals, L)
+        if cut is not None:
+            cands.append((score, name, cut, vals))
+    if not cands:
+        return [L]
+    score, name, cut, vals = max(cands)
+    if score < SPLIT_MIN:
+        return [L]
+    a = [b for b, v in zip(L, vals) if v <= cut]
+    z = [b for b, v in zip(L, vals) if v > cut]
+    return [g for g in (a, z) if g]
+
+
+def bbox(group):
+    return (min(b[0] for b in group), min(b[1] for b in group),
+            max(b[2] for b in group), max(b[3] for b in group), len(group))

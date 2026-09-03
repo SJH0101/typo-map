@@ -1,52 +1,47 @@
-"""포스터를 «자동으로» 재귀해 잰 트리로 읽는다.
+"""포스터를 «잰 트리» 로 읽는다 — 검출은 한 번, 나머지는 기하.
 
-멈춤 조건을 지어내지 않는다. **검출기가 대신 답한다.**
+앞선 판(recurse_crop.py)은 마디마다 크롭을 떠서 검출기를 다시 불렀다. 잘라
+확대하면 작은 글자가 잘 보인다는 생각이었고, 그 자체는 맞다. 그런데 대가가
+컸다.
 
-    상자 0개              멈춤 · 그림 (글자가 없다)
-    상자 1개가 크롭을 채움   멈춤 · 글줄 (더 쪼갤 것이 없다)
-    상자 여럿             묶어서 자식으로 만들고 한 단계 내려간다
+    검출기가 불안정하다   104x71 은 2개, 103x52 는 조각 1개
+    형제를 가려야 한다     큰 쪽 안을 다시 보면 작은 쪽 글줄이 또 잡힌다
+    가리다 나를 품는 형제까지 가려 크롭이 통째로 바탕이 됐다
+    대비 문턱이 필요했다   빈 자리를 잘라 넣으면 잡음에서 상자를 지어낸다
 
-한 줄을 잘라서 확대해도 검출기는 낱말로 쪼개지 않는다 — 실제로 재보니
-정보 한 줄 1개, 제목 한 줄 1개였다. 그래서 이 규칙은 저절로 멈춘다.
-「판면의 0.3% 미만」이나 「깊이 4」 같은 지어낸 수가 필요 없다.
+하루에 붙인 패치 넷이 전부 재검출 때문에 생긴 문제였다. 그리고 그것으로도
+283장 중 75장에서 트리가 두 마디에서 끝났다.
 
-그림은 재귀로 «찾지» 않는다. 자식들이 덮지 못하고 남은 자리가 그림이다.
-빈 회색 바탕을 잘라서 검출기에 넣으면 잡음에서 상자 13개를 만들어 낸다
-(대비 3.4). 그런 자리에 애초에 안 들어가는 것이 맞다.
+여기서는 검출기를 «한 번만» 부른다. 판 전체에서 줄을 받고, 그다음은 좌표만
+가지고 나눈다.
 
-각 마디를 재는 것은 measure/ground.py 가 한다. 짚기와 재기는 여전히 갈라져
-있고, 달라진 것은 짚기가 사람 눈에서 검출기로 옮겨간 것뿐이다.
+    ① 줄을 받는다                      Surya, 판 전체에서 한 번
+    ② 가장 큰 틈에서 둘로 가른다         끝까지. 이것이 덴드로그램이다
+    ③ 마디마다 «한 행간인가» 를 묻는다    귀무모형. 예면 글줄 마디
+    ④ 줄이 안 덮은 잉크가 그림이다        판 전체에서 한 번 계산
+
+②에는 문턱이 없다. 「얼마나 벌어져야 자르나」를 묻지 않고 끝까지 자른다.
+나무 전체가 답이고, 문턱은 나무를 «잘라» 평평한 군집을 만들 때만 필요한데
+우리는 나무를 원한다.
+
+없어진 문턱: INK_R · MIN_PX · SAME · FILL · FRAG · SPLIT_MIN · 깊이제한.
 """
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 
-import detect_surya as DS
-from measure import ground as G
-
-INK_R = 0.15      # 크롭 대비가 «그 판 전체 대비» 의 이 비율에 못 미치면
-                  # 검출기가 낸 상자를 안 믿는다 (잉크가 없는 자리로 본다).
-                  #
-                  # 두 번 틀리고 세 번째다.
-                  #   INK = 15.0        절대 밝기차. 우리 포스터 다섯 곳에서
-                  #                     눈대중으로 골랐다. 스캔이 바뀌면 무너진다.
-                  #   INK_K × 잡음바닥   판마다 «가장 평평한 칸» 으로 바닥을 재려
-                  #                     했다. 판 전체가 사진인 포스터에는 평평한
-                  #                     칸이 없다 — 분위2 가 55.5 였고 그 3배가
-                  #                     판 전체 대비(111.9)를 넘어 온 판이 «그림»
-                  #                     이 됐다.
-                  #
-                  # 지금은 무차원 비율이다. 스캔 품질·종이·조명이 바뀌면 분자와
-                  # 분모가 «함께» 움직이므로 값이 따라간다. 다만 0.15 라는 수
-                  # 자체는 여전히 우리가 넣은 것이다 — 이것까지 없애려면 「잉크가
-                  # 있나」를 대비가 아닌 다른 것으로 물어야 한다.
-MIN_PX = 16       # 이보다 작은 크롭은 검출기에 넣지 않는다 (모델 입력 하한)
-MAX_DEPTH = 8     # 안전장치. 규칙이 아니다 — 걸리면 «깊이제한» 으로 기록한다
+MIN_AREA = 200        # 이보다 작은 줄상자는 부스러기로 본다 (검출기 산출물 정리)
+N_NULL = 400          # 「이 틈이 두드러지나」를 물을 때 섞어 보는 횟수
+ALPHA = 0.05          # 귀무 분위. 여느 판정과 같은 값을 쓴다
+PIC_MIN = 0.02        # 줄이 안 덮은 잉크 덩어리가 판의 이 비율은 되어야 마디로
+                      # 센다. 보고의 문턱이지 셈의 문턱이 아니다 — 값이 달라져도
+                      # 측정이 아니라 트리에 적히는 마디 수만 는다.
 
 
 class Node:
     def __init__(self, id, box, kind='묶음', why=None):
         self.id, self.box, self.kind, self.why = id, box, kind, why
-        self.kids, self.m, self.n_boxes, self.덮음 = [], None, None, None
+        self.kids, self.m, self.lines = [], None, []
 
     def walk(self):
         yield self
@@ -55,9 +50,7 @@ class Node:
 
     def dict(self):
         d = dict(id=self.id, 종류=self.kind, 상자=[round(v, 4) for v in self.box],
-                 상자수=self.n_boxes)
-        if self.덮음 is not None:
-            d['덮음'] = self.덮음
+                 줄수=len(self.lines))
         if self.why:
             d['왜'] = self.why
         if self.m:
@@ -67,121 +60,138 @@ class Node:
         return d
 
 
-def noise_floor(im, n=24):
-    """이 판의 «잡음 바닥» — 가장 평평한 자리들의 대비.
+def _norm(b):
+    x1, y1, x2, y2 = b
+    return (min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
 
-    **지금 쓰지 않는다.** 판 전체가 사진인 포스터에는 평평한 칸이 없어서
-    바닥이 내용과 구분되지 않는다 (사진 격자 판의 분위2 가 55.5). 왜 안
-    되는지를 남겨 두려고 지우지 않았다.
+
+def _bbox(ls):
+    return [min(b[0] for b in ls), min(b[1] for b in ls),
+            max(b[2] for b in ls), max(b[3] for b in ls)]
+
+
+def _widest_gap(ls):
+    """가장 큰 틈 하나. (축, 자른 자리, 벌어진 정도)
+
+    크기·세로·가로 셋을 같은 잣대로 잰다 — 틈 ÷ 이웃 간격의 중앙값. 잣대가
+    같아야 어느 축으로 갈라야 할지 견줄 수 있다. 셋 다 틈이 없으면 None.
     """
-    g = np.asarray(im.convert('L'), float)
-    H, W = g.shape
-    s = max(8, int(min(H, W) / np.sqrt(n)))
-    vs = []
-    for y in range(0, H - s + 1, s):
-        for x in range(0, W - s + 1, s):
-            t = g[y:y + s, x:x + s]
-            m = float(np.percentile(t, 50))
-            lo, hi = t[t <= m], t[t > m]
-            if lo.size and hi.size:
-                vs.append(float(hi.mean() - lo.mean()))
-    if not vs:
-        return 1.0
-    return max(0.5, float(np.percentile(vs, 10)))
-
-
-def _contrast(c):
-    """크롭 안 잉크 대비 — 두 무리의 «색» 거리.
-
-    회색조로 재면 안 된다. 분홍 위 빨강, 초록 위 파랑처럼 밝기가 거의 같고
-    색만 다른 조판을 놓친다 — Opernhaus 1966 의 분홍 패널 위 빨간 크레딧이
-    명도 대비 8.0 으로 나와 «그림» 으로 잘못 끝났다. 스위스 포스터가 늘
-    하는 짓이다.
-
-    RGB 에서 잰다. 명도로 두 무리를 가른 뒤 각 무리의 «평균 색» 사이 거리를
-    쓰면, 밝기 차든 색상 차든 둘 다 잡힌다.
-    """
-    a = np.asarray(c.convert('RGB'), float)
-    if a.size < 48:
-        return 0.0
-    g = a.mean(2)
-    t = float(np.percentile(g, 50))
-    lo, hi = a[g <= t], a[g > t]
-    if not lo.size or not hi.size:
-        return 0.0
-    return float(np.linalg.norm(hi.reshape(-1, 3).mean(0) - lo.reshape(-1, 3).mean(0)))
-
-
-def _ink_cover(c, boxes):
-    """자식 상자들이 크롭 안 잉크의 몇 %를 덮나."""
-    g = np.asarray(c.convert('L'), float)
-    t = float(np.percentile(g, 50))
-    ink = g < t if g.mean() > t else g > t
-    if not ink.any():
-        return 1.0
-    m = np.zeros(g.shape, bool)
-    for b in boxes:
-        x1, y1, x2, y2 = [int(v) for v in b]
-        m[max(0, y1):y2, max(0, x1):x2] = True
-    return round(float((ink & m).sum() / ink.sum()), 3)
-
-
-def _mask_siblings(c, mine, others):
-    """내려갈 크롭에서 «형제의 자리» 를 바탕색으로 덮는다.
-
-    group() 은 줄을 한 번씩만 쓰지만 «상자» 는 서로 품을 수 있다. 큰 쪽 안을
-    다시 검출하면 작은 쪽의 글줄이 또 잡혀 같은 글자가 트리에 두 번 들어간다.
-    Opernhaus 1966 에서 크레딧 네 블록이 r.2~r.5 로 한 번, r.1.2~r.1.5 로
-    또 한 번 나왔다.
-
-    형제를 «지우면» 안 된다 — 한 번 해봤더니 자식이 하나로 줄어 바로 멈췄고
-    트리가 비었다. 지울 것은 자식이 아니라 크롭 안의 그 자리다.
-    """
-    if not others:
-        return c
-    a = np.asarray(c).copy()
-    g = np.asarray(c.convert('L'), float)
-    bg = int(np.percentile(g, 75))          # 이 크롭의 «바탕» 밝기
-    mx1, my1, mx2, my2 = mine
-    myarea = max((mx2 - mx1) * (my2 - my1), 1)
-    for b in others:
-        x1, y1, x2, y2 = [int(v) for v in b[:4]]
-        ix = min(mx2, x2) - max(mx1, x1)
-        iy = min(my2, y2) - max(my1, y1)
-        # 나를 «품는» 형제는 덮지 않는다. 덮으면 내 크롭이 통째로 바탕이 되어
-        # 검출기가 아무것도 못 찾고 «그림» 으로 잘못 끝난다. 처음에 겹침을
-        # 형제 넓이로 재서 이 경우를 놓쳤다 — 내 넓이로 재야 한다.
-        if ix > 0 and iy > 0 and (ix * iy) / myarea > 0.5:
+    best = (None, None, 0.0)
+    for ax, vals in (('크기', [b[3] - b[1] for b in ls]),
+                     ('세로', [(b[1] + b[3]) / 2 for b in ls]),
+                     ('가로', [b[0] for b in ls])):
+        v = np.sort(np.asarray(vals, float))
+        if len(v) < 2:
             continue
-        a[max(0, y1):y2, max(0, x1):x2] = bg
-    return Image.fromarray(a)
+        d = np.diff(v)
+        m = float(np.median(d))
+        if m <= 0:
+            m = float(d.max()) or 1.0
+        i = int(np.argmax(d))
+        score = float(d[i] / m)
+        if score > best[2]:
+            best = (ax, float((v[i] + v[i + 1]) / 2), score)
+    return best
 
 
-def _leftover(c, boxes, min_share=0.05):
-    """자식들이 덮지 않은 «잉크 덩어리» 들. 그림 마디가 된다.
+def _stands_out(vals, score, n_null=N_NULL, seed=20260903):
+    """이 틈이 «우연보다» 두드러지나.
 
-    min_share 는 이 마디 잉크의 몇 %를 차지해야 마디로 세울지다. 작은 부스러기
-    까지 마디로 만들면 트리가 지저분해진다. 문턱이지만 «셈» 이 아니라 «보고» 의
-    문턱이다 — 값이 달라져도 측정이 달라지지 않고 트리에 적히는 마디 수만 는다.
+    「이웃의 2배 넘으면 가른다」 같은 배수를 쓰면 안 된다 — 그 배수가 어디서
+    왔는지 말할 수 없고, 판마다 줄 수가 달라 같은 배수가 다른 뜻이 된다.
+    줄 다섯 개의 최대 틈은 우연히도 이웃의 2배가 되지만, 여든 개면 그렇지
+    않다.
+
+    그래서 «같은 개수의 값을 같은 범위에 고르게 흩뿌렸을 때» 의 최대 틈과
+    견준다. 실제 틈이 그 분포의 위쪽 5% 밖이면 두드러진 것이고, 아니면
+    나눌 자리가 아니다.
     """
-    g = np.asarray(c.convert('L'), float)
+    v = np.sort(np.asarray(vals, float))
+    if len(v) < 3:
+        return len(v) == 2 and v[1] > v[0]      # 둘뿐이면 다르기만 하면 가른다
+    lo, hi = v[0], v[-1]
+    if hi <= lo:
+        return False
+    rnd = np.random.RandomState(seed)
+    null = []
+    for _ in range(n_null):
+        r = np.sort(rnd.uniform(lo, hi, len(v)))
+        d = np.diff(r)
+        m = float(np.median(d)) or 1.0
+        null.append(float(d.max() / m))
+    return score >= float(np.percentile(null, 100 * (1 - ALPHA)))
+
+
+def _split(ls, ax, cut):
+    key = {'크기': lambda b: b[3] - b[1],
+           '세로': lambda b: (b[1] + b[3]) / 2,
+           '가로': lambda b: b[0]}[ax]
+    a = [b for b in ls if key(b) <= cut]
+    z = [b for b in ls if key(b) > cut]
+    return [g for g in (a, z) if g]
+
+
+def build(lines, size, id='r'):
+    """줄상자 목록 → 덴드로그램. 이미지를 다시 보지 않는다."""
+    W, H = size
+    ls = [_norm(b) for b in lines]
+    ls = [b for b in ls if (b[2] - b[0]) * (b[3] - b[1]) >= MIN_AREA]
+    if not ls:
+        return Node(id, [0, 0, 1, 1], '그림', '검출기가 줄을 내지 않았다')
+
+    def go(g, nid):
+        bx = _bbox(g)
+        n = Node(nid, [bx[0] / W, bx[1] / H, bx[2] / W, bx[3] / H])
+        n.lines = g
+        if len(g) == 1:
+            n.kind = '글줄'
+            return n
+        ax, cut, score = _widest_gap(g)
+        if ax is None:
+            n.kind, n.why = '글줄', '더 가를 틈이 없다'
+            return n
+        vals = {'크기': [b[3] - b[1] for b in g],
+                '세로': [(b[1] + b[3]) / 2 for b in g],
+                '가로': [b[0] for b in g]}[ax]
+        if not _stands_out(vals, score):
+            n.kind = '글줄'
+            n.why = f'가장 큰 틈({ax}, 이웃의 {score:.1f}배)이 우연과 구분되지 않는다'
+            return n
+        parts = _split(g, ax, cut)
+        if len(parts) < 2:
+            n.kind, n.why = '글줄', '더 가를 틈이 없다'
+            return n
+        n.why = f'{ax} 틈에서 가름 (이웃의 {score:.1f}배)'
+        for i, p in enumerate(parts, 1):
+            n.kids.append(go(p, f'{nid}.{i}'))
+        return n
+
+    return go(ls, id)
+
+
+def pictures(path, lines, root, min_share=PIC_MIN, work=400):
+    """줄이 덮지 않은 잉크 덩어리 = 그림. 판 전체에서 «한 번만» 낸다.
+
+    앞선 판은 마디마다 남은 잉크를 계산해 그림 마디를 붙였다. 마디가 겹치면
+    같은 자리가 여러 번 그림이 됐다. 판 전체에서 한 번 내고 트리 밑에 단다.
+    """
+    im = Image.open(path).convert('RGB')
+    W, H = im.size
+    s = im.copy(); s.thumbnail((work, work))
+    w, h = s.size
+    g = np.asarray(s.convert('L'), float)
     t = float(np.percentile(g, 50))
     ink = g < t if g.mean() > t else g > t
-    if not ink.any():
-        return []
-    taken = np.zeros(g.shape, bool)
-    for b in boxes:
-        x1, y1, x2, y2 = [int(v) for v in b]
-        taken[max(0, y1):y2, max(0, x1):x2] = True
-    rest = ink & ~taken
-    if not rest.any():
-        return []
-    from scipy import ndimage as ndi
-    rest = ndi.binary_closing(rest, np.ones((5, 5)))
-    lab, n = ndi.label(rest)
+    taken = np.zeros((h, w), bool)
+    for b in lines:
+        x1, y1, x2, y2 = _norm(b)
+        taken[max(0, int(y1 / H * h)):int(y2 / H * h) + 1,
+              max(0, int(x1 / W * w)):int(x2 / W * w) + 1] = True
+    rest = ndimage.binary_closing(ink & ~taken, np.ones((5, 5)))
+    lab, n = ndimage.label(rest)
     if not n:
         return []
-    tot = float(ink.sum())
+    tot = float(ink.sum()) or 1.0
     out = []
     for i in range(1, n + 1):
         m = lab == i
@@ -189,119 +199,22 @@ def _leftover(c, boxes, min_share=0.05):
         if share < min_share:
             continue
         ys, xs = np.where(m)
-        out.append(([float(xs.min()), float(ys.min()),
-                     float(xs.max() + 1), float(ys.max() + 1)], share))
-    return sorted(out, key=lambda t: -t[1])[:4]
-
-
-def _crop(im, box):
-    W, H = im.size
-    x1, y1, x2, y2 = [int(box[0] * W), int(box[1] * H), int(box[2] * W), int(box[3] * H)]
-    return im.crop((max(0, x1), max(0, y1), min(W, x2), min(H, y2)))
-
-
-def _abs(box, sub, cw, ch):
-    """크롭 안 좌표 → 판 전체의 0~1 좌표."""
-    x1, y1, x2, y2 = box
-    w, h = x2 - x1, y2 - y1
-    a, b, c, d = sub
-    return [x1 + a / cw * w, y1 + b / ch * h, x1 + c / cw * w, y1 + d / ch * h]
-
-
-def build(path, det, box=(0.0, 0.0, 1.0, 1.0), id='r', depth=0, log=None, floor=None,
-          mask=None):
-    log = log if log is not None else []
-    im = Image.open(path).convert('RGB')
-    if floor is None:
-        floor = _contrast(im)          # 이 판 전체의 대비. 아래에서 잣대로 쓴다
-    n = Node(id, list(box))
-    c = _crop(im, box)
-    if mask is not None and c.width >= MIN_PX and c.height >= MIN_PX:
-        others, pbox, pw, ph = mask
-        W, H = im.size
-        px1, py1, px2, py2 = pbox
-        def to_c(b):                      # 부모 크롭 좌표 → 내 크롭 좌표
-            ax = px1 + b[0] / pw * (px2 - px1); ay = py1 + b[1] / ph * (py2 - py1)
-            bx = px1 + b[2] / pw * (px2 - px1); by = py1 + b[3] / ph * (py2 - py1)
-            return [(ax - box[0]) / max(box[2] - box[0], 1e-9) * c.width,
-                    (ay - box[1]) / max(box[3] - box[1], 1e-9) * c.height,
-                    (bx - box[0]) / max(box[2] - box[0], 1e-9) * c.width,
-                    (by - box[1]) / max(box[3] - box[1], 1e-9) * c.height]
-        c = _mask_siblings(c, (0, 0, c.width, c.height), [to_c(b) for b in others])
-    if c.width < MIN_PX or c.height < MIN_PX:
-        n.kind, n.why = '글줄', '크롭이 모델 입력 하한보다 작다'
-        return n, log
-    if depth >= MAX_DEPTH:
-        n.kind, n.why = '글줄', '깊이제한'
-        log.append(f'{id} 깊이제한')
-        return n, log
-
-    lines = [DS._norm([float(v) for v in b.bbox]) for b in det([c])[0].bboxes]
-    n.n_boxes = len(lines)
-    if not lines:
-        n.kind, n.why = '그림', '검출기가 상자를 내지 않았다'
-        return n, log
-
-    ink = _contrast(c)
-    if ink < INK_R * floor:
-        n.kind = '그림'
-        n.why = (f'대비 {ink:.1f} 이 이 판 전체 대비 {floor:.1f} 의 '
-                 f'{INK_R:.0%}({INK_R * floor:.1f})에 못 미친다')
-        return n, log
-
-    # 상자가 하나면 group() 이 자식 하나를 내고 아래에서 멈춘다. 「크롭의
-    # 55% 를 채우면 한 줄」 같은 별도 문턱이 필요 없었다 — 지웠다.
-    kids = DS.group(lines)
-
-    # 묶기가 «하나» 를 냈으면 더 쪼갤 것이 없다는 뜻이다. 내려가면 안 된다.
-    # 루더 1955 에서 group() 이 "Louis" 와 "Weber" 를 한 덩어리로 옳게 묶었는데,
-    # 그 덩어리가 부모의 73% 라 SAME(0.85) 에 안 걸려 또 내려갔다. 그 살짝
-    # 다른 크롭에서 검출기가 조각 하나(39x15, "ouis")만 냈고 나머지가 사라졌다.
-    # 덮는 비율로 물을 일이 아니라 «쪼개졌나» 로 물을 일이다.
-    if len(kids) == 1:
-        k = kids[0]
-        n.kind = '글줄'
-        n.why = '묶기가 하나로 냈다 — 더 쪼개지지 않는다'
-        n.box = _abs(box, k[:4], c.width, c.height)
-        return n, log
-
-    # 자식이 부모와 «정확히 같으면» 내려가지 않는다. 비율로 묻지 않는다 —
-    # 「부모의 85% 이상」 같은 수는 우리 코퍼스에서 역추적한 것이라 다른
-    # 코퍼스에서 무너진다. 여기서 물을 것은 「쪼개졌나」뿐이고, 그것은 위에서
-    # group() 이 몇 개를 냈나로 이미 답했다. 이 등호는 무한재귀 안전장치다.
-    for i, k in enumerate(kids, 1):
-        kb = _abs(box, k[:4], c.width, c.height)
-        if [round(v, 6) for v in kb] == [round(v, 6) for v in box]:
-            kn = Node(f'{id}.{i}', kb, '글줄', '자식 상자가 부모와 정확히 같다')
-        else:
-            others = [k2[:4] for j, k2 in enumerate(kids) if j != i - 1]
-            kn, log = build(path, det, kb, f'{id}.{i}', depth + 1, log, floor,
-                            mask=(others, box, c.width, c.height))
-        n.kids.append(kn)
-
-    # ── 덮음 검사 ─────────────────────────────────────────────
-    # 자식들이 부모의 «잉크» 를 얼마나 가져갔나. 25장에서 재보니 중앙값이
-    # 0.36 이었다 — 절반 넘게 어디론가 샜다. 새는 것이 사진·색면·도형이고,
-    # 그것이 트리에 자리가 없어 그림 마디가 한 개도 안 나왔다.
-    #
-    # 남은 잉크를 «그림» 마디로 만든다. 재귀로 찾지 않는다 — 빈 자리를 잘라
-    # 검출기에 넣으면 잡음에서 상자를 지어내기 때문이다. 자식들이 덮지 못하고
-    # 남은 자리가 곧 그림이다.
-    n.덮음 = _ink_cover(c, [k[:4] for k in kids])
-    for j, (rb, share) in enumerate(_leftover(c, [k[:4] for k in kids]), 1):
-        n.kids.append(Node(f'{id}.그림{j}', _abs(box, rb, c.width, c.height),
-                           '그림', f'자식들이 덮지 않은 자리 — 이 마디 잉크의 {share:.0%}'))
-    return n, log
+        out.append(Node(f'{root.id}.그림{len(out) + 1}',
+                        [xs.min() / w, ys.min() / h, (xs.max() + 1) / w, (ys.max() + 1) / h],
+                        '그림', f'줄이 덮지 않은 잉크 — 판 잉크의 {share:.0%}'))
+    return sorted(out, key=lambda z: -(z.box[2] - z.box[0]) * (z.box[3] - z.box[1]))[:6]
 
 
 def measure(root, path):
     """글줄 마디 안을 잰다. 묶음은 자식에서 굴려 올린다."""
+    from measure import ground as G
     leaf = [x for x in root.walk() if x.kind == '글줄']
     if leaf:
         r = G.measure_boxes(path, [x.box for x in leaf], coords='norm')
         for x, m in zip(leaf, r['boxes']):
             x.m = dict(줄=m.get('n_lines'), xh=m.get('xh_median'),
-                       행간=m.get('lead_measured'))
+                       행간=m.get('lead_measured'),
+                       잉크상자=[round(v, 1) for v in (m.get('box_ink') or [])])
     for x in sorted(root.walk(), key=lambda z: -len(z.id)):
         if x.kids:
             ms = [k.m for k in x.walk() if k.m]
@@ -312,20 +225,30 @@ def measure(root, path):
     return root
 
 
+def read(path, det):
+    """포스터 한 장 → 잰 트리. 검출기는 여기서 «한 번» 부른다."""
+    im = Image.open(path).convert('RGB')
+    lines = [[float(v) for v in b.bbox] for b in det([im])[0].bboxes]
+    root = build(lines, im.size)
+    root.kids += pictures(path, lines, root)
+    measure(root, path)
+    return root, lines
+
+
 def summary(root):
     out = []
     for x in root.walk():
         m = x.m or {}
-        bits = []
+        b = []
         if m.get('줄'):
-            bits.append(f"줄 {m['줄']}")
+            b.append(f"줄 {m['줄']}")
         if m.get('xh'):
-            bits.append(f"xh {m['xh']:.1f}")
+            b.append(f"xh {m['xh']:.1f}")
         if m.get('xh범위'):
-            bits.append(f"xh {m['xh범위'][0]}~{m['xh범위'][1]}")
+            b.append(f"xh {m['xh범위'][0]}~{m['xh범위'][1]}")
         if m.get('행간'):
-            bits.append(f"행간 {m['행간']:.0f}")
-        if x.why and x.kind == '그림':
-            bits.append(x.why)
-        out.append('  ' * x.id.count('.') + f"{x.id:<12}[{x.kind}] " + ' · '.join(bits))
+            b.append(f"행간 {m['행간']:.0f}")
+        if x.kind == '그림' and x.why:
+            b.append(x.why)
+        out.append('  ' * x.id.count('.') + f"{x.id:<10}[{x.kind}] " + ' · '.join(b))
     return '\n'.join(out)
