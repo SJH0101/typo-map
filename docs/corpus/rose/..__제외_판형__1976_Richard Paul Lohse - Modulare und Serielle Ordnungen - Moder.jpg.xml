@@ -1,0 +1,23 @@
+<poster version="0.1">
+  <source file="1976_Richard Paul Lohse - Modulare und Serielle Ordnungen - Moder.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" unit="px">
+      <axis id="1" at="16"/>
+      <axis id="2" at="32"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="13.2" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.0356 0.265 0.0694 0.2888" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.2" level="L1" lines="1" xh="5" box="0.0516 0.4325 0.1068 0.4462"/>
+    <block id="r.3" level="L2" lines="1" xh="13" box="0.0249 0.7588 0.3843 0.7812"/>
+    <block id="r.4" level="L2" lines="2" xh="13.5" lead="22" box="0.0231 0.79 0.8399 0.8425"/>
+    <picture id="r.5" box="0.0249 0.8688 0.5819 0.9888" why="대비 14.5 이 이 판 전체 대비 171.9 의 15%(25.8)에 못 미친다"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 75%"/>
+  </content>
+</poster>

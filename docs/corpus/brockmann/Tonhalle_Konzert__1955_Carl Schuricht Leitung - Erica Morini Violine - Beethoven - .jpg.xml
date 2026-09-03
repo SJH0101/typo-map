@@ -1,0 +1,28 @@
+<poster version="0.1">
+  <source file="1955_Carl Schuricht Leitung - Erica Morini Violine - Beethoven - .jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="81" wobble="0.42" unit="px">
+      <axis id="1" at="7"/>
+      <axis id="2" at="54"/>
+      <axis id="3" at="169"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="5" n="2"/>
+      <level id="L2" xh="14" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="3" xh="14" lead="28" box="0.0901 0.5887 0.6678 0.685"/>
+    <group id="r.2" box="0.0106 0.7163 0.4205 0.8425" coverage="0.305">
+      <block id="r.2.1" level="L1" lines="1" xh="5" box="0.0106 0.7875 0.0636 0.7975"/>
+      <block id="r.2.2" level="L1" lines="1" xh="5" box="0.3039 0.81 0.3922 0.82"/>
+      <group id="r.2.3" box="0.0954 0.8137 0.2456 0.8413" coverage="0">
+        <picture id="r.2.3.그림1" box="0.099 0.8163 0.242 0.8387" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 86%"/>
+      </group>
+      <picture id="r.2.그림1" box="0.2456 0.8125 0.417 0.84" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 53%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.1562 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 82%"/>
+  </content>
+</poster>

@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1957_Musica Viva - Paul Hindemith - Sonate für Viola und Klavier .jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="208.5" wobble="0.338" unit="px">
+      <axis id="1" at="7"/>
+      <axis id="2" at="286"/>
+      <axis id="3" at="424"/>
+      <tested how="leave-one-out" error="69" null="88.28" ratio="1.28" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1756" null="0.1492" percentile="0.96" n="16"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="9" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="5" box="0.5044 0.0225 0.5982 0.0312"/>
+    <block id="r.2" level="L2" lines="3" xh="8" lead="16.5" box="0.7451 0.0238 0.9487 0.08"/>
+    <block id="r.3" level="L2" lines="11" xh="9" lead="17" box="0.0088 0.03 0.4779 0.2588"/>
+    <block id="r.4" level="L2" lines="1" xh="9" box="0.0088 0.0325 0.1522 0.0475"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 51%"/>
+    <picture id="r.그림2" box="0.0265 0.7987 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 17%"/>
+  </content>
+</poster>

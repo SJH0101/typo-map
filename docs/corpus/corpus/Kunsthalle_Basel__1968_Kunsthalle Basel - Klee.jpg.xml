@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1968_Kunsthalle Basel - Klee.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="16" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="15" box="0.127 0.0275 0.4074 0.0525"/>
+    <block id="r.2" level="L1" lines="3" xh="17" lead="31.5" box="0.1217 0.065 0.3986 0.18"/>
+    <picture id="r.3" box="0.5256 0.0737 0.8889 0.1913" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.4" box="0.3845 0.4238 0.4868 0.4475" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.1963 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 98%"/>
+  </content>
+</poster>

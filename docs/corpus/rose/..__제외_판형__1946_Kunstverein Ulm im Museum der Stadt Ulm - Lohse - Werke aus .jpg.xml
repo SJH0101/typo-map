@@ -1,0 +1,21 @@
+<poster version="0.1">
+  <source file="1946_Kunstverein Ulm im Museum der Stadt Ulm - Lohse - Werke aus .jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="10.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="5" xh="11" lead="18.5" box="0.2191 0.0013 0.6219 0.1138"/>
+    <picture id="r.2" box="0.6396 0.025 0.9982 0.115" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.3" box="0.2155 0.27 0.4399 0.3125" coverage="0">
+      <picture id="r.3.그림1" box="0.3198 0.2725 0.4364 0.31" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 33%"/>
+      <picture id="r.3.그림2" box="0.235 0.2725 0.3074 0.31" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 30%"/>
+      <picture id="r.3.그림3" box="0.3198 0.29 0.3339 0.31" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+      <picture id="r.3.그림4" box="0.2721 0.2888 0.2915 0.3063" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 5%"/>
+    </group>
+    <block id="r.4" level="L1" lines="1" xh="10" box="0.7756 0.2713 0.9841 0.2906"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 84%"/>
+  </content>
+</poster>

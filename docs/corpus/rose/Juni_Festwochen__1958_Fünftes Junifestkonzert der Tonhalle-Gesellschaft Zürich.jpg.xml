@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1958_Fünftes Junifestkonzert der Tonhalle-Gesellschaft Zürich.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="310.2"/>
+      <tested how="leave-one-out" error="2.35" null="136.2" ratio="57.94" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1597" null="0.1436" percentile="0.88" n="16"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="8" n="1"/>
+      <level id="L3" xh="16.8" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="17" box="0.554 0.045 0.7062 0.0638"/>
+    <block id="r.2" level="L2" lines="3" xh="8" lead="13.5" box="0.5504 0.0777 0.8584 0.1336"/>
+    <block id="r.3" level="L3" lines="2" xh="16.5" lead="27" box="0.5522 0.1438 0.9876 0.2012"/>
+    <block id="r.4" level="L1" lines="10" xh="5" lead="10" box="0.5522 0.8537 0.931 0.9888"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.7212" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    <picture id="r.그림2" box="0.0035 0.2263 0.9965 0.8462" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 29%"/>
+  </content>
+</poster>

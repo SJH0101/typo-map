@@ -1,0 +1,14 @@
+<poster version="0.1">
+  <source file="1972_Lohse - Vismara Arte Contemporanea Milano.jpg" w="573" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="11.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="11" box="0.0175 0.8787 0.1309 0.8987"/>
+    <block id="r.2" level="L1" lines="3" xh="12" lead="22.5" box="0.0175 0.9075 0.5079 0.9875"/>
+    <picture id="r.그림1" box="0.014 0.015 0.9791 0.7063" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 98%"/>
+  </content>
+</poster>

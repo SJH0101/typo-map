@@ -1,0 +1,28 @@
+<poster version="0.1">
+  <source file="1958_Henry van de Velde - Kunstgewerbemuseum Zürich - 6. Juni - 3.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="185.5" wobble="0.089" unit="px">
+      <axis id="1" at="55"/>
+      <axis id="2" at="257"/>
+      <axis id="3" at="426"/>
+      <tested how="leave-one-out" error="84.5" null="65.86" ratio="0.78" n="4"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="5" n="2"/>
+      <level id="L2" xh="7" n="1"/>
+      <level id="L3" xh="54" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="54" box="0.1007 0.8488 0.7279 0.9475"/>
+    <block id="r.2" level="L1" lines="1" xh="5" box="0.7491 0.845 0.97 0.8575"/>
+    <picture id="r.3" box="0.7473 0.86 0.9594 0.9387" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.5" level="L2" lines="1" xh="7" box="0.0954 0.955 0.1714 0.9675"/>
+    <block id="r.6" level="L1" lines="1" xh="5" box="0.4505 0.955 0.7279 0.9688"/>
+    <picture id="r.그림1" box="0.0972 0.0413 0.9682 0.8187" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 93%"/>
+  </content>
+  <unmeasured>
+    <item id="r.4" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

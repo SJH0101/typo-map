@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1965_Opernhaus Zürich - Der Opernball - von Richard Heuberger - 3.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="41"/>
+      <tested how="leave-one-out" error="2" null="253.4" ratio="126.7" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0773" null="0.0744" percentile="0.54" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8.2" n="2"/>
+      <level id="L2" xh="53" n="1"/>
+      <level id="L3" xh="61.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="61.5" lead="87" box="0.0618 0.1462 0.9028 0.3275"/>
+    <block id="r.2" level="L1" lines="2" xh="8.5" lead="16" box="0.0707 0.3787 0.5565 0.4125"/>
+    <block id="r.3" level="L2" lines="1" xh="53" box="0.0601 0.5862 0.8145 0.6875"/>
+    <block id="r.4" level="L1" lines="1" xh="8" box="0.0707 0.8275 0.477 0.8462"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.88" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 44%"/>
+    <picture id="r.그림2" box="0.0035 0.8538 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 17%"/>
+  </content>
+</poster>

@@ -1,0 +1,20 @@
+<poster version="0.1">
+  <source file="1961_René Auberjonois - Ernest Bolens - Kunsthalle Basel.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system/>
+  <content>
+    <group id="r.1" box="0.5528 0.0 0.581 0.02" coverage="0">
+      <picture id="r.1.그림1" box="0.5563 0.0025 0.5775 0.0175" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 61%"/>
+    </group>
+    <group id="r.2" box="0.1303 0.3013 0.4912 0.5587" coverage="0.009">
+      <picture id="r.2.1" box="0.2694 0.3588 0.331 0.3862" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.2" box="0.3644 0.3638 0.4049 0.385" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.3" box="0.4437 0.3638 0.4806 0.3912" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.4" box="0.4208 0.3663 0.4507 0.3862" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.5" box="0.1408 0.4025 0.1743 0.4263" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.그림1" box="0.1338 0.3038 0.4877 0.5562" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 90%"/>
+    </group>
+    <picture id="r.3" box="0.6708 0.74 0.8134 0.8263" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 84%"/>
+  </content>
+</poster>

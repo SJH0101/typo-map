@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1989_Basler Gesangverein - Zürcher Bach Chor - Basler Sinfonieorc.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="31.5" wobble="1.617" unit="px">
+      <axis id="1" at="224.3"/>
+      <axis id="2" at="360.5"/>
+      <axis id="3" at="392"/>
+      <axis id="4" at="417"/>
+      <tested how="leave-one-out" error="1" null="46.36" ratio="46.36" n="7"/>
+    </axes>
+    <baseline-grid found="yes" unit="16.5">
+      <tested how="null-model" deviation="0.0949" null="0.144" percentile="0" n="15"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5.5" n="1"/>
+      <level id="L2" xh="10.2" n="6"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="4" xh="9" lead="17" box="0.6314 0.5325 0.8677 0.6138"/>
+    <block id="r.2" level="L2" lines="2" xh="10" lead="17" box="0.6314 0.6175 0.7848 0.6575"/>
+    <group id="r.3" box="0.3915 0.695 0.5503 0.88" coverage="0.612">
+      <block id="r.3.1" level="L2" lines="2" xh="10.5" lead="17" box="0.3915 0.6999 0.5397 0.7363"/>
+      <block id="r.3.2" level="L2" lines="2" xh="9" lead="17" box="0.3915 0.8462 0.5467 0.8788"/>
+      <picture id="r.3.그림1" box="0.3951 0.6975 0.5467 0.7687" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 34%"/>
+    </group>
+    <block id="r.4" level="L2" lines="2" xh="12" lead="17" box="0.7425 0.72 0.8272 0.7575"/>
+    <block id="r.5" level="L2" lines="2" xh="11.5" lead="17" box="0.6966 0.8438 0.7619 0.8775"/>
+    <block id="r.6" level="L1" lines="2" xh="5.5" lead="11" box="0.3933 0.9562 0.7337 0.9825"/>
+    <picture id="r.그림1" box="0.0035 0.0712 0.9965 0.8812" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 92%"/>
+  </content>
+</poster>

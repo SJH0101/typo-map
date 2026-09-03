@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1963_Berlin - die grösste Stadt Deutschlands - Ausstellung Gewerb.jpg" w="569" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="9" n="1"/>
+      <level id="L2" xh="52" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="5" xh="52" lead="81" box="0.5413 0.4938 0.9367 0.9788"/>
+    <block id="r.2" level="L1" lines="5" xh="9" lead="15" box="0.0035 0.8962 0.3585 0.9838"/>
+    <picture id="r.그림1" box="0.0035 0.12 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 56%"/>
+    <picture id="r.그림2" box="0.6169 0.0025 0.7188 0.4637" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+  </content>
+</poster>

@@ -1,0 +1,23 @@
+<poster version="0.1">
+  <source file="1955_Für alle... - Oscar Weber.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="11" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0053 0.4125 0.2811 0.5075" coverage="0">
+      <picture id="r.1.그림1" box="0.0089 0.415 0.2776 0.505" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 87%"/>
+    </group>
+    <block id="r.2" level="L1" lines="2" xh="11" lead="18" box="0.3434 0.6338 0.3879 0.6613"/>
+    <picture id="r.3" box="0.7295 0.6663 0.8238 0.7338" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.4" box="0.0089 0.8363 0.0854 0.97" coverage="0">
+      <picture id="r.4.그림1" box="0.0125 0.8525 0.0819 0.9675" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 84%"/>
+    </group>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.6312" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 62%"/>
+    <picture id="r.그림2" box="0.0036 0.6162 0.6886 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+    <picture id="r.그림3" box="0.6335 0.585 0.9751 0.7625" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+    <picture id="r.그림4" box="0.452 0.555 0.6317 0.7625" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 5%"/>
+  </content>
+</poster>

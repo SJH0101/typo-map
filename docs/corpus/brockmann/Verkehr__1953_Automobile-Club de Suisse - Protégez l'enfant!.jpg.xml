@@ -1,0 +1,17 @@
+<poster version="0.1">
+  <source file="1953_Automobile-Club de Suisse - Protégez l'enfant!.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="20" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.1741 0.015 0.6128 0.0475" coverage="0">
+      <picture id="r.1.그림1" box="0.1776 0.0175 0.4689 0.045" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 58%"/>
+      <picture id="r.1.그림2" box="0.4813 0.0175 0.6092 0.045" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 17%"/>
+    </group>
+    <block id="r.2" level="L1" lines="1" xh="20" box="0.0053 0.1338 0.5169 0.18"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9485 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 90%"/>
+  </content>
+</poster>

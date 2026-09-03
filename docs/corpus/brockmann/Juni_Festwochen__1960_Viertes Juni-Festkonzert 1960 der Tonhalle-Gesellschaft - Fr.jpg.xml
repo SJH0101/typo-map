@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1960_Viertes Juni-Festkonzert 1960 der Tonhalle-Gesellschaft - Fr.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="7" n="1"/>
+      <level id="L2" xh="15.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="4" xh="15.5" lead="30" box="0.1155 0.745 0.4529 0.8875"/>
+    <block id="r.2" level="L1" lines="4" xh="7" lead="15" box="0.4849 0.8862 0.9183 0.97"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 81%"/>
+  </content>
+</poster>

@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1957_Volg Traubensaft naturrein - Zuverlässigkeit.jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="15" n="1"/>
+      <level id="L2" xh="28" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="28" box="0.1631 0.1997 0.5018 0.2412"/>
+    <picture id="r.2" box="0.0089 0.2525 0.1986 0.29" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.3" level="L1" lines="1" xh="15" box="0.1791 0.9012 0.4947 0.9325"/>
+    <picture id="r.그림1" box="0.0035 0.0875 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 86%"/>
+  </content>
+</poster>

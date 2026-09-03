@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1949_Ausstellung im Gewerbemuseum Basel - Photographie in der Sch.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="156.2" unit="px">
+      <axis id="1" at="33.8"/>
+      <axis id="2" at="190"/>
+      <tested how="leave-one-out" error="1" null="135.9" ratio="135.9" n="5"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="4" n="2"/>
+      <level id="L2" xh="5" n="2"/>
+      <level id="L3" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="16" box="0.3292 0.075 0.9929 0.1175"/>
+    <block id="r.2" level="L2" lines="1" xh="5" box="0.0531 0.2213 0.1575 0.2387"/>
+    <block id="r.3" level="L1" lines="1" xh="4" box="0.0549 0.275 0.2814 0.29"/>
+    <picture id="r.4" box="0.0531 0.3262 0.2708 0.3975" why="대비 21.4 이 이 판 전체 대비 198.9 의 15%(29.8)에 못 미친다"/>
+    <block id="r.5" level="L1" lines="1" xh="4" box="0.0549 0.4338 0.2478 0.4525"/>
+    <block id="r.6" level="L2" lines="1" xh="5" box="0.0549 0.485 0.1522 0.5012"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.55" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 51%"/>
+    <picture id="r.그림2" box="0.0035 0.455 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 42%"/>
+  </content>
+</poster>

@@ -1,0 +1,31 @@
+<poster version="0.1">
+  <source file="1954_Ausstellung - Deutsche Gebrauchsgraphik - Gewerbemuseum Base.jpg" w="558" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="227.5" wobble="0.609" unit="px">
+      <axis id="1" at="5"/>
+      <axis id="2" at="371"/>
+      <axis id="3" at="460"/>
+      <tested how="leave-one-out" error="2" null="64.64" ratio="32.32" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0667" null="0.08" percentile="0.26" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="3" n="1"/>
+      <level id="L2" xh="5" n="2"/>
+      <level id="L3" xh="21.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="21" box="0.0018 0.0087 0.2455 0.0537"/>
+    <block id="r.2" level="L3" lines="1" xh="22" box="0.828 0.0125 0.9964 0.0563"/>
+    <block id="r.3" level="L1" lines="1" xh="3" box="0.6613 0.4325 0.8369 0.445"/>
+    <group id="r.4" box="0.6613 0.48 0.9982 0.5288" coverage="0.411">
+      <block id="r.4.1" level="L2" lines="1" xh="5" box="0.8297 0.4825 0.9964 0.4925"/>
+      <block id="r.4.2" level="L2" lines="2" xh="5" lead="15" box="0.6613 0.5 0.8459 0.5263"/>
+      <picture id="r.4.그림1" box="0.6649 0.4825 0.9462 0.5263" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 50%"/>
+    </group>
+    <picture id="r.그림1" box="0.0358 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 92%"/>
+  </content>
+</poster>

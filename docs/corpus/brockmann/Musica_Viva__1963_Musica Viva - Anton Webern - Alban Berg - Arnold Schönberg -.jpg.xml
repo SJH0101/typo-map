@@ -1,0 +1,37 @@
+<poster version="0.1">
+  <source file="1963_Musica Viva - Anton Webern - Alban Berg - Arnold Schönberg -.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="422.7" unit="px">
+      <axis id="1" at="22.3"/>
+      <axis id="2" at="445"/>
+      <tested how="leave-one-out" error="0.75" null="149.9" ratio="199.9" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1029" null="0.0898" percentile="0.82" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8.5" n="2"/>
+      <level id="L2" xh="30.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="30" box="0.0336 0.2425 0.5406 0.28"/>
+    <group id="r.2" box="0.0318 0.365 0.7968 0.6887" coverage="0.846">
+      <picture id="r.2.1" box="0.5353 0.3812 0.6307 0.415" why="검출기가 상자를 내지 않았다"/>
+      <group id="r.2.2" box="0.0318 0.5062 0.7951 0.6887" coverage="0.823">
+        <block id="r.2.2.1" level="L2" lines="3" xh="31" lead="54.5" box="0.0318 0.5062 0.6272 0.6887"/>
+        <picture id="r.2.2.2" box="0.6201 0.5137 0.7933 0.5613" why="검출기가 상자를 내지 않았다"/>
+        <picture id="r.2.2.그림1" box="0.6272 0.5613 0.7774 0.6863" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+      </group>
+      <picture id="r.2.그림1" box="0.5406 0.3675 0.6678 0.4" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <group id="r.3" box="0.0353 0.7438 0.9364 0.9325" coverage="0.65">
+      <block id="r.3.1" level="L1" lines="1" xh="8" box="0.7915 0.7662 0.9064 0.7812"/>
+      <block id="r.3.2" level="L1" lines="2" xh="9" lead="17" box="0.0353 0.8938 0.9346 0.9325"/>
+      <picture id="r.3.그림1" box="0.2173 0.8775 0.7491 0.8925" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 32%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.8763 0.4025" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 49%"/>
+    <picture id="r.그림2" box="0.0035 0.5675 0.7509 0.7438" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+  </content>
+</poster>

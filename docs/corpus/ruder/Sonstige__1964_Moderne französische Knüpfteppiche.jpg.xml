@@ -1,0 +1,29 @@
+<poster version="0.1">
+  <source file="1964_Moderne französische Knüpfteppiche.jpg" w="570" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="8" n="1"/>
+      <level id="L2" xh="38" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.9421 0.2787 0.9982 0.3225" coverage="0">
+      <picture id="r.1.그림1" box="0.9456 0.2838 0.9947 0.32" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 80%"/>
+    </group>
+    <picture id="r.2" box="0.7333 0.285 0.8158 0.32" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.3" box="0.5596 0.2875 0.6088 0.3225" coverage="0">
+      <picture id="r.3.그림1" box="0.5632 0.2899 0.6053 0.3201" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 71%"/>
+    </group>
+    <picture id="r.4" box="0.9263 0.4213 0.9982 0.4825" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.5" box="0.3509 0.4412 0.393 0.4688" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.6" box="0.7491 0.505 0.8333 0.54" coverage="0">
+      <picture id="r.6.그림1" box="0.7526 0.5075 0.8298 0.5375" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 55%"/>
+      <picture id="r.6.그림2" box="0.7789 0.5188 0.807 0.5288" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+    </group>
+    <block id="r.7" level="L2" lines="2" xh="38" lead="59" box="0.2088 0.5825 0.9982 0.7137"/>
+    <picture id="r.8" box="0.1982 0.5687 0.3561 0.6388" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.9" level="L1" lines="5" xh="8" lead="17" box="0.2105 0.885 0.5158 0.985"/>
+    <picture id="r.그림1" box="0.0035 0.07 0.9965 0.9" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 82%"/>
+  </content>
+</poster>

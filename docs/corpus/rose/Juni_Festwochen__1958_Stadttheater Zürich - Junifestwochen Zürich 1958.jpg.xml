@@ -1,0 +1,24 @@
+<poster version="0.1">
+  <source file="1958_Stadttheater Zürich - Junifestwochen Zürich 1958.jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="311.8"/>
+      <tested how="leave-one-out" error="3" null="134.6" ratio="44.88" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1169" null="0.1366" percentile="0.06" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="3"/>
+      <level id="L2" xh="18" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="4" xh="18" lead="30" box="0.5479 0.0575 0.9823 0.2013"/>
+    <block id="r.2" level="L1" lines="1" xh="5" box="0.555 0.8538 0.6099 0.8662"/>
+    <block id="r.3" level="L1" lines="10" xh="5" lead="11" box="0.5514 0.855 0.977 0.99"/>
+    <block id="r.4" level="L1" lines="1" xh="5" box="0.5532 0.9087 0.617 0.9213"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.8475" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 88%"/>
+  </content>
+</poster>

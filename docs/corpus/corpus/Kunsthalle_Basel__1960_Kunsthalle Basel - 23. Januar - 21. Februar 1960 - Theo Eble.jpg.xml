@@ -1,0 +1,23 @@
+<poster version="0.1">
+  <source file="1960_Kunsthalle Basel - 23. Januar - 21. Februar 1960 - Theo Eble.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="10" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="10" box="0.0141 0.0163 0.6155 0.0362"/>
+    <group id="r.2" box="0.4427 0.2475 0.8536 0.9225" coverage="0.052">
+      <picture id="r.2.1" box="0.6138 0.37 0.6543 0.435" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.2" box="0.5996 0.7275 0.8501 0.9225" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.그림1" box="0.6173 0.25 0.8501 0.7275" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 71%"/>
+      <picture id="r.2.그림2" box="0.4462 0.7438 0.5996 0.92" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 21%"/>
+    </group>
+    <group id="r.3" box="0.0 0.5337 0.3774 0.7438" coverage="0">
+      <picture id="r.3.그림1" box="0.0035 0.5362 0.3739 0.7413" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 90%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0238 0.4797 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 56%"/>
+    <picture id="r.그림2" box="0.8536 0.3275 0.9965 0.71" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 8%"/>
+  </content>
+</poster>

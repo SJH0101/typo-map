@@ -1,0 +1,17 @@
+<poster version="0.1">
+  <source file="1957_Joan Miró - Kunsthalle Basel.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="8" n="1"/>
+      <level id="L2" xh="20" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.754 0.205 0.9115 0.3287" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.2" level="L2" lines="1" xh="20" box="0.023 0.6525 0.3221 0.69"/>
+    <block id="r.3" level="L1" lines="1" xh="8" box="0.8 0.66 0.9805 0.6825"/>
+    <picture id="r.그림1" box="0.0035 0.55 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 67%"/>
+    <picture id="r.그림2" box="0.0035 0.04 0.9345 0.43" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 26%"/>
+  </content>
+</poster>

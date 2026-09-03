@@ -1,0 +1,36 @@
+<poster version="0.1">
+  <source file="1956_Kunsthalle Basel - Bauchant - Bombois - Séraphine - Vivin - .jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="158" wobble="0.329" unit="px">
+      <axis id="1" at="12"/>
+      <axis id="2" at="222"/>
+      <axis id="3" at="328"/>
+      <axis id="4" at="342"/>
+      <tested how="leave-one-out" error="60" null="62.94" ratio="1.05" n="4"/>
+    </axes>
+    <baseline-grid found="yes" unit="43">
+      <tested how="null-model" deviation="0.0426" null="0.085" percentile="0.02" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5.5" n="1"/>
+      <level id="L2" xh="29" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="29" box="0.0265 0.6862 0.3622 0.7225"/>
+    <group id="r.2" box="0.3905 0.6725 0.9912 0.985" coverage="0.146">
+      <block id="r.2.1" level="L2" lines="3" xh="29" lead="42.5" box="0.576 0.6875 0.9876 0.8262"/>
+      <block id="r.2.2" level="L2" lines="1" xh="29" box="0.3905 0.945 0.9876 0.985"/>
+      <picture id="r.2.그림1" box="0.394 0.675 0.9876 0.94" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 83%"/>
+    </group>
+    <group id="r.3" box="0.3852 0.825 0.9364 0.9425" coverage="0.767">
+      <block id="r.3.1" level="L1" lines="2" xh="5.5" lead="7" box="0.6095 0.825 0.9346 0.835"/>
+      <picture id="r.3.2" box="0.3852 0.8425 0.9346 0.935" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.3.그림1" box="0.3887 0.8275 0.7597 0.8425" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+      <picture id="r.3.그림2" box="0.4046 0.935 0.8145 0.94" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.28" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+    <picture id="r.그림2" box="0.0035 0.6713 0.9417 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+  </content>
+</poster>

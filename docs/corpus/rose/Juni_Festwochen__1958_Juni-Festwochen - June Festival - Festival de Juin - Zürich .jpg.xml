@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1958_Juni-Festwochen - June Festival - Festival de Juin - Zürich .jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="9" n="1"/>
+      <level id="L2" xh="14" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="5" xh="14" lead="28" box="0.5514 0.045 0.9433 0.2013"/>
+    <block id="r.2" level="L1" lines="6" xh="9" lead="18" box="0.5532 0.8575 0.9628 0.9888"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.8488" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 92%"/>
+  </content>
+</poster>

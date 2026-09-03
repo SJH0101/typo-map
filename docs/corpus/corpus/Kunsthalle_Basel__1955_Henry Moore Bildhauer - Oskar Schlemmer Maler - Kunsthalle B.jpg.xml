@@ -1,0 +1,22 @@
+<poster version="0.1">
+  <source file="1955_Henry Moore Bildhauer - Oskar Schlemmer Maler - Kunsthalle B.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system/>
+  <content>
+    <group id="r.1" box="0.4155 0.3488 0.6162 0.55" coverage="0.352">
+      <picture id="r.1.1" box="0.537 0.39 0.6162 0.43" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.1.2" box="0.4331 0.4325 0.5704 0.5012" why="검출기가 상자를 내지 않았다"/>
+      <group id="r.1.3" box="0.4437 0.5025 0.5563 0.54" coverage="0"/>
+      <picture id="r.1.그림1" box="0.419 0.455 0.6127 0.5475" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 30%"/>
+      <picture id="r.1.그림2" box="0.419 0.3513 0.5616 0.4363" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 27%"/>
+    </group>
+    <picture id="r.2" box="0.669 0.3725 0.8292 0.4938" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.3" box="0.2975 0.3925 0.5915 0.5138" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.4" box="0.5951 0.5238 0.6796 0.57" coverage="0">
+      <picture id="r.4.그림1" box="0.6549 0.561 0.6725 0.5649" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 100%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.6778 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 59%"/>
+    <picture id="r.그림2" box="0.6162 0.3937 0.9965 0.86" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+    <picture id="r.그림3" box="0.6901 0.14 0.9965 0.47" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+  </content>
+</poster>

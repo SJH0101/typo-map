@@ -1,0 +1,29 @@
+<poster version="0.1">
+  <source file="1964_Opernhaus Zürich - Dornröschen - Musik von Peter Iljitsch Ts.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="42.8"/>
+      <tested how="leave-one-out" error="1" null="249" ratio="249" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0977" null="0.0766" percentile="0.9" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="11.5" n="2"/>
+      <level id="L2" xh="28" n="1"/>
+      <level id="L3" xh="61.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="61.5" lead="87" box="0.0689 0.1375 0.917 0.3287"/>
+    <block id="r.2" level="L1" lines="2" xh="12" lead="21" box="0.0742 0.3887 0.7208 0.425"/>
+    <block id="r.3" level="L2" lines="1" xh="28" box="0.0742 0.5737 0.6007 0.625"/>
+    <group id="r.4" box="0.0724 0.6412 0.7809 0.84" coverage="0.272">
+      <picture id="r.4.1" box="0.5954 0.6975 0.6837 0.7587" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.4.2" level="L1" lines="1" xh="11" box="0.0724 0.8187 0.7774 0.8375"/>
+      <picture id="r.4.그림1" box="0.6007 0.7488 0.7774 0.8187" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 50%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.32 0.9965 0.8762" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 59%"/>
+  </content>
+</poster>

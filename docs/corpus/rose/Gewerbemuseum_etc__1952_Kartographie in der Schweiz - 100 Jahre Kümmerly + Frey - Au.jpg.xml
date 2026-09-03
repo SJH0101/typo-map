@@ -1,0 +1,19 @@
+<poster version="0.1">
+  <source file="1952_Kartographie in der Schweiz - 100 Jahre Kümmerly + Frey - Au.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="9" n="1"/>
+      <level id="L2" xh="17.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="17.5" lead="37" box="0.576 0.31 0.9594 0.3887"/>
+    <block id="r.3" level="L1" lines="1" xh="9" box="0.5795 0.5637 0.9717 0.5775"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.5725" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 45%"/>
+    <picture id="r.그림2" box="0.0035 0.5775 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 44%"/>
+  </content>
+  <unmeasured>
+    <item id="r.2" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

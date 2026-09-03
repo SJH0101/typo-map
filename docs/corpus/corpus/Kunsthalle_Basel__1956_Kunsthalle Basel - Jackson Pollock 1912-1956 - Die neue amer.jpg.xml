@@ -1,0 +1,30 @@
+<poster version="0.1">
+  <source file="1956_Kunsthalle Basel - Jackson Pollock 1912-1956 - Die neue amer.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="297" unit="px">
+      <axis id="1" at="13"/>
+      <axis id="2" at="310"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="35">
+      <tested how="null-model" deviation="0.0143" null="0.075" percentile="0" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="18" n="2"/>
+      <level id="L2" xh="24" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="18" box="0.0194 0.0262 0.4823 0.06"/>
+    <group id="r.2" box="0.5424 0.0238 0.9982 0.235" coverage="0.578">
+      <picture id="r.2.1" box="0.9329 0.0288 0.9965 0.0588" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.2.2" level="L1" lines="4" xh="18" lead="35" box="0.5424 0.0688 0.9346 0.2325"/>
+      <picture id="r.2.그림1" box="0.5459 0.0262 0.9947 0.0675" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 30%"/>
+      <picture id="r.2.그림2" box="0.9576 0.1338 0.9947 0.2325" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+    </group>
+    <block id="r.3" level="L2" lines="1" xh="24" box="0.5424 0.9425 0.9576 0.98"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.8638" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    <picture id="r.그림2" box="0.0035 0.9025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+  </content>
+</poster>

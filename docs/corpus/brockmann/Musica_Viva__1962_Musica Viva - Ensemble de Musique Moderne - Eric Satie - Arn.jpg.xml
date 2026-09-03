@@ -1,0 +1,28 @@
+<poster version="0.1">
+  <source file="1962_Musica Viva - Ensemble de Musique Moderne - Eric Satie - Arn.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="23"/>
+      <tested how="leave-one-out" error="1.35" null="270" ratio="200" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0535" null="0.0743" percentile="0.08" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="9" n="1"/>
+      <level id="L2" xh="31" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="31" box="0.0389 0.24 0.53 0.2787"/>
+    <group id="r.2" box="0.0318 0.4275 0.9417 0.6975" coverage="0.602">
+      <block id="r.2.1" level="L2" lines="3" xh="31" lead="54" box="0.0318 0.5025 0.9399 0.695"/>
+      <block id="r.2.2" level="L2" lines="1" xh="31" box="0.0318 0.5687 0.4329 0.62"/>
+      <picture id="r.2.그림1" box="0.0353 0.43 0.712 0.5025" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 37%"/>
+    </group>
+    <block id="r.3" level="L1" lines="2" xh="9" lead="16" box="0.0336 0.8675 0.8463 0.9075"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.52" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 66%"/>
+    <picture id="r.그림2" box="0.0283 0.86 0.7668 0.9762" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+  </content>
+</poster>

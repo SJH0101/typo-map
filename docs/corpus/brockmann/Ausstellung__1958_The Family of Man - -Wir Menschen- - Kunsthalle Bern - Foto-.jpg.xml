@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1958_The Family of Man - -Wir Menschen- - Kunsthalle Bern - Foto-.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="174.8" wobble="0.482" unit="px">
+      <axis id="1" at="9"/>
+      <axis id="2" at="268"/>
+      <axis id="3" at="358.5"/>
+      <tested how="leave-one-out" error="1" null="80.14" ratio="80.14" n="5"/>
+    </axes>
+    <baseline-grid found="yes" unit="12.25">
+      <tested how="null-model" deviation="0.0612" null="0.0903" percentile="0.02" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="4"/>
+      <level id="L2" xh="33" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="33" box="0.0 0.045 0.8416 0.1212"/>
+    <block id="r.2" level="L1" lines="1" xh="5" box="0.6352 0.2637 0.7544 0.2762"/>
+    <block id="r.3" level="L1" lines="1" xh="5" box="0.0125 0.8962 0.1299 0.9075"/>
+    <block id="r.4" level="L1" lines="1" xh="5" box="0.4733 0.8962 0.5943 0.9087"/>
+    <block id="r.5" level="L1" lines="4" xh="5.5" lead="12" box="0.6352 0.9113 0.8808 0.9675"/>
+    <picture id="r.그림1" box="0.0036 0.3075 0.9964 0.8525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 96%"/>
+  </content>
+</poster>

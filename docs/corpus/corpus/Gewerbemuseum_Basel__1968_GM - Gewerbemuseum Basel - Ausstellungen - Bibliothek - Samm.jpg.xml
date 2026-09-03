@@ -1,0 +1,29 @@
+<poster version="0.1">
+  <source file="1968_GM - Gewerbemuseum Basel - Ausstellungen - Bibliothek - Samm.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="153" wobble="0.523" unit="px">
+      <axis id="1" at="17"/>
+      <axis id="2" at="250"/>
+      <axis id="3" at="323"/>
+      <tested how="leave-one-out" error="36.5" null="92.44" ratio="2.53" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0736" null="0.1011" percentile="0.1" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="7.2" n="2"/>
+      <level id="L3" xh="29" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.4372 0.7775 0.9752 0.9625" coverage="0.997">
+      <block id="r.1.1" level="L3" lines="3" xh="29" lead="48" box="0.4372 0.7775 0.9752 0.9475"/>
+      <block id="r.1.2" level="L1" lines="1" xh="4" box="0.5788 0.8925 0.7504 0.9"/>
+    </group>
+    <block id="r.2" level="L2" lines="3" xh="7" lead="15.5" box="0.0283 0.8412 0.3027 0.8938"/>
+    <block id="r.3" level="L2" lines="2" xh="7.5" lead="15" box="0.0265 0.9425 0.3717 0.9738"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.7675" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 94%"/>
+  </content>
+</poster>

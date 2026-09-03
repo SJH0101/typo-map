@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1958_Strassenbau-Vorlage ja.jpg" w="556" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="14" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="3" xh="14" lead="13.5" box="0.0 0.8575 0.696 0.9025"/>
+    <picture id="r.2" box="0.7968 0.8788 0.9496 0.9775" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0036 0.3825 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 54%"/>
+    <picture id="r.그림2" box="0.0036 0.0025 0.9964 0.16" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 31%"/>
+    <picture id="r.그림3" box="0.0036 0.9125 0.4676 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 8%"/>
+  </content>
+</poster>

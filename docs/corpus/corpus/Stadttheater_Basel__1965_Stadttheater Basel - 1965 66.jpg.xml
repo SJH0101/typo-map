@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1965_Stadttheater Basel - 1965 66.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="15" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="3" xh="15" lead="24" box="0.1115 0.0737 0.2867 0.1575"/>
+    <group id="r.2" box="0.2796 0.1475 0.4071 0.2238" coverage="0">
+      <picture id="r.2.그림1" box="0.2832 0.15 0.4035 0.2213" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 75%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.04 0.9965 0.98" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 93%"/>
+  </content>
+</poster>

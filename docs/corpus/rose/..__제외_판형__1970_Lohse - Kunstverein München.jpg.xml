@@ -1,0 +1,34 @@
+<poster version="0.1">
+  <source file="1970_Lohse - Kunstverein München.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="177" wobble="0.09" unit="px">
+      <axis id="1" at="49"/>
+      <axis id="2" at="242"/>
+      <axis id="3" at="403"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="21">
+      <tested how="null-model" deviation="0.0298" null="0.1068" percentile="0" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="11" n="1"/>
+      <level id="L2" xh="17.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.4253 0.7025 0.9359 0.95" coverage="0.501">
+      <block id="r.1.1" level="L2" lines="1" xh="17" box="0.7224 0.7062 0.9324 0.7375"/>
+      <group id="r.1.2" box="0.4253 0.795 0.9342 0.9475" coverage="1">
+        <block id="r.1.2.1" level="L1" lines="6" xh="11" lead="21" box="0.4253 0.795 0.9342 0.9475"/>
+      </group>
+      <picture id="r.1.그림1" box="0.4288 0.705 0.9324 0.795" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 46%"/>
+    </group>
+    <block id="r.2" level="L2" lines="1" xh="18" box="0.0925 0.7137 0.2153 0.7363"/>
+    <picture id="r.그림1" box="0.073 0.0512 0.9306 0.6562" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 96%"/>
+  </content>
+  <unmeasured>
+    <item id="r.1.2.2" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+    <item id="r.3" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

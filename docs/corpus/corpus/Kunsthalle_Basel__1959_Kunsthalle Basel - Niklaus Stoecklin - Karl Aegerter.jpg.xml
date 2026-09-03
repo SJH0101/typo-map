@@ -1,0 +1,18 @@
+<poster version="0.1">
+  <source file="1959_Kunsthalle Basel - Niklaus Stoecklin - Karl Aegerter.jpg" w="561" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="13" n="1"/>
+      <level id="L2" xh="58.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="13" box="0.3476 0.255 0.9768 0.2862"/>
+    <block id="r.2" level="L2" lines="4" xh="58.5" lead="79" box="0.0071 0.3113 0.9448 0.6775"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 71%"/>
+  </content>
+  <unmeasured>
+    <item id="r.3" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1962_28. Juli - 16. Sept. - Die Kunst Neu-Guineas - Kunsthalle Ba.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="78" unit="px">
+      <axis id="1" at="356"/>
+      <axis id="2" at="434"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="23">
+      <tested how="null-model" deviation="0.0373" null="0.0909" percentile="0" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="19" n="1"/>
+      <level id="L2" xh="32.2" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="34.5" lead="47" box="0.7739 0.0112 0.9788 0.1163"/>
+    <group id="r.2" box="0.6272 0.435 0.9788 0.665" coverage="0.947">
+      <block id="r.2.1" level="L2" lines="4" xh="30" lead="45" box="0.6272 0.4462 0.9788 0.6638"/>
+      <block id="r.2.2" level="L1" lines="1" xh="19" box="0.6396 0.6462 0.7615 0.6638"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.3412 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 37%"/>
+    <picture id="r.그림2" box="0.0035 0.0025 0.9965 0.4525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 36%"/>
+  </content>
+</poster>

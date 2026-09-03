@@ -1,0 +1,25 @@
+<poster version="0.1">
+  <source file="1961_Stadttheater Zürich - Fünf Fest-Vorstellungen - Fidelio - Op.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="15.7"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="11.5">
+      <tested how="null-model" deviation="0.1481" null="0.1708" percentile="0.02" n="27"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="7" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="22" xh="7" lead="12" box="0.0249 0.2087 0.2256 0.5962"/>
+    <picture id="r.2" box="0.2416 0.2125 0.9822 0.8087" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.3" level="L2" lines="2" xh="7" lead="12" box="0.0249 0.6002 0.2149 0.626"/>
+    <block id="r.4" level="L1" lines="3" xh="6" lead="11.5" box="0.0249 0.7715 0.2291 0.8"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.3638" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 42%"/>
+    <picture id="r.그림2" box="0.0835 0.755 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 25%"/>
+  </content>
+</poster>

@@ -1,0 +1,17 @@
+<poster version="0.1">
+  <source file="1954_Die gute Form - Gewerbemuseum Winterthur - Ausstellung der a.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="5.5" n="1"/>
+      <level id="L2" xh="30" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="30" box="0.368 0.7987 0.9894 0.86"/>
+    <block id="r.2" level="L1" lines="2" xh="5.5" lead="12" box="0.3732 0.9637 0.9701 0.99"/>
+    <picture id="r.그림1" box="0.3873 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 62%"/>
+    <picture id="r.그림2" box="0.0035 0.045 0.4243 0.5088" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+    <picture id="r.그림3" box="0.3627 0.2625 0.581 0.6512" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 11%"/>
+  </content>
+</poster>

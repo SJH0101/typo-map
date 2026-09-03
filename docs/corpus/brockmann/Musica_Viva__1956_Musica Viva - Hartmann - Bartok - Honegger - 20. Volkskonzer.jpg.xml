@@ -1,0 +1,34 @@
+<poster version="0.1">
+  <source file="1956_Musica Viva - Hartmann - Bartok - Honegger - 20. Volkskonzer.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="75.8" unit="px">
+      <axis id="1" at="5.2"/>
+      <axis id="2" at="81"/>
+      <tested how="leave-one-out" error="6.85" null="174.9" ratio="25.54" n="6"/>
+    </axes>
+    <baseline-grid found="yes" unit="11.75">
+      <tested how="null-model" deviation="0.1109" null="0.1382" percentile="0.02" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="5" n="2"/>
+      <level id="L3" xh="11" n="1"/>
+      <level id="L4" xh="13" n="1"/>
+      <level id="L5" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L5" lines="1" xh="16" box="0.0053 0.275 0.2898 0.2963"/>
+    <group id="r.2" box="0.0088 0.3962 0.2473 0.5162" coverage="0.464">
+      <block id="r.2.1" level="L3" lines="1" xh="11" box="0.0088 0.4175 0.2385 0.4275"/>
+      <block id="r.2.2" level="L4" lines="1" xh="13" box="0.0088 0.4985 0.2385 0.5112"/>
+      <picture id="r.2.그림1" box="0.0124 0.3987 0.2438 0.4412" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 46%"/>
+    </group>
+    <block id="r.3" level="L1" lines="8" xh="4" lead="11" box="0.0159 0.6275 0.3869 0.7375"/>
+    <block id="r.4" level="L2" lines="2" xh="5" lead="12" box="0.1396 0.9437 0.3657 0.97"/>
+    <block id="r.5" level="L2" lines="1" xh="5" box="0.0141 0.93 0.0972 0.9425"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 83%"/>
+    <picture id="r.그림2" box="0.8286 0.0025 0.9965 0.585" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 11%"/>
+  </content>
+</poster>

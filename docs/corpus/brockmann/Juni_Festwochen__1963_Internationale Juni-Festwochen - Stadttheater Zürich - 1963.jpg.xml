@@ -1,0 +1,45 @@
+<poster version="0.1">
+  <source file="1963_Internationale Juni-Festwochen - Stadttheater Zürich - 1963.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="5" pitch="113" wobble="0.329" unit="px">
+      <axis id="1" at="17"/>
+      <axis id="2" at="151.2"/>
+      <axis id="3" at="243"/>
+      <axis id="4" at="287.3"/>
+      <axis id="5" at="422"/>
+      <tested how="leave-one-out" error="1" null="37.17" ratio="37.17" n="12"/>
+    </axes>
+    <baseline-grid found="yes" unit="9">
+      <tested how="null-model" deviation="0.058" null="0.1683" percentile="0" n="23"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="3"/>
+      <level id="L2" xh="5" n="4"/>
+      <level id="L3" xh="6" n="1"/>
+      <level id="L4" xh="11" n="1"/>
+      <level id="L5" xh="13" n="1"/>
+      <level id="L6" xh="20" n="1"/>
+      <level id="L7" xh="40" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L5" lines="1" xh="13" box="0.2686 0.185 0.4505 0.2"/>
+    <block id="r.2" level="L2" lines="2" xh="5" lead="9" box="0.7438 0.18 0.9152 0.2025"/>
+    <picture id="r.3" box="0.5053 0.0425 0.7014 0.0688" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.4" level="L2" lines="11" xh="5" lead="9" box="0.0265 0.055 0.2367 0.1775"/>
+    <block id="r.5" level="L3" lines="1" xh="6" box="0.0283 0.0437 0.2261 0.055"/>
+    <group id="r.6" box="0.5035 0.0625 0.7067 0.1713" coverage="0">
+      <picture id="r.6.그림1" box="0.6979 0.0888 0.7032 0.1688" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 59%"/>
+    </group>
+    <block id="r.7" level="L2" lines="2" xh="5" lead="9" box="0.4346 0.1338 0.4629 0.1562"/>
+    <block id="r.8" level="L1" lines="2" xh="4" lead="9" box="0.5071 0.1212 0.5901 0.135"/>
+    <block id="r.9" level="L1" lines="2" xh="4" lead="9" box="0.7438 0.1338 0.917 0.1462"/>
+    <block id="r.10" level="L2" lines="1" xh="5" box="0.5071 0.1675 0.6908 0.1812"/>
+    <block id="r.11" level="L1" lines="1" xh="4" box="0.2668 0.2137 0.4505 0.2238"/>
+    <block id="r.12" level="L4" lines="1" xh="11" box="0.2633 0.4263 0.4788 0.4437"/>
+    <block id="r.13" level="L6" lines="1" xh="20" box="0.5 0.4913 0.9682 0.5188"/>
+    <block id="r.14" level="L7" lines="1" xh="40" box="0.2562 0.5488 0.97 0.6175"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 75%"/>
+  </content>
+</poster>

@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1956_Goldschmuck der Völkerwanderungszeit.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="8" n="1"/>
+      <level id="L2" xh="30" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="3" xh="30" lead="49.5" box="0.0229 0.0212 0.9965 0.2062"/>
+    <block id="r.2" level="L1" lines="4" xh="8" lead="17" box="0.3686 0.3975 0.9753 0.4762"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 65%"/>
+  </content>
+</poster>

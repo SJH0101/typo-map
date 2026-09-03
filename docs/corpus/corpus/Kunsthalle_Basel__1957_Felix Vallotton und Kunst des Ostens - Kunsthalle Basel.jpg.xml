@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1957_Felix Vallotton und Kunst des Ostens - Kunsthalle Basel.jpg" w="571" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="154" wobble="0.287" unit="px">
+      <axis id="1" at="15"/>
+      <axis id="2" at="169"/>
+      <axis id="3" at="357"/>
+      <axis id="4" at="439"/>
+      <tested how="leave-one-out" error="118" null="68.5" ratio="0.58" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.07" null="0.0883" percentile="0.1" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="7" n="3"/>
+      <level id="L2" xh="85.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="7" box="0.7636 0.0138 0.9842 0.0325"/>
+    <block id="r.2" level="L2" lines="4" xh="85.5" lead="111" box="0.0263 0.0163 0.9545 0.53"/>
+    <block id="r.3" level="L1" lines="1" xh="7" box="0.2925 0.2888 0.3433 0.305"/>
+    <block id="r.4" level="L1" lines="1" xh="7" box="0.62 0.6787 0.9405 0.6975"/>
+  </content>
+</poster>

@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1958_Musica viva - Dienstag, den 7. Januar 1958 - Schweizerische .jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="6" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.6855 0.795 0.9594 0.8263" why="대비 17.5 이 이 판 전체 대비 303.3 의 15%(45.5)에 못 미친다"/>
+    <block id="r.2" level="L1" lines="10" xh="6" lead="14" box="0.0177 0.805 0.3021 0.9763"/>
+    <block id="r.3" level="L1" lines="10" xh="6" lead="14" box="0.3074 0.805 0.6661 0.9763"/>
+    <picture id="r.4" box="0.6873 0.91 0.9947 0.9788" why="대비 13.4 이 이 판 전체 대비 303.3 의 15%(45.5)에 못 미친다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 76%"/>
+  </content>
+</poster>

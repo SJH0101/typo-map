@@ -1,0 +1,21 @@
+<poster version="0.1">
+  <source file="1958_AHP - Alfred Heinrich Pellegrini - Kunsthalle Basel - 25. Ok.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="10" n="1"/>
+      <level id="L2" xh="29.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.5459 0.03 0.7544 0.0875" coverage="0">
+      <picture id="r.1.그림1" box="0.5936 0.0325 0.6219 0.085" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+      <picture id="r.1.그림2" box="0.7102 0.0575 0.7509 0.085" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+      <picture id="r.1.그림3" box="0.636 0.0612 0.6714 0.085" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+      <picture id="r.1.그림4" box="0.636 0.0325 0.6696 0.0525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 10%"/>
+    </group>
+    <block id="r.2" level="L1" lines="5" xh="10" lead="23" box="0.0159 0.7612 0.2597 0.8912"/>
+    <block id="r.3" level="L2" lines="2" xh="29.5" lead="58" box="0.6943 0.8588 0.9717 0.9612"/>
+    <picture id="r.그림1" box="0.0035 0.0638 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 80%"/>
+  </content>
+</poster>

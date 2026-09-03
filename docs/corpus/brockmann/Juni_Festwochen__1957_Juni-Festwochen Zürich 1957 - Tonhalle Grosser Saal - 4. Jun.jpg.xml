@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1957_Juni-Festwochen Zürich 1957 - Tonhalle Grosser Saal - 4. Jun.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="56" wobble="0.196" unit="px">
+      <axis id="1" at="10"/>
+      <axis id="2" at="55"/>
+      <axis id="3" at="122"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="25.5">
+      <tested how="null-model" deviation="0.0706" null="0.1197" percentile="0.02" n="10"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="8" n="1"/>
+      <level id="L3" xh="13" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="7" xh="13" lead="25.5" box="0.0936 0.2963 0.5106 0.5088"/>
+    <block id="r.2" level="L2" lines="2" xh="8" lead="14" box="0.212 0.6 0.4329 0.6288"/>
+    <picture id="r.3" box="0.2085 0.6587 0.477 0.985" why="대비 12.3 이 이 판 전체 대비 182.1 의 15%(27.3)에 못 미친다"/>
+    <block id="r.4" level="L1" lines="1" xh="6" box="0.0141 0.7438 0.189 0.76"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 82%"/>
+  </content>
+</poster>

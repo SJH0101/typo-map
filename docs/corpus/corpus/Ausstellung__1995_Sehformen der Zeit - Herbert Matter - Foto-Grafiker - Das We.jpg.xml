@@ -1,0 +1,32 @@
+<poster version="0.1">
+  <source file="1995_Sehformen der Zeit - Herbert Matter - Foto-Grafiker - Das We.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="39.7"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="8" n="1"/>
+      <level id="L3" xh="11" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.4655 0.635 0.9982 0.815" coverage="0.057">
+      <picture id="r.1.1" box="0.4655 0.7238 0.5044 0.7862" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.1.2" box="0.4973 0.725 0.5752 0.7875" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.1.3" box="0.5664 0.7325 0.6265 0.7875" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.1.그림1" box="0.469 0.6375 0.9947 0.8125" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 89%"/>
+    </group>
+    <group id="r.2" box="0.0637 0.795 0.8354 0.9513" coverage="0.426">
+      <block id="r.2.1" level="L3" lines="3" xh="11" lead="25" box="0.0637 0.7975 0.6159 0.8713"/>
+      <block id="r.2.2" level="L2" lines="1" xh="8" box="0.0637 0.9088 0.8336 0.9263"/>
+      <block id="r.2.3" level="L1" lines="1" xh="6" box="0.0637 0.94 0.5912 0.95"/>
+      <picture id="r.2.그림1" box="0.0673 0.7975 0.8319 0.9088" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 38%"/>
+      <picture id="r.2.그림2" box="0.0673 0.9263 0.8319 0.9487" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.125 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    <picture id="r.그림2" box="0.4796 0.01 0.9965 0.2" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+  </content>
+</poster>

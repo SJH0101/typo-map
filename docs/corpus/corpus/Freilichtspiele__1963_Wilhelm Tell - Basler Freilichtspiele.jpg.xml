@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1963_Wilhelm Tell - Basler Freilichtspiele.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="12" n="1"/>
+      <level id="L2" xh="18" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="3" xh="12" lead="22.5" box="0.092 0.0375 0.6372 0.1162"/>
+    <block id="r.2" level="L2" lines="1" xh="18" box="0.8301 0.0938 0.9982 0.1175"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.89" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 87%"/>
+  </content>
+</poster>

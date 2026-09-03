@@ -1,0 +1,14 @@
+<poster version="0.1">
+  <source file="1964_Zürcher Künstler im Helmhaus.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="5" xh="6" lead="12.5" box="0.1616 0.0163 0.8366 0.0938"/>
+    <picture id="r.2" box="0.1599 0.1113 0.8419 0.3862" why="대비 18.4 이 이 판 전체 대비 167.0 의 15%(25.0)에 못 미친다"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 72%"/>
+  </content>
+</poster>

@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1960_Musica viva - Donnerstag, 10. März 1960 - Tonhalle Grosser S.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="180.5" wobble="0.474" unit="px">
+      <axis id="1" at="14"/>
+      <axis id="2" at="280"/>
+      <axis id="3" at="375"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="27.25">
+      <tested how="null-model" deviation="0.0682" null="0.1745" percentile="0" n="30"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="13" n="1"/>
+      <level id="L2" xh="15" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.4938 0.01 0.9858 0.9962" coverage="0.996">
+      <block id="r.1.1" level="L2" lines="29" xh="15" lead="27" box="0.4938 0.01 0.9822 0.9962"/>
+      <block id="r.1.2" level="L1" lines="1" xh="13" box="0.6714 0.4725 0.7158 0.485"/>
+    </group>
+    <block id="r.2" level="L2" lines="1" xh="15" box="0.0213 0.465 0.2824 0.4825"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9876 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 67%"/>
+  </content>
+</poster>

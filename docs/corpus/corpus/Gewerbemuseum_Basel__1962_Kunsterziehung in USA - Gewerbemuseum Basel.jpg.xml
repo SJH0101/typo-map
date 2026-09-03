@@ -1,0 +1,10 @@
+<poster version="0.1">
+  <source file="1962_Kunsterziehung in USA - Gewerbemuseum Basel.jpg" w="569" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="15" n="1"/>
+    </levels>
+  </system>
+  <content/>
+</poster>

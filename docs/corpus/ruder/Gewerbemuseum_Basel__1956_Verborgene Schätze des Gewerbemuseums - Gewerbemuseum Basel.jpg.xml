@@ -1,0 +1,31 @@
+<poster version="0.1">
+  <source file="1956_Verborgene Schätze des Gewerbemuseums - Gewerbemuseum Basel.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="438.5"/>
+      <tested how="leave-one-out" error="0.7" null="147.5" ratio="210.7" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1061" null="0.1073" percentile="0.52" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="5" n="1"/>
+      <level id="L3" xh="6" n="1"/>
+      <level id="L4" xh="13" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L4" lines="5" xh="13" lead="22" box="0.7673 0.0212 0.9982 0.155"/>
+    <group id="r.2" box="0.7762 0.5 0.9734 0.5663" coverage="0.432">
+      <block id="r.2.1" level="L1" lines="2" xh="4" lead="10" box="0.7762 0.5062 0.9645 0.5238"/>
+      <block id="r.2.2" level="L2" lines="1" xh="5" box="0.7762 0.5537 0.8544 0.5625"/>
+      <picture id="r.2.그림1" box="0.7798 0.5075 0.9698 0.5388" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 44%"/>
+    </group>
+    <block id="r.3" level="L3" lines="2" xh="6" lead="15" box="0.778 0.5262 0.9876 0.5413"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.7584 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 66%"/>
+    <picture id="r.그림2" box="0.3286 0.5275 0.6945 0.9862" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 16%"/>
+    <picture id="r.그림3" box="0.3464 0.03 0.6927 0.4825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+  </content>
+</poster>

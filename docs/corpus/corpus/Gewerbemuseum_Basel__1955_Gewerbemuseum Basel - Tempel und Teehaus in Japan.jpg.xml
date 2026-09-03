@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1955_Gewerbemuseum Basel - Tempel und Teehaus in Japan.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="164" wobble="0.216" unit="px">
+      <axis id="1" at="174"/>
+      <axis id="2" at="302.5"/>
+      <axis id="3" at="502"/>
+      <tested how="leave-one-out" error="64.75" null="71.04" ratio="1.1" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0946" null="0.1279" percentile="0.06" n="12"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6.5" n="1"/>
+      <level id="L2" xh="8" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="8" box="0.8907 0.0013 0.9418 0.02"/>
+    <block id="r.2" level="L1" lines="2" xh="6.5" lead="12" box="0.3122 0.3337 0.3422 0.3525"/>
+    <block id="r.3" level="L2" lines="7" xh="8" lead="15" box="0.5238 0.81 0.7901 0.9338"/>
+    <block id="r.4" level="L2" lines="2" xh="8.5" lead="15" box="0.5291 0.95 0.7707 0.9762"/>
+    <picture id="r.그림1" box="0.0035 0.1113 0.9965 0.9263" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 96%"/>
+  </content>
+</poster>

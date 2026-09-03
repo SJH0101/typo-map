@@ -1,0 +1,18 @@
+<poster version="0.1">
+  <source file="1959_Alte und neue Formen in Japan - Gewerbemuseum Basel.jpg" w="569" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="8.5" n="1"/>
+      <level id="L2" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="4" xh="8.5" lead="16" box="0.5466 0.7838 0.7698 0.8525"/>
+    <block id="r.2" level="L2" lines="3" xh="16" lead="30" box="0.1248 0.8613 0.4359 0.9675"/>
+    <picture id="r.그림1" box="0.0861 0.3762 0.877 0.7612" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 39%"/>
+    <picture id="r.그림2" box="0.5888 0.0413 0.9701 0.4775" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 23%"/>
+    <picture id="r.그림3" box="0.1722 0.0875 0.6485 0.4225" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 21%"/>
+    <picture id="r.그림4" box="0.0035 0.0362 0.2355 0.6438" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+  </content>
+</poster>

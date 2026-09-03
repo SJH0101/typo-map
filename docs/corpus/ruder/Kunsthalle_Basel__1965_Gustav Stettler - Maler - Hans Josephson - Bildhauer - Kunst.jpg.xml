@@ -1,0 +1,86 @@
+<poster version="0.1">
+  <source file="1965_Gustav Stettler - Maler - Hans Josephson - Bildhauer - Kunst.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="35.7" wobble="0.372" unit="px">
+      <axis id="1" at="124.3"/>
+      <axis id="2" at="160"/>
+      <axis id="3" at="180"/>
+      <axis id="4" at="232.5"/>
+      <tested how="leave-one-out" error="0.8" null="45.28" ratio="56.6" n="16"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1409" null="0.164" percentile="0.06" n="23"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="7" n="5"/>
+      <level id="L2" xh="13" n="1"/>
+      <level id="L3" xh="24.5" n="1"/>
+      <level id="L4" xh="29.5" n="2"/>
+      <level id="L5" xh="41" n="1"/>
+      <level id="L6" xh="106" n="3"/>
+      <level id="L7" xh="130" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.2018 0.0 1.0 1.0" coverage="0.99">
+      <group id="r.1.1" box="0.2071 0.0 0.9982 1.0" coverage="1">
+        <block id="r.1.1.1" level="L6" lines="4" xh="111" lead="113" box="0.2071 0.0 0.9982 1.0"/>
+        <group id="r.1.1.2" box="0.2071 0.0813 0.9558 0.8825" coverage="0.997">
+          <block id="r.1.1.2.1" level="L5" lines="1" xh="41" box="0.2142 0.0813 0.4496 0.1275"/>
+          <group id="r.1.1.2.2" box="0.2071 0.0825 0.9558 0.755" coverage="0.685">
+            <group id="r.1.1.2.2.1" box="0.2071 0.0825 0.9558 0.6375" coverage="0.981">
+              <block id="r.1.1.2.2.1.1" level="L7" lines="3" xh="129" lead="157.5" box="0.2071 0.0825 0.9558 0.6312"/>
+              <group id="r.1.1.2.2.1.2" box="0.2124 0.0825 0.492 0.1301" coverage="0.109">
+                <picture id="r.1.1.2.2.1.2.1" box="0.3115 0.0838 0.3504 0.1076" why="검출기가 상자를 내지 않았다"/>
+                <picture id="r.1.1.2.2.1.2.2" box="0.2708 0.0875 0.3133 0.1201" why="검출기가 상자를 내지 않았다"/>
+                <picture id="r.1.1.2.2.1.2.그림1" box="0.292 0.085 0.4885 0.1276" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 62%"/>
+                <picture id="r.1.1.2.2.1.2.그림2" box="0.2442 0.085 0.3115 0.1251" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 10%"/>
+              </group>
+            </group>
+            <group id="r.1.1.2.2.2" box="0.4124 0.57 0.8071 0.65" coverage="0.999">
+              <block id="r.1.1.2.2.2.1" level="L1" lines="1" xh="9" box="0.4124 0.57 0.554 0.5872"/>
+              <block id="r.1.1.2.2.2.2" level="L3" lines="2" xh="24.5" lead="55" box="0.4124 0.57 0.8035 0.65"/>
+            </group>
+            <picture id="r.1.1.2.2.그림1" box="0.2106 0.6375 0.8761 0.7525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 31%"/>
+          </group>
+          <block id="r.1.1.2.3" level="L6" lines="1" xh="106" box="0.2071 0.7163 0.8283 0.87"/>
+        </group>
+      </group>
+      <group id="r.1.2" box="0.2053 0.0813 0.9558 0.8812" coverage="0.998">
+        <group id="r.1.2.1" box="0.2053 0.0813 0.9558 0.755" coverage="0.68">
+          <group id="r.1.2.1.1" box="0.2053 0.0813 0.9558 0.635" coverage="0.981">
+            <block id="r.1.2.1.1.1" level="L7" lines="3" xh="130" lead="157" box="0.2053 0.0813 0.9558 0.6288"/>
+            <block id="r.1.2.1.1.2" level="L1" lines="2" xh="7" lead="6" box="0.3274 0.085 0.3841 0.1075"/>
+          </group>
+          <group id="r.1.2.1.2" box="0.4212 0.57 0.8053 0.6475" coverage="1">
+            <block id="r.1.2.1.2.1" level="L1" lines="1" xh="7" box="0.4212 0.57 0.5469 0.5872"/>
+            <block id="r.1.2.1.2.2" level="L1" lines="3" xh="7" lead="31" box="0.4212 0.57 0.8018 0.6475"/>
+          </group>
+          <picture id="r.1.2.1.그림1" box="0.2088 0.635 0.8743 0.7525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 31%"/>
+        </group>
+        <group id="r.1.2.2" box="0.2159 0.0813 0.4885 0.13" coverage="0.207">
+          <group id="r.1.2.2.1" box="0.3027 0.0813 0.3929 0.11" coverage="0">
+            <picture id="r.1.2.2.1.그림1" box="0.3451 0.0838 0.3681 0.1075" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 38%"/>
+            <picture id="r.1.2.2.1.그림2" box="0.3115 0.0838 0.3327 0.1075" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 37%"/>
+          </group>
+          <block id="r.1.2.2.2" level="L4" lines="1" xh="30" box="0.2885 0.0838 0.3115 0.12"/>
+          <picture id="r.1.2.2.그림1" box="0.292 0.0838 0.485 0.1275" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 53%"/>
+          <picture id="r.1.2.2.그림2" box="0.2442 0.0838 0.2885 0.125" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 10%"/>
+        </group>
+        <block id="r.1.2.3" level="L6" lines="1" xh="101" box="0.2053 0.7225 0.8248 0.8662"/>
+      </group>
+    </group>
+    <group id="r.2" box="0.1982 0.0762 0.9611 0.6425" coverage="0.997">
+      <group id="r.2.1" box="0.2142 0.0762 0.5062 0.1312" coverage="0.087">
+        <block id="r.2.1.1" level="L1" lines="1" xh="8" box="0.3292 0.0826 0.3487 0.1069"/>
+        <block id="r.2.1.2" level="L4" lines="1" xh="29" box="0.2885 0.0878 0.3097 0.1197"/>
+        <picture id="r.2.1.그림1" box="0.292 0.0788 0.5027 0.1287" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 63%"/>
+        <picture id="r.2.1.그림2" box="0.2442 0.0788 0.3115 0.1261" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 13%"/>
+      </group>
+      <block id="r.2.2" level="L7" lines="3" xh="130" lead="158" box="0.1982 0.0813 0.9611 0.6312"/>
+      <block id="r.2.3" level="L2" lines="3" xh="13" lead="23.5" box="0.315 0.5762 0.8053 0.6425"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.005 0.2018 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 25%"/>
+  </content>
+</poster>

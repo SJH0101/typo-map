@@ -1,0 +1,36 @@
+<poster version="0.1">
+  <source file="1957_La Suisse à l'époque romaine.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="4" box="0.7407 0.0138 0.8219 0.025"/>
+    <group id="r.2" box="0.7372 0.025 0.9206 0.1737" coverage="0">
+      <picture id="r.2.그림1" box="0.7407 0.0275 0.9171 0.1712" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 90%"/>
+    </group>
+    <group id="r.3" box="0.582 0.1138 0.6649 0.19" coverage="0">
+      <picture id="r.3.그림1" box="0.6032 0.1163 0.6614 0.1875" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 78%"/>
+      <picture id="r.3.그림2" box="0.5855 0.1163 0.5891 0.1812" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <group id="r.4" box="0.9365 0.32 0.9894 0.375" coverage="0">
+      <picture id="r.4.그림1" box="0.94 0.3225 0.9859 0.3725" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 71%"/>
+    </group>
+    <picture id="r.5" box="0.7425 0.8788 0.8924 0.9925" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.7" box="0.5485 0.8862 0.6737 0.9213" coverage="0">
+      <picture id="r.7.그림1" box="0.552 0.8887 0.5996 0.9125" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 40%"/>
+      <picture id="r.7.그림2" box="0.5838 0.9075 0.6561 0.9125" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 32%"/>
+      <picture id="r.7.그림3" box="0.5996 0.8925 0.6067 0.8987" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 5%"/>
+    </group>
+    <block id="r.8" level="L2" lines="3" xh="5" lead="8" box="0.552 0.92 0.6772 0.95"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.4437" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 57%"/>
+    <picture id="r.그림2" box="0.0035 0.8838 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+    <picture id="r.그림3" box="0.1993 0.68 0.5855 0.825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+  </content>
+  <unmeasured>
+    <item id="r.6" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

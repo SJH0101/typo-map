@@ -1,0 +1,32 @@
+<poster version="0.1">
+  <source file="1964_Opernhaus Zürich - Eröffnung der Spielzeit 1964-65 - Oberon .jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="60.2" wobble="0.612" unit="px">
+      <axis id="1" at="40.7"/>
+      <axis id="2" at="64"/>
+      <axis id="3" at="161"/>
+      <tested how="leave-one-out" error="2" null="92.29" ratio="46.14" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1111" null="0.1037" percentile="0.6" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="2"/>
+      <level id="L2" xh="11" n="1"/>
+      <level id="L3" xh="22" n="1"/>
+      <level id="L4" xh="62" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L4" lines="2" xh="62" lead="87" box="0.0637 0.145 0.9186 0.3262"/>
+    <block id="r.2" level="L2" lines="1" xh="11" box="0.0708 0.3837 0.4673 0.4025"/>
+    <picture id="r.3" box="0.0743 0.4363 0.6265 0.5125" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.4" level="L1" lines="1" xh="8" box="0.2814 0.6362 0.469 0.6488"/>
+    <picture id="r.5" box="0.5717 0.5525 0.8035 0.6462" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.6" level="L3" lines="1" xh="22" box="0.1186 0.725 0.6779 0.75"/>
+    <block id="r.7" level="L1" lines="4" xh="8" lead="16" box="0.069 0.7562 0.5487 0.8363"/>
+    <picture id="r.8" box="0.5717 0.7837 0.8 0.84" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+  </content>
+</poster>

@@ -1,0 +1,17 @@
+<poster version="0.1">
+  <source file="1950_Bundesfinanzreform Ja - Zurück zur Verfassung.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="16" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="2" xh="16" lead="28" box="0.5548 0.84 0.9841 0.9113"/>
+    <block id="r.2" level="L1" lines="1" xh="16" box="0.5371 0.9138 0.8746 0.9475"/>
+    <group id="r.3" box="0.5177 0.9762 0.689 0.9988" coverage="0">
+      <picture id="r.3.그림1" box="0.5212 0.9788 0.6855 0.9962" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 65%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 86%"/>
+  </content>
+</poster>

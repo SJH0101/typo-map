@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1938_Siedlungsbau in der Schweiz 1938-47 - Ausstellung im Gewerbe.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="15" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="15" box="0.0 0.7488 0.8289 0.79"/>
+    <picture id="r.2" box="0.3598 0.8237 0.6861 0.9475" why="대비 12.8 이 이 판 전체 대비 171.6 의 15%(25.7)에 못 미친다"/>
+    <picture id="r.그림1" box="0.5714 0.0025 0.9965 0.7125" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 46%"/>
+    <picture id="r.그림2" box="0.0035 0.0025 0.4885 0.53" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 35%"/>
+    <picture id="r.그림3" box="0.0035 0.83 0.3492 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 10%"/>
+  </content>
+</poster>

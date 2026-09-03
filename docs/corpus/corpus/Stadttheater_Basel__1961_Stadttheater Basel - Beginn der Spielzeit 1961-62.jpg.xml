@@ -1,0 +1,17 @@
+<poster version="0.1">
+  <source file="1961_Stadttheater Basel - Beginn der Spielzeit 1961-62.jpg" w="560" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="10" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="31" xh="4" lead="10.5" box="0.0268 0.0187 0.2321 0.4938"/>
+    <block id="r.2" level="L2" lines="3" xh="10" lead="16" box="0.2321 0.6025 0.3464 0.6588"/>
+    <picture id="r.그림1" box="0.0036 0.465 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 56%"/>
+    <picture id="r.그림2" box="0.3429 0.0025 0.5857 0.5863" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 25%"/>
+    <picture id="r.그림3" box="0.6679 0.0025 0.7661 0.5025" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+  </content>
+</poster>

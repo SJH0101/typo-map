@@ -1,0 +1,18 @@
+<poster version="0.1">
+  <source file="1959_Aeschbacher - Bill - Müller - Linck - 4 Bildhauer - Kunsthal.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="18" n="1"/>
+      <level id="L2" xh="69.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="4" xh="69.5" lead="107" box="0.0 0.0338 0.9485 0.6837"/>
+    <block id="r.2" level="L1" lines="2" xh="18" lead="24" box="0.5222 0.8563 0.7762 0.9012"/>
+    <group id="r.3" box="0.4121 0.8113 0.4796 0.8337" coverage="0">
+      <picture id="r.3.그림1" box="0.444 0.8137 0.476 0.8313" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 57%"/>
+    </group>
+    <picture id="r.그림1" box="0.0036 0.6837 0.881 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 36%"/>
+  </content>
+</poster>

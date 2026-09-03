@@ -1,0 +1,24 @@
+<poster version="0.1">
+  <source file="1963_Kreis 48 - Ernst Messerli - Werner Witschi - (...) Kunsthall.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="145.5" wobble="0.409" unit="px">
+      <axis id="1" at="190"/>
+      <axis id="2" at="395"/>
+      <axis id="3" at="481"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="16.2" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="16.5" lead="27" box="0.3286 0.0362 0.606 0.1"/>
+    <block id="r.2" level="L2" lines="1" xh="16" box="0.8498 0.335 0.9276 0.3563"/>
+    <picture id="r.3" box="0.0106 0.6438 0.1678 0.7638" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.4" level="L1" lines="1" xh="6" box="0.6943 0.9487 0.8322 0.9637"/>
+    <picture id="r.그림1" box="0.4081 0.0688 0.9965 0.8725" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 46%"/>
+    <picture id="r.그림2" box="0.0035 0.1087 0.5583 0.91" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 44%"/>
+  </content>
+</poster>

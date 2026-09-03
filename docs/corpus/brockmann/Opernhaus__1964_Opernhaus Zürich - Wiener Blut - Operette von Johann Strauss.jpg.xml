@@ -1,0 +1,35 @@
+<poster version="0.1">
+  <source file="1964_Opernhaus Zürich - Wiener Blut - Operette von Johann Strauss.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="410.2" unit="px">
+      <axis id="1" at="39.8"/>
+      <axis id="2" at="450"/>
+      <tested how="leave-one-out" error="0.2" null="132.1" n="7"/>
+    </axes>
+    <baseline-grid found="yes" unit="10.5">
+      <tested how="null-model" deviation="0.0619" null="0.1134" percentile="0.02" n="10"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="12" n="6"/>
+      <level id="L2" xh="61.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="61.5" lead="87" box="0.0586 0.1288 0.9272 0.3263"/>
+    <block id="r.2" level="L1" lines="2" xh="11.5" lead="20" box="0.0675 0.39 0.7052 0.4313"/>
+    <group id="r.3" box="0.0551 0.5925 0.8917 0.8175" coverage="0.319">
+      <picture id="r.3.1" box="0.0764 0.6588 0.5535 0.6813" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.3.2" level="L1" lines="2" xh="12" lead="21" box="0.064 0.765 0.7884 0.8137"/>
+      <block id="r.3.3" level="L1" lines="1" xh="11" box="0.0657 0.7688 0.29 0.785"/>
+      <picture id="r.3.그림1" box="0.3861 0.595 0.8881 0.815" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 61%"/>
+    </group>
+    <block id="r.4" level="L1" lines="2" xh="12" lead="31" box="0.0675 0.6975 0.6661 0.76"/>
+    <group id="r.5" box="0.0675 0.8163 0.8988 0.84" coverage="0.581">
+      <block id="r.5.1" level="L1" lines="1" xh="12" box="0.0675 0.8237 0.3037 0.8375"/>
+      <block id="r.5.2" level="L1" lines="1" xh="12" box="0.8046 0.8187 0.8952 0.8375"/>
+      <picture id="r.5.그림1" box="0.3286 0.8187 0.4174 0.8375" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 17%"/>
+    </group>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 56%"/>
+  </content>
+</poster>

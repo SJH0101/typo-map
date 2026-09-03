@@ -1,0 +1,35 @@
+<poster version="0.1">
+  <source file="1986_Kunsthaus Zürich - Hans Arp - Hugo Ball.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="23.5"/>
+      <tested how="leave-one-out" error="0.7" null="269" ratio="384.3" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0797" null="0.0976" percentile="0.1" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="7.5" n="2"/>
+      <level id="L3" xh="15" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="15" box="0.0336 0.1562 0.4276 0.1925"/>
+    <block id="r.2" level="L2" lines="1" xh="8" box="0.0371 0.215 0.3339 0.2338"/>
+    <block id="r.3" level="L1" lines="1" xh="5" box="0.0442 0.3475 0.1166 0.3613"/>
+    <group id="r.4" box="0.0353 0.4163 0.4523 0.58" coverage="0.288">
+      <picture id="r.4.1" box="0.1908 0.4326 0.4346 0.4641" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.4.2" box="0.1943 0.5195 0.4523 0.5674" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.4.그림1" box="0.1908 0.4641 0.3428 0.5195" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 37%"/>
+      <picture id="r.4.그림2" box="0.1908 0.4188 0.3781 0.4326" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 16%"/>
+      <picture id="r.4.그림3" box="0.3657 0.478 0.4152 0.5082" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <picture id="r.5" box="0.0389 0.5938 0.1643 0.64" why="대비 0.0 이 이 판 전체 대비 69.5 의 15%(10.4)에 못 미친다"/>
+    <block id="r.6" level="L2" lines="5" xh="7" lead="17.5" box="0.0353 0.78 0.2615 0.8812"/>
+    <picture id="r.7" box="0.2809 0.7987 0.417 0.8825" why="대비 0.0 이 이 판 전체 대비 69.5 의 15%(10.4)에 못 미친다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 77%"/>
+    <picture id="r.그림2" box="0.4647 0.0425 0.6678 0.43" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+  </content>
+</poster>

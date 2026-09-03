@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1960_Junge holländische Bildhauer - Kunsthalle Basel.jpg" w="567" h="795"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="27.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="2" xh="27" lead="41" box="0.2857 0.8453 0.7531 0.9421"/>
+    <block id="r.2" level="L1" lines="1" xh="28" box="0.0723 0.9484 0.7196 0.995"/>
+    <picture id="r.그림1" box="0.418 0.1308 0.9965 0.7849" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 52%"/>
+    <picture id="r.그림2" box="0.0035 0.0025 0.4145 0.8465" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 47%"/>
+  </content>
+</poster>

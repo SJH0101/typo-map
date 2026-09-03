@@ -1,0 +1,30 @@
+<poster version="0.1">
+  <source file="1959_Aegyptische Kinder weben Bildteppiche - Helmhaus Zürich.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="393" unit="px">
+      <axis id="1" at="21"/>
+      <axis id="2" at="414"/>
+      <tested how="leave-one-out" error="2.25" null="96.08" ratio="42.7" n="4"/>
+    </axes>
+    <baseline-grid found="yes" unit="12.75">
+      <tested how="null-model" deviation="0.0588" null="0.0975" percentile="0.02" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="3" n="1"/>
+      <level id="L2" xh="5" n="1"/>
+      <level id="L3" xh="13.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.7191 0.1412 0.9982 0.2913" coverage="0.221">
+      <block id="r.1.1" level="L3" lines="2" xh="13" lead="26" box="0.7244 0.1561 0.9876 0.2107"/>
+      <block id="r.1.2" level="L1" lines="1" xh="3" box="0.7297 0.2181 0.8127 0.2268"/>
+      <picture id="r.1.그림1" box="0.7226 0.2008 0.9929 0.2838" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 76%"/>
+    </group>
+    <block id="r.2" level="L2" lines="3" xh="5" lead="14" box="0.0336 0.2288 0.6926 0.2762"/>
+    <block id="r.3" level="L3" lines="2" xh="14" lead="26" box="0.7297 0.9225 0.9399 0.9775"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.7963" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 63%"/>
+    <picture id="r.그림2" box="0.689 0.2975 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 19%"/>
+  </content>
+</poster>

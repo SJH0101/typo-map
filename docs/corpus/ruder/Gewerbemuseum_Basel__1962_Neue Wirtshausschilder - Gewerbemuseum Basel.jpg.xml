@@ -1,0 +1,31 @@
+<poster version="0.1">
+  <source file="1962_Neue Wirtshausschilder - Gewerbemuseum Basel.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="227.2" wobble="0.595" unit="px">
+      <axis id="1" at="6.5"/>
+      <axis id="2" at="369"/>
+      <axis id="3" at="461"/>
+      <tested how="leave-one-out" error="46.5" null="90.26" ratio="1.94" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0821" null="0.102" percentile="0.1" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="7" n="3"/>
+      <level id="L2" xh="24" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="24" lead="59" box="0.0 0.6238 0.6057 0.7312"/>
+    <block id="r.2" level="L1" lines="3" xh="7" lead="17" box="0.0071 0.8812 0.5115 0.9387"/>
+    <group id="r.3" box="0.6519 0.8825 0.9645 0.9838" coverage="0.309">
+      <block id="r.3.1" level="L1" lines="1" xh="7" box="0.8242 0.885 0.9645 0.8987"/>
+      <block id="r.3.2" level="L1" lines="2" xh="7" lead="17" box="0.6519 0.9487 0.8952 0.9813"/>
+      <picture id="r.3.그림1" box="0.6554 0.8987 0.9609 0.9812" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 63%"/>
+    </group>
+    <picture id="r.그림1" box="0.0036 0.085 0.7265 0.9125" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    <picture id="r.그림2" box="0.8011 0.2737 0.9964 0.625" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 11%"/>
+    <picture id="r.그림3" box="0.7229 0.735 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+  </content>
+</poster>

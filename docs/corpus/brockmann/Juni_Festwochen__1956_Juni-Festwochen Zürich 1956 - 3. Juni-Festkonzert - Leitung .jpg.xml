@@ -1,0 +1,47 @@
+<poster version="0.1">
+  <source file="1956_Juni-Festwochen Zürich 1956 - 3. Juni-Festkonzert - Leitung .jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="77.5" wobble="0.01" unit="px">
+      <axis id="1" at="8"/>
+      <axis id="2" at="84.8"/>
+      <axis id="3" at="163"/>
+      <tested how="leave-one-out" error="0" null="82.47" n="11"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1052" null="0.123" percentile="0.14" n="12"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="9"/>
+      <level id="L2" xh="8" n="1"/>
+      <level id="L3" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="5" box="0.1466 0.0775 0.2668 0.09"/>
+    <block id="r.2" level="L1" lines="1" xh="5" box="0.2809 0.0775 0.3728 0.09"/>
+    <group id="r.3" box="0.0866 0.485 0.4523 0.7788" coverage="0.741">
+      <block id="r.3.1" level="L2" lines="1" xh="8" box="0.1431 0.4875 0.3445 0.5038"/>
+      <group id="r.3.2" box="0.1449 0.53 0.4505 0.7788" coverage="0.347">
+        <picture id="r.3.2.1" box="0.341 0.6188 0.4505 0.6887" why="검출기가 상자를 내지 않았다"/>
+        <block id="r.3.2.2" level="L3" lines="1" xh="16" box="0.1449 0.7512 0.3816 0.7788"/>
+        <picture id="r.3.2.그림1" box="0.3445 0.7 0.447 0.7763" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 55%"/>
+      </group>
+      <picture id="r.3.그림1" box="0.0901 0.4875 0.4293 0.53" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 10%"/>
+      <picture id="r.3.그림2" box="0.0901 0.68 0.1449 0.7763" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+    </group>
+    <block id="r.4" level="L1" lines="1" xh="5" box="0.0106 0.5062 0.0636 0.5175"/>
+    <block id="r.5" level="L1" lines="1" xh="5" box="0.0106 0.55 0.0671 0.5625"/>
+    <block id="r.6" level="L1" lines="1" xh="5" box="0.0124 0.5925 0.0512 0.605"/>
+    <group id="r.7" box="0.0106 0.8025 0.394 0.9413" coverage="0.615">
+      <block id="r.7.1" level="L1" lines="1" xh="4" box="0.0106 0.8037 0.0883 0.8137"/>
+      <block id="r.7.2" level="L1" lines="2" xh="4" lead="11" box="0.0106 0.8475 0.0883 0.8712"/>
+      <block id="r.7.3" level="L1" lines="1" xh="4" box="0.0106 0.89 0.0848 0.9"/>
+      <block id="r.7.4" level="L1" lines="2" xh="4.5" lead="11" box="0.1466 0.9175 0.3922 0.9388"/>
+      <picture id="r.7.그림1" box="0.0777 0.9188 0.1466 0.9387" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+      <picture id="r.7.그림2" box="0.0177 0.8712 0.0866 0.89" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 8%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.5088 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 61%"/>
+    <picture id="r.그림2" box="0.8057 0.0063 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+  </content>
+</poster>

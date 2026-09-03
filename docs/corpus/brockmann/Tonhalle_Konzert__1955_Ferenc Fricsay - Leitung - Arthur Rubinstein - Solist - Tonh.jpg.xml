@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1955_Ferenc Fricsay - Leitung - Arthur Rubinstein - Solist - Tonh.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="127.5" wobble="0.626" unit="px">
+      <axis id="1" at="6"/>
+      <axis id="2" at="53.7"/>
+      <axis id="3" at="261"/>
+      <tested how="leave-one-out" error="2" null="90.93" ratio="45.46" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0899" null="0.097" percentile="0.24" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="2"/>
+      <level id="L2" xh="5" n="1"/>
+      <level id="L3" xh="14" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="14" lead="27" box="0.0863 0.5787 0.5035 0.6438"/>
+    <block id="r.2" level="L1" lines="1" xh="4" box="0.4525 0.5913 0.5106 0.6062"/>
+    <block id="r.3" level="L3" lines="1" xh="14" box="0.0898 0.6488 0.4789 0.6763"/>
+    <group id="r.4" box="0.007 0.7137 0.4173 0.84" coverage="0.882">
+      <group id="r.4.1" box="0.007 0.7562 0.088 0.78" coverage="0">
+        <picture id="r.4.1.그림1" box="0.0106 0.7588 0.0845 0.7775" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 65%"/>
+      </group>
+      <block id="r.4.2" level="L1" lines="1" xh="4" box="0.007 0.7987 0.0669 0.8087"/>
+      <block id="r.4.3" level="L2" lines="2" xh="5" lead="11" box="0.0933 0.8163 0.4155 0.8387"/>
+    </group>
+    <picture id="r.그림1" box="0.0282 0.0138 0.9877 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 86%"/>
+  </content>
+</poster>

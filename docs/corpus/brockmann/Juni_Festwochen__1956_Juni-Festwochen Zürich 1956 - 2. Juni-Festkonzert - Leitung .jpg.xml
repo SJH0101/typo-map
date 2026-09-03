@@ -1,0 +1,40 @@
+<poster version="0.1">
+  <source file="1956_Juni-Festwochen Zürich 1956 - 2. Juni-Festkonzert - Leitung .jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="78" wobble="0.009" unit="px">
+      <axis id="1" at="9"/>
+      <axis id="2" at="86.3"/>
+      <axis id="3" at="165"/>
+      <tested how="leave-one-out" error="0.5" null="75.61" ratio="151.2" n="6"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0791" null="0.0755" percentile="0.6" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="3"/>
+      <level id="L2" xh="6" n="1"/>
+      <level id="L3" xh="7" n="1"/>
+      <level id="L4" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="6" box="0.284 0.0762 0.3757 0.0887"/>
+    <block id="r.2" level="L1" lines="1" xh="4" box="0.1481 0.0775 0.2681 0.0887"/>
+    <group id="r.3" box="0.0811 0.54 0.3774 0.7725" coverage="0.62">
+      <block id="r.3.1" level="L3" lines="1" xh="7" box="0.134 0.54 0.3245 0.5525"/>
+      <group id="r.3.2" box="0.1429 0.5775 0.3757 0.7725" coverage="0.627">
+        <picture id="r.3.2.1" box="0.321 0.5875 0.3739 0.6088" why="검출기가 상자를 내지 않았다"/>
+        <block id="r.3.2.2" level="L4" lines="2" xh="16" lead="33" box="0.1429 0.7112 0.3527 0.77"/>
+        <picture id="r.3.2.그림1" box="0.3668 0.73 0.3721 0.75" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+      </group>
+      <picture id="r.3.그림1" box="0.0847 0.65 0.1429 0.77" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 17%"/>
+      <picture id="r.3.그림2" box="0.0847 0.545 0.3616 0.5825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 13%"/>
+    </group>
+    <block id="r.4" level="L1" lines="1" xh="4" box="0.0123 0.5563 0.0653 0.5687"/>
+    <block id="r.5" level="L1" lines="1" xh="4" box="0.0123 0.5962 0.067 0.61"/>
+    <picture id="r.6" box="0.0123 0.8013 0.3933 0.9425" why="대비 20.9 이 이 판 전체 대비 143.5 의 15%(21.5)에 못 미친다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.4974 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 70%"/>
+    <picture id="r.그림2" box="0.8854 0.52 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+  </content>
+</poster>

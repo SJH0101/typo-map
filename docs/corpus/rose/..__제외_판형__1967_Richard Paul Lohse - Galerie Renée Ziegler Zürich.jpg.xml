@@ -1,0 +1,25 @@
+<poster version="0.1">
+  <source file="1967_Richard Paul Lohse - Galerie Renée Ziegler Zürich.jpg" w="561" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="207.5" unit="px">
+      <axis id="1" at="21"/>
+      <axis id="2" at="228.5"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="9" n="1"/>
+      <level id="L2" xh="18" n="1"/>
+      <level id="L3" xh="24" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0267 0.7775 0.9269 0.9625" coverage="0.282">
+      <block id="r.1.1" level="L3" lines="1" xh="24" box="0.0267 0.7824 0.7023 0.8225"/>
+      <block id="r.1.2" level="L1" lines="3" xh="9" lead="16" box="0.3993 0.8975 0.9251 0.9525"/>
+      <picture id="r.1.그림1" box="0.0303 0.78 0.9234 0.94" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 62%"/>
+    </group>
+    <block id="r.2" level="L2" lines="1" xh="18" box="0.4029 0.955 0.9697 0.9763"/>
+    <picture id="r.그림1" box="0.0339 0.025 0.9697 0.6813" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 95%"/>
+  </content>
+</poster>

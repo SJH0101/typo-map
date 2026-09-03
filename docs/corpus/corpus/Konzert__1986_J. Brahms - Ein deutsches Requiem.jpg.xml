@@ -1,0 +1,32 @@
+<poster version="0.1">
+  <source file="1986_J. Brahms - Ein deutsches Requiem.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="189" wobble="0.741" unit="px">
+      <axis id="1" at="9"/>
+      <axis id="2" at="58"/>
+      <axis id="3" at="387"/>
+      <tested how="leave-one-out" error="3" null="77.12" ratio="25.71" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1519" null="0.1487" percentile="0.48" n="18"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6" n="4"/>
+      <level id="L2" xh="10" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="6" box="0.6808 0.09 0.8236 0.105"/>
+    <block id="r.2" level="L1" lines="2" xh="6.5" lead="11" box="0.6808 0.105 0.8836 0.13"/>
+    <block id="r.3" level="L1" lines="2" xh="6" lead="12" box="0.6772 0.1338 0.8307 0.1613"/>
+    <block id="r.4" level="L1" lines="12" xh="6" lead="12" box="0.0988 0.5 0.3457 0.6975"/>
+    <block id="r.5" level="L2" lines="1" xh="10" box="0.0123 0.8562 0.4568 0.875"/>
+    <group id="r.6" box="0.1905 0.8562 0.6208 0.9513" coverage="0.233">
+      <picture id="r.6.1" box="0.3263 0.8875 0.4921 0.93" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.6.2" box="0.4868 0.8875 0.619 0.9313" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.6.그림1" box="0.194 0.8587 0.6173 0.9487" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 66%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 88%"/>
+  </content>
+</poster>

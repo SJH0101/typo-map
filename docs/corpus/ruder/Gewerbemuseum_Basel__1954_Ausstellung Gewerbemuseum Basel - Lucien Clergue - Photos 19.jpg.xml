@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1954_Ausstellung Gewerbemuseum Basel - Lucien Clergue - Photos 19.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="257" wobble="0.743" unit="px">
+      <axis id="1" at="4"/>
+      <axis id="2" at="452"/>
+      <axis id="3" at="518"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1084" null="0.1026" percentile="0.64" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="18" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="18" lead="32" box="0.9221 0.0175 0.9965 0.0825"/>
+    <block id="r.2" level="L2" lines="3" xh="18" lead="31.5" box="0.0018 0.0125 0.4602 0.1237"/>
+    <block id="r.3" level="L1" lines="5" xh="4" lead="10" box="0.7982 0.9187 0.954 0.9788"/>
+    <picture id="r.그림1" box="0.5239 0.1275 0.9965 0.9175" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 51%"/>
+    <picture id="r.그림2" box="0.0035 0.17 0.4655 0.88" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 45%"/>
+  </content>
+</poster>

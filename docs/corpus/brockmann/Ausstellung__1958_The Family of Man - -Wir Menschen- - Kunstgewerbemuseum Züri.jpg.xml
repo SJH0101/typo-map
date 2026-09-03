@@ -1,0 +1,28 @@
+<poster version="0.1">
+  <source file="1958_The Family of Man - -Wir Menschen- - Kunstgewerbemuseum Züri.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="172" wobble="0.459" unit="px">
+      <axis id="1" at="11"/>
+      <axis id="2" at="262"/>
+      <axis id="3" at="355"/>
+      <tested how="leave-one-out" error="2" null="81.41" ratio="40.7" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0905" null="0.0971" percentile="0.38" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="6" n="3"/>
+      <level id="L3" xh="33" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="33" box="0.0018 0.0436 0.8434 0.1163"/>
+    <block id="r.2" level="L2" lines="1" xh="6" box="0.6281 0.2625 0.7598 0.2737"/>
+    <block id="r.3" level="L1" lines="1" xh="5" box="0.0142 0.8925 0.2562 0.9062"/>
+    <block id="r.4" level="L2" lines="1" xh="6" box="0.4644 0.895 0.5979 0.9075"/>
+    <block id="r.5" level="L2" lines="5" xh="6" lead="13" box="0.6299 0.8975 0.9484 0.9738"/>
+    <picture id="r.그림1" box="0.0036 0.3038 0.9964 0.85" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 98%"/>
+  </content>
+</poster>

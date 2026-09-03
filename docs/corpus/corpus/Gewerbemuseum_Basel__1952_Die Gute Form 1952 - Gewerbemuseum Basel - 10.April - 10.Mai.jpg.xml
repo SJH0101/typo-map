@@ -1,0 +1,41 @@
+<poster version="0.1">
+  <source file="1952_Die Gute Form 1952 - Gewerbemuseum Basel - 10.April - 10.Mai.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="8" pitch="58" wobble="0.945" unit="px">
+      <axis id="1" at="48"/>
+      <axis id="2" at="84"/>
+      <axis id="3" at="110"/>
+      <axis id="4" at="168"/>
+      <axis id="5" at="256"/>
+      <axis id="6" at="352"/>
+      <axis id="7" at="370"/>
+      <axis id="8" at="559"/>
+      <tested how="leave-one-out" error="31" null="28.02" ratio="0.9" n="8"/>
+    </axes>
+    <baseline-grid found="yes" unit="8.25">
+      <tested how="null-model" deviation="0.0628" null="0.1378" percentile="0" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="7" n="2"/>
+      <level id="L2" xh="9" n="3"/>
+      <level id="L3" xh="11.5" n="2"/>
+      <level id="L4" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0352 0.3225 0.2007 0.4313" coverage="0.062">
+      <block id="r.1.1" level="L1" lines="1" xh="7" box="0.1444 0.3663 0.1989 0.3825"/>
+      <block id="r.1.2" level="L1" lines="1" xh="7" box="0.0827 0.3675 0.1268 0.3813"/>
+      <picture id="r.1.그림1" box="0.0387 0.325 0.1972 0.4288" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 91%"/>
+    </group>
+    <block id="r.2" level="L2" lines="1" xh="9" box="0.625 0.79 0.6743 0.8013"/>
+    <block id="r.3" level="L3" lines="1" xh="12" box="0.2905 0.7875 0.3944 0.8013"/>
+    <block id="r.4" level="L3" lines="4" xh="11" lead="17" box="0.1884 0.8087 0.3979 0.8875"/>
+    <block id="r.5" level="L2" lines="1" xh="9" box="0.6563 0.8688 0.7077 0.885"/>
+    <block id="r.6" level="L4" lines="4" xh="16" lead="25" box="0.9789 0.83 0.9947 0.9225"/>
+    <block id="r.7" level="L2" lines="3" xh="9" lead="16.5" box="0.4472 0.8925 0.662 0.9513"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.412 0.9912" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 54%"/>
+    <picture id="r.그림2" box="0.4278 0.0575 0.9965 0.8838" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 33%"/>
+  </content>
+</poster>

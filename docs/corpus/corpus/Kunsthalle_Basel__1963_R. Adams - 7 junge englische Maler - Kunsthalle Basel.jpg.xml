@@ -1,0 +1,19 @@
+<poster version="0.1">
+  <source file="1963_R. Adams - 7 junge englische Maler - Kunsthalle Basel.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system/>
+  <content>
+    <group id="r.1" box="0.6449 0.375 0.8021 0.4113" coverage="0">
+      <picture id="r.1.그림1" box="0.6484 0.3775 0.7986 0.4088" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+    </group>
+    <group id="r.2" box="0.3852 0.4525 0.4576 0.5" coverage="0">
+      <picture id="r.2.그림1" box="0.3887 0.455 0.4541 0.4975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 77%"/>
+    </group>
+    <picture id="r.3" box="0.3728 0.505 0.5141 0.57" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.4" box="0.8092 0.6775 0.9859 0.7175" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.5" box="0.1325 0.935 0.6095 0.9712" coverage="0">
+      <picture id="r.5.그림1" box="0.136 0.9375 0.606 0.9688" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.375 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 88%"/>
+  </content>
+</poster>

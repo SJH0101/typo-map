@@ -1,0 +1,58 @@
+<poster version="0.1">
+  <source file="1950_Schauspielhaus - Juni-Festwochen Zürich 1950.jpg" w="574" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="8" pitch="90.5" wobble="0.265" unit="px">
+      <axis id="1" at="34"/>
+      <axis id="2" at="84"/>
+      <axis id="3" at="100"/>
+      <axis id="4" at="200"/>
+      <axis id="5" at="248"/>
+      <axis id="6" at="345"/>
+      <axis id="7" at="454"/>
+      <axis id="8" at="538"/>
+      <tested how="leave-one-out" error="2" null="28.34" ratio="14.17" n="14"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1504" null="0.1506" percentile="0.46" n="17"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="2" n="4"/>
+      <level id="L2" xh="2.5" n="1"/>
+      <level id="L3" xh="3" n="4"/>
+      <level id="L4" xh="5" n="1"/>
+      <level id="L5" xh="6" n="1"/>
+      <level id="L6" xh="7.5" n="1"/>
+      <level id="L7" xh="21" n="1"/>
+      <level id="L8" xh="26" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L7" lines="1" xh="21" box="0.1533 0.5675 0.3345 0.5863"/>
+    <block id="r.2" level="L6" lines="2" xh="7.5" lead="9" box="0.4373 0.5713 0.5767 0.5887"/>
+    <block id="r.3" level="L3" lines="1" xh="3" box="0.7909 0.58 0.9199 0.595"/>
+    <block id="r.4" level="L1" lines="2" xh="2" lead="7" box="0.7875 0.6275 0.946 0.6462"/>
+    <block id="r.5" level="L8" lines="1" xh="26" box="0.054 0.655 0.5505 0.6975"/>
+    <group id="r.6" box="0.5958 0.66 0.9948 0.9637" coverage="0.256">
+      <block id="r.6.1" level="L4" lines="1" xh="5" box="0.5958 0.9212 0.7352 0.9375"/>
+      <block id="r.6.2" level="L3" lines="1" xh="3" box="0.9425 0.9412 0.993 0.955"/>
+      <block id="r.6.3" level="L2" lines="2" xh="2.5" lead="9" box="0.7857 0.95 0.9059 0.9625"/>
+      <picture id="r.6.그림1" box="0.9774 0.6625 0.9913 0.88" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 48%"/>
+      <picture id="r.6.그림2" box="0.946 0.89 0.9913 0.9263" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+    </group>
+    <block id="r.7" level="L1" lines="1" xh="2" box="0.7875 0.6687 0.9094 0.68"/>
+    <group id="r.9" box="0.1446 0.75 0.5401 0.9" coverage="0.671">
+      <block id="r.9.1" level="L3" lines="1" xh="3" box="0.3554 0.8463 0.5017 0.855"/>
+      <block id="r.9.2" level="L5" lines="1" xh="6" box="0.1446 0.8638 0.3502 0.8813"/>
+      <picture id="r.9.그림1" box="0.1533 0.8488 0.1847 0.8638" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <block id="r.10" level="L1" lines="1" xh="2" box="0.5976 0.7987 0.7143 0.8113"/>
+    <block id="r.11" level="L3" lines="1" xh="3" box="0.784 0.9263 0.993 0.9437"/>
+    <block id="r.12" level="L1" lines="1" xh="2" box="0.1446 0.9437 0.3206 0.9613"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.8625" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 39%"/>
+    <picture id="r.그림2" box="0.0035 0.5837 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 23%"/>
+  </content>
+  <unmeasured>
+    <item id="r.8" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

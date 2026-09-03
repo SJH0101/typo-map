@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1959_Kunsthalle Basel - 11.6. bis 12.7. - Deutsche Künstler der G.jpg" w="561" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="23" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.246 0.0112 0.3708 0.19" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.2" box="0.4064 0.0112 0.8146 0.1963" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.3" level="L1" lines="3" xh="23" lead="61.5" box="0.016 0.0187 0.1979 0.18"/>
+    <picture id="r.그림1" box="0.0036 0.205 0.9964 0.9038" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 99%"/>
+  </content>
+</poster>

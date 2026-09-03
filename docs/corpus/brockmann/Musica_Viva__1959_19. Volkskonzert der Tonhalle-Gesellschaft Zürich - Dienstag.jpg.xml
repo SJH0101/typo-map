@@ -1,0 +1,24 @@
+<poster version="0.1">
+  <source file="1959_19. Volkskonzert der Tonhalle-Gesellschaft Zürich - Dienstag.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="9.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.0212 0.605 0.261 0.8413" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.2" box="0.1252 0.6987 0.3457 0.885" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.3" box="0.1993 0.7113 0.455 0.99" coverage="0.091">
+      <block id="r.3.1" level="L1" lines="2" xh="9.5" lead="10" box="0.2593 0.9025 0.284 0.9237"/>
+      <picture id="r.3.2" box="0.291 0.905 0.3228 0.9387" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.3.그림1" box="0.2028 0.9038 0.321 0.9875" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 63%"/>
+      <picture id="r.3.그림2" box="0.3457 0.7475 0.4462 0.8175" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 23%"/>
+    </group>
+    <picture id="r.4" box="0.0353 0.8125 0.1411 0.9038" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.5" box="0.321 0.8187 0.5414 1.0" coverage="0">
+      <picture id="r.5.그림1" box="0.3245 0.8212 0.5379 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 93%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.8812" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 97%"/>
+  </content>
+</poster>

@@ -1,0 +1,22 @@
+<poster version="0.1">
+  <source file="1967_Gewerbemuseum Basel - Kymatik - Schwingungen experimentell s.jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="19.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.0053 0.1825 0.172 0.3325" why="대비 19.2 이 이 판 전체 대비 238.7 의 15%(35.8)에 못 미친다"/>
+    <group id="r.2" box="0.6082 0.1875 0.9965 0.435" coverage="0">
+      <picture id="r.2.그림1" box="0.6117 0.2263 0.9929 0.4325" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 85%"/>
+      <picture id="r.2.그림2" box="0.7021 0.19 0.9929 0.2387" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 11%"/>
+    </group>
+    <group id="r.3" box="0.4486 0.72 0.9982 0.98" coverage="0.998">
+      <block id="r.3.1" level="L1" lines="4" xh="19.5" lead="17" box="0.4486 0.72 0.9965 0.93"/>
+      <picture id="r.3.2" box="0.4486 0.935 0.9965 0.98" why="검출기가 상자를 내지 않았다"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.2961 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 39%"/>
+    <picture id="r.그림2" box="0.5762 0.435 0.9965 0.72" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 23%"/>
+  </content>
+</poster>

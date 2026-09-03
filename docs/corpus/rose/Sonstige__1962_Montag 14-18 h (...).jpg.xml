@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1962_Montag 14-18 h (...).jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="178" unit="px">
+      <axis id="1" at="112"/>
+      <axis id="2" at="290"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="12">
+      <tested how="null-model" deviation="0.0357" null="0.1118" percentile="0" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="8.2" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.1915 0.1225 0.6826 0.1963" coverage="0.817">
+      <block id="r.1.1" level="L1" lines="4" xh="6" lead="12" box="0.1915 0.13 0.6809 0.1888"/>
+      <block id="r.1.2" level="L2" lines="2" xh="8.5" lead="12" box="0.5071 0.1325 0.6809 0.1575"/>
+      <picture id="r.1.그림1" box="0.195 0.1888 0.6791 0.1938" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+    </group>
+    <block id="r.2" level="L2" lines="1" xh="8" box="0.1933 0.2 0.3741 0.2188"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 91%"/>
+  </content>
+</poster>

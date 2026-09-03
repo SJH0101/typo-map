@@ -1,0 +1,45 @@
+<poster version="0.1">
+  <source file="1953_Tonhalle Grosser Saal - Juni-Festwochen Zürich 1953 - Leitun.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="164.2" wobble="0.769" unit="px">
+      <axis id="1" at="26"/>
+      <axis id="2" at="316.5"/>
+      <axis id="3" at="354.5"/>
+      <axis id="4" at="367"/>
+      <tested how="leave-one-out" error="1.4" null="45.09" ratio="32.2" n="10"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1228" null="0.1393" percentile="0.12" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="2"/>
+      <level id="L2" xh="6" n="6"/>
+      <level id="L3" xh="7" n="1"/>
+      <level id="L4" xh="25" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="7" lead="14" box="0.5511 0.1537 0.8803 0.1837"/>
+    <block id="r.2" level="L2" lines="1" xh="6" box="0.5563 0.3063 0.6356 0.3225"/>
+    <group id="r.3" box="0.5511 0.3275 0.9771 0.7025" coverage="0.578">
+      <group id="r.3.1" box="0.875 0.345 0.9754 0.4413" coverage="0">
+        <picture id="r.3.1.그림1" box="0.8785 0.3475 0.9718 0.4388" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 87%"/>
+      </group>
+      <group id="r.3.2" box="0.6303 0.5637 0.9595 0.6813" coverage="0.966">
+        <block id="r.3.2.1" level="L4" lines="2" xh="25" lead="57" box="0.6303 0.5662 0.9578 0.6813"/>
+        <block id="r.3.2.2" level="L2" lines="1" xh="6" box="0.6303 0.6138 0.6916 0.6262"/>
+      </group>
+      <block id="r.3.3" level="L1" lines="1" xh="5" box="0.6408 0.6837 0.9137 0.6987"/>
+      <picture id="r.3.그림1" box="0.9261 0.63 0.9736 0.7" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+      <picture id="r.3.그림2" box="0.9049 0.33 0.9736 0.345" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+      <picture id="r.3.그림3" box="0.5546 0.5588 0.6937 0.7" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <block id="r.4" level="L1" lines="1" xh="5" box="0.0423 0.3713 0.3363 0.385"/>
+    <block id="r.5" level="L2" lines="2" xh="6" lead="17" box="0.5563 0.4512 0.8451 0.4838"/>
+    <block id="r.6" level="L2" lines="1" xh="6" box="0.5546 0.5375 0.9067 0.555"/>
+    <block id="r.7" level="L2" lines="1" xh="6" box="0.5563 0.6112 0.6901 0.6238"/>
+    <block id="r.8" level="L2" lines="3" xh="6" lead="14" box="0.5546 0.8287 0.9243 0.8762"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 92%"/>
+  </content>
+</poster>

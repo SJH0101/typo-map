@@ -1,0 +1,42 @@
+<poster version="0.1">
+  <source file="1950_Kunstgewerbemuseum - Die gute Form - Wanderausstellung der S.jpg" w="569" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="117" wobble="0.723" unit="px">
+      <axis id="1" at="28"/>
+      <axis id="2" at="83.5"/>
+      <axis id="3" at="341"/>
+      <axis id="4" at="458"/>
+      <tested how="leave-one-out" error="55.5" null="54.51" ratio="0.98" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1044" null="0.1086" percentile="0.5" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="2.5" n="1"/>
+      <level id="L2" xh="3" n="2"/>
+      <level id="L3" xh="6" n="1"/>
+      <level id="L4" xh="25.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="6" box="0.1441 0.59 0.4903 0.6075"/>
+    <block id="r.2" level="L2" lines="1" xh="3" box="0.7979 0.5962 0.9262 0.61"/>
+    <block id="r.3" level="L4" lines="2" xh="25.5" lead="34" box="0.0422 0.6763 0.3128 0.7512"/>
+    <group id="r.4" box="0.5958 0.675 0.9859 0.85" coverage="0">
+      <picture id="r.4.그림1" box="0.5993 0.7825 0.7592 0.8187" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 66%"/>
+      <picture id="r.4.그림2" box="0.7873 0.79 0.9244 0.8187" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 11%"/>
+      <picture id="r.4.그림3" box="0.9279 0.7475 0.9824 0.78" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <group id="r.5" box="0.1424 0.8187 0.5325 0.8888" coverage="0.638">
+      <block id="r.5.1" level="L2" lines="3" xh="3" lead="16.5" box="0.1424 0.83 0.5308 0.8838"/>
+      <picture id="r.5.그림1" box="0.1459 0.8213 0.529 0.83" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 25%"/>
+    </group>
+    <block id="r.6" level="L1" lines="2" xh="2.5" lead="8" box="0.5958 0.9437 0.9473 0.9575"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 56%"/>
+    <picture id="r.그림2" box="0.5114 0.0025 0.9508 0.48" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 5%"/>
+  </content>
+  <unmeasured>
+    <item id="r.5.2" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

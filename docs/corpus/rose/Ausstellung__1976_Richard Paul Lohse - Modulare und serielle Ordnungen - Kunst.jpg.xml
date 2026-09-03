@@ -1,0 +1,35 @@
+<poster version="0.1">
+  <source file="1976_Richard Paul Lohse - Modulare und serielle Ordnungen - Kunst.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="184" wobble="0.543" unit="px">
+      <axis id="1" at="30"/>
+      <axis id="2" at="114"/>
+      <axis id="3" at="398"/>
+      <tested how="leave-one-out" error="42" null="82.41" ratio="1.96" n="4"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="5.8" n="2"/>
+      <level id="L2" xh="15" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="1" xh="6" box="0.0513 0.6737 0.7204 0.6875"/>
+    <group id="r.2" box="0.1965 0.73 0.9504 0.8438" coverage="0.376">
+      <block id="r.2.1" level="L2" lines="1" xh="15" box="0.708 0.775 0.9469 0.8075"/>
+      <block id="r.2.2" level="L2" lines="1" xh="15" box="0.1965 0.8137 0.5876 0.8438"/>
+      <picture id="r.2.그림1" box="0.892 0.7325 0.9469 0.775" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 20%"/>
+      <picture id="r.2.그림2" box="0.708 0.8075 0.9469 0.84" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 18%"/>
+      <picture id="r.2.그림3" box="0.4248 0.8025 0.6796 0.8137" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <picture id="r.3" box="0.1982 0.895 0.5717 0.9637" why="대비 27.6 이 이 판 전체 대비 184.1 의 15%(27.6)에 못 미친다"/>
+    <group id="r.4" box="0.1982 0.92 0.4867 0.955" coverage="0.512">
+      <block id="r.4.1" level="L1" lines="2" xh="5.5" lead="10" box="0.1982 0.925 0.3876 0.95"/>
+      <group id="r.4.2" box="0.4071 0.925 0.485 0.9475" coverage="0">
+        <picture id="r.4.2.그림1" box="0.4659 0.9275 0.4815 0.945" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 60%"/>
+      </group>
+      <picture id="r.4.그림1" box="0.2018 0.9225 0.4832 0.9525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 31%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+  </content>
+</poster>

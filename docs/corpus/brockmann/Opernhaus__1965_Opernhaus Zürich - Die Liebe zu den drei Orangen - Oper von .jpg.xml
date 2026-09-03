@@ -1,0 +1,16 @@
+<poster version="0.1">
+  <source file="1965_Opernhaus Zürich - Die Liebe zu den drei Orangen - Oper von .jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="8" n="1"/>
+      <level id="L2" xh="50.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="4" xh="50.5" lead="88" box="0.0656 0.1338 0.9202 0.705"/>
+    <picture id="r.2" box="0.0745 0.7288 0.8369 0.835" why="대비 19.1 이 이 판 전체 대비 195.0 의 15%(29.2)에 못 미친다"/>
+    <block id="r.3" level="L1" lines="1" xh="8" box="0.0745 0.78 0.195 0.7975"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 66%"/>
+  </content>
+</poster>

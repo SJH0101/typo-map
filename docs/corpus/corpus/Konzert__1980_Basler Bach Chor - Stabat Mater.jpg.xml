@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1980_Basler Bach Chor - Stabat Mater.jpg" w="565" h="798"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="103.5" unit="px">
+      <axis id="1" at="43"/>
+      <axis id="2" at="146.5"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="7" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.0726 0.3208 0.2071 0.3534" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.2" box="0.0726 0.3446 0.1841 0.4135" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.3" level="L1" lines="1" xh="7" box="0.0726 0.6992 0.2283 0.718"/>
+    <block id="r.4" level="L1" lines="1" xh="7" box="0.2549 0.7005 0.5416 0.718"/>
+    <group id="r.5" box="0.2549 0.7318 0.6513 0.7694" coverage="0">
+      <picture id="r.5.그림1" box="0.6265 0.7406 0.646 0.7494" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 100%"/>
+    </group>
+    <picture id="r.6" box="0.0708 0.7343 0.2177 0.797" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.7" level="L1" lines="2" xh="8" lead="13" box="0.2549 0.8972 0.5487 0.9261"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 88%"/>
+  </content>
+</poster>

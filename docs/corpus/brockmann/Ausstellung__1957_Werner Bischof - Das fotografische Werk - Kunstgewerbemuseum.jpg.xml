@@ -1,0 +1,48 @@
+<poster version="0.1">
+  <source file="1957_Werner Bischof - Das fotografische Werk - Kunstgewerbemuseum.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="5" pitch="107" wobble="0.519" unit="px">
+      <axis id="1" at="13"/>
+      <axis id="2" at="229"/>
+      <axis id="3" at="303"/>
+      <axis id="4" at="390"/>
+      <axis id="5" at="517"/>
+      <tested how="leave-one-out" error="80.5" null="45.7" ratio="0.57" n="6"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0762" null="0.0987" percentile="0.1" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8.2" n="4"/>
+      <level id="L2" xh="11" n="1"/>
+      <level id="L3" xh="13" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0106 0.5175 0.4611 0.6175" coverage="0.913">
+      <group id="r.1.1" box="0.0106 0.5224 0.4611 0.615" coverage="0.208">
+        <group id="r.1.1.1" box="0.1237 0.5286 0.2032 0.5496" coverage="0">
+          <picture id="r.1.1.1.그림1" box="0.1526 0.5311 0.1996 0.5471" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 57%"/>
+          <picture id="r.1.1.1.그림2" box="0.1273 0.5311 0.1399 0.5471" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+        </group>
+        <group id="r.1.1.2" box="0.0106 0.5743 0.4611 0.615" coverage="0.811">
+          <picture id="r.1.1.2.1" box="0.2367 0.5743 0.4594 0.6113" why="검출기가 상자를 내지 않았다"/>
+          <picture id="r.1.1.2.2" box="0.0106 0.578 0.242 0.6113" why="검출기가 상자를 내지 않았다"/>
+        </group>
+        <picture id="r.1.1.그림1" box="0.0141 0.5249 0.4576 0.5743" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+      </group>
+      <block id="r.1.2" level="L3" lines="1" xh="13" box="0.3975 0.5298 0.4594 0.5471"/>
+    </group>
+    <block id="r.2" level="L1" lines="1" xh="8" box="0.0177 0.7712 0.3145 0.7888"/>
+    <block id="r.3" level="L1" lines="1" xh="8" box="0.6943 0.77 0.9099 0.7863"/>
+    <group id="r.4" box="0.5265 0.8662 0.9982 0.9888" coverage="0.31">
+      <block id="r.4.1" level="L2" lines="1" xh="11" box="0.9081 0.8687 0.97 0.8825"/>
+      <block id="r.4.2" level="L1" lines="3" xh="9" lead="20" box="0.53 0.92 0.9965 0.9875"/>
+      <block id="r.4.3" level="L1" lines="2" xh="8.5" lead="21" box="0.53 0.9212 0.7438 0.96"/>
+      <picture id="r.4.그림1" box="0.53 0.8687 0.9293 0.9187" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.1237 0.9965 0.6325" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 41%"/>
+    <picture id="r.그림2" box="0.0035 0.7538 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 34%"/>
+  </content>
+</poster>

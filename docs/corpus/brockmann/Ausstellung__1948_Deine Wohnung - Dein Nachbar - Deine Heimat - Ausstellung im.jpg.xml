@@ -1,0 +1,49 @@
+<poster version="0.1">
+  <source file="1948_Deine Wohnung - Dein Nachbar - Deine Heimat - Ausstellung im.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="6" pitch="61.2" wobble="0.775" unit="px">
+      <axis id="1" at="32"/>
+      <axis id="2" at="79"/>
+      <axis id="3" at="136.5"/>
+      <axis id="4" at="197.7"/>
+      <axis id="5" at="286"/>
+      <axis id="6" at="463"/>
+      <tested how="leave-one-out" error="2.5" null="35.02" ratio="14.01" n="9"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1339" null="0.1327" percentile="0.48" n="13"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="4"/>
+      <level id="L2" xh="7" n="1"/>
+      <level id="L3" xh="13" n="1"/>
+      <level id="L4" xh="18" n="1"/>
+      <level id="L5" xh="21.5" n="1"/>
+      <level id="L6" xh="61" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L5" lines="2" xh="21.5" lead="11" box="0.5142 0.2075 0.9555 0.2625"/>
+    <block id="r.2" level="L6" lines="1" xh="61" box="0.048 0.0325 0.4964 0.2013"/>
+    <block id="r.3" level="L3" lines="1" xh="13" box="0.831 0.7775 0.8915 0.795"/>
+    <group id="r.4" box="0.1352 0.7762 0.4662 0.9337" coverage="0.221">
+      <block id="r.4.1" level="L4" lines="1" xh="18" box="0.1352 0.78 0.2402 0.7962"/>
+      <block id="r.4.2" level="L1" lines="3" xh="5" lead="14.5" box="0.2384 0.815 0.3254 0.8788"/>
+      <group id="r.4.3" box="0.3416 0.78 0.4644 0.8262" coverage="0">
+        <picture id="r.4.3.그림1" box="0.4591 0.7825 0.4609 0.8037" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 29%"/>
+        <picture id="r.4.3.그림2" box="0.4591 0.8112 0.4609 0.8237" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 16%"/>
+      </group>
+      <block id="r.4.4" level="L2" lines="1" xh="7" box="0.3523 0.8512 0.4146 0.8612"/>
+      <block id="r.4.5" level="L1" lines="2" xh="4.5" lead="9" box="0.3541 0.8862 0.4146 0.8962"/>
+      <picture id="r.4.6" box="0.2402 0.9037 0.2883 0.9325" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.4.7" level="L1" lines="1" xh="5" box="0.3523 0.92 0.4306 0.9312"/>
+      <picture id="r.4.그림1" box="0.1388 0.7987 0.4128 0.9312" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+    </group>
+    <block id="r.5" level="L1" lines="1" xh="5" box="0.2402 0.8862 0.2954 0.8975"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+  </content>
+  <unmeasured>
+    <item id="r.6" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

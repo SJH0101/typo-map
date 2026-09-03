@@ -1,0 +1,70 @@
+<poster version="0.1">
+  <source file="1962_Internationale Juni-Festwochen Zürich - Sinfonie-Konzerte de.jpg" w="571" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="8" pitch="40" wobble="1.972" unit="px">
+      <axis id="1" at="73.5"/>
+      <axis id="2" at="329"/>
+      <axis id="3" at="350"/>
+      <axis id="4" at="370"/>
+      <axis id="5" at="434"/>
+      <axis id="6" at="474"/>
+      <axis id="7" at="518.7"/>
+      <axis id="8" at="536"/>
+      <tested how="leave-one-out" error="1" null="23.85" ratio="23.85" n="21"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1683" null="0.1814" percentile="0.06" n="36"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4.5" n="15"/>
+      <level id="L2" xh="13" n="3"/>
+      <level id="L3" xh="15" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="3" xh="16" lead="29" box="0.1226 0.0175 0.4816 0.1175"/>
+    <group id="r.2" box="0.5657 0.0163 0.9772 0.2225" coverage="0.942">
+      <picture id="r.2.1" box="0.8897 0.0175 0.9527 0.0412" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.2.2" level="L3" lines="3" xh="15" lead="28.5" box="0.5657 0.1225 0.9737 0.2212"/>
+    </group>
+    <group id="r.3" box="0.5709 0.3675 0.732 0.4213" coverage="0.72">
+      <block id="r.3.1" level="L1" lines="1" xh="5" box="0.5709 0.3675 0.732 0.3787"/>
+      <block id="r.3.2" level="L1" lines="1" xh="4" box="0.6532 0.4088 0.7303 0.42"/>
+      <picture id="r.3.그림1" box="0.6585 0.3787 0.7285 0.3862" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 13%"/>
+      <picture id="r.3.그림2" box="0.6567 0.3925 0.6743 0.4062" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 8%"/>
+    </group>
+    <block id="r.4" level="L1" lines="2" xh="4" lead="8" box="0.944 0.3775 0.972 0.4012"/>
+    <block id="r.5" level="L3" lines="7" xh="15" lead="30" box="0.1243 0.5663 0.4939 0.825"/>
+    <picture id="r.7" box="0.7548 0.4425 0.9159 0.4963" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.8" box="0.5727 0.5162 0.9667 0.6462" coverage="0.564">
+      <block id="r.8.1" level="L1" lines="1" xh="4" box="0.9124 0.5375 0.965 0.5475"/>
+      <block id="r.8.2" level="L1" lines="1" xh="5" box="0.9124 0.5663 0.965 0.5813"/>
+      <picture id="r.8.그림1" box="0.9159 0.5813 0.9597 0.595" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 17%"/>
+      <picture id="r.8.그림2" box="0.8914 0.6275 0.8967 0.64" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+    </group>
+    <block id="r.9" level="L1" lines="2" xh="4.5" lead="8" box="0.5762 0.53 0.6532 0.55"/>
+    <block id="r.10" level="L2" lines="1" xh="13" box="0.7583 0.5463 0.979 0.5613"/>
+    <block id="r.11" level="L1" lines="1" xh="5" box="0.5727 0.56 0.7496 0.57"/>
+    <block id="r.12" level="L1" lines="1" xh="4" box="0.5744 0.6663 0.7163 0.6775"/>
+    <block id="r.13" level="L1" lines="2" xh="5" lead="8" box="0.8354 0.6737 0.9212 0.6863"/>
+    <block id="r.14" level="L1" lines="2" xh="4" lead="8" box="0.5937 0.6863 0.669 0.6963"/>
+    <block id="r.15" level="L1" lines="1" xh="5" box="0.9159 0.7762 0.9527 0.7913"/>
+    <block id="r.16" level="L1" lines="1" xh="5" box="0.5744 0.7412 0.7303 0.7525"/>
+    <block id="r.17" level="L2" lines="1" xh="13" box="0.5779 0.7538 0.655 0.7725"/>
+    <block id="r.18" level="L1" lines="2" xh="4.5" lead="8" box="0.6194 0.805 0.7058 0.8275"/>
+    <group id="r.19" box="0.5727 0.8662 0.7408 0.9237" coverage="0.487">
+      <block id="r.19.1" level="L2" lines="1" xh="12" box="0.5744 0.8987 0.7391 0.91"/>
+      <block id="r.19.2" level="L1" lines="1" xh="4" box="0.5727 0.9113 0.6637 0.9175"/>
+      <picture id="r.19.그림1" box="0.5762 0.8687 0.7373 0.8987" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 39%"/>
+    </group>
+    <group id="r.20" box="0.7583 0.8688 0.9527 0.9075" coverage="0">
+      <picture id="r.20.그림1" box="0.9352 0.8712 0.9492 0.905" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 80%"/>
+    </group>
+    <block id="r.21" level="L1" lines="2" xh="5.5" lead="8" box="0.5744 0.9225 0.7461 0.9425"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 55%"/>
+  </content>
+  <unmeasured>
+    <item id="r.6" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

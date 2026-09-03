@@ -1,0 +1,45 @@
+<poster version="0.1">
+  <source file="1950_Juni-Festwochen Zürich 1950 - Helmhaus - Grosse Chinesische .jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="6" pitch="118" wobble="0.4" unit="px">
+      <axis id="1" at="31"/>
+      <axis id="2" at="79.6"/>
+      <axis id="3" at="223"/>
+      <axis id="4" at="341"/>
+      <axis id="5" at="374"/>
+      <axis id="6" at="517"/>
+      <tested how="leave-one-out" error="0.8" null="31.31" ratio="39.14" n="11"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1228" null="0.1447" percentile="0.06" n="16"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="3" n="4"/>
+      <level id="L2" xh="3.8" n="2"/>
+      <level id="L3" xh="6" n="2"/>
+      <level id="L4" xh="7" n="1"/>
+      <level id="L5" xh="10" n="1"/>
+      <level id="L6" xh="25" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L5" lines="1" xh="10" box="0.3915 0.585 0.5309 0.6038"/>
+    <block id="r.2" level="L3" lines="1" xh="6" box="0.1358 0.5863 0.3333 0.605"/>
+    <block id="r.3" level="L6" lines="1" xh="25" box="0.0459 0.6763 0.381 0.7125"/>
+    <group id="r.4" box="0.5961 0.6725 0.9877 0.8313" coverage="0.992">
+      <block id="r.4.1" level="L4" lines="1" xh="7" box="0.9171 0.7275 0.9877 0.7488"/>
+      <block id="r.4.2" level="L1" lines="3" xh="3" lead="16" box="0.5961 0.7612 0.9136 0.8288"/>
+    </group>
+    <block id="r.5" level="L2" lines="1" xh="4" box="0.1376 0.7388 0.2804 0.7512"/>
+    <group id="r.6" box="0.5944 0.8862 0.8501 0.9325" coverage="0.505">
+      <block id="r.6.1" level="L3" lines="1" xh="6" box="0.5944 0.8887 0.8483 0.9062"/>
+      <block id="r.6.2" level="L1" lines="1" xh="3" box="0.6578 0.9175 0.7584 0.9287"/>
+      <picture id="r.6.그림1" box="0.6614 0.91 0.8466 0.93" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 38%"/>
+    </group>
+    <block id="r.7" level="L1" lines="1" xh="3" box="0.1358 0.8912 0.1887 0.9025"/>
+    <block id="r.8" level="L1" lines="5" xh="3" lead="7.5" box="0.1358 0.8988 0.4056 0.9412"/>
+    <block id="r.9" level="L2" lines="2" xh="3.5" lead="7" box="0.1358 0.945 0.3492 0.965"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 72%"/>
+  </content>
+</poster>

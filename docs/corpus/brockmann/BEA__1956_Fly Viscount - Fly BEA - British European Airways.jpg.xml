@@ -1,0 +1,39 @@
+<poster version="0.1">
+  <source file="1956_Fly Viscount - Fly BEA - British European Airways.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="32.5" wobble="0.536" unit="px">
+      <axis id="1" at="309"/>
+      <axis id="2" at="376"/>
+      <axis id="3" at="404"/>
+      <axis id="4" at="436.5"/>
+      <tested how="leave-one-out" error="28" null="50.62" ratio="1.81" n="5"/>
+    </axes>
+    <baseline-grid found="yes" unit="23.5">
+      <tested how="null-model" deviation="0.0319" null="0.0961" percentile="0" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="7.8" n="2"/>
+      <level id="L2" xh="12" n="2"/>
+      <level id="L3" xh="17" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="12" box="0.7597 0.041 0.9717 0.0639"/>
+    <group id="r.2" box="0.5406 0.6288 0.9735 0.945" coverage="0.612">
+      <block id="r.2.1" level="L1" lines="3" xh="8" lead="22.5" box="0.7102 0.6338 0.9717 0.705"/>
+      <group id="r.2.2" box="0.5406 0.745 0.9717 0.9437" coverage="0.142">
+        <group id="r.2.2.1" box="0.5406 0.745 0.7085 0.7662" coverage="0.881">
+          <block id="r.2.2.1.1" level="L2" lines="1" xh="12" box="0.5406 0.7475 0.6603 0.7638"/>
+          <block id="r.2.2.1.2" level="L3" lines="1" xh="17" box="0.6603 0.7488 0.7067 0.765"/>
+        </group>
+        <block id="r.2.2.2" level="L1" lines="2" xh="7.5" lead="23" box="0.7739 0.9025 0.9682 0.9413"/>
+        <picture id="r.2.2.그림1" box="0.5442 0.7662 0.7739 0.9412" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 83%"/>
+      </group>
+      <picture id="r.2.그림1" box="0.5442 0.6312 0.97 0.745" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 36%"/>
+    </group>
+    <picture id="r.3" box="0.0389 0.7425 0.0919 0.7725" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.2213 0.9965 0.9313" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 59%"/>
+    <picture id="r.그림2" box="0.5601 0.0025 0.9965 0.395" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 23%"/>
+  </content>
+</poster>

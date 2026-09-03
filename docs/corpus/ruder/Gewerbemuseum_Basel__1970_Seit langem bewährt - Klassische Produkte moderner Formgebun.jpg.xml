@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1970_Seit langem bewährt - Klassische Produkte moderner Formgebun.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="290.5" unit="px">
+      <axis id="1" at="257.5"/>
+      <axis id="2" at="548"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1456" null="0.115" percentile="0.98" n="10"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="14" n="1"/>
+      <level id="L3" xh="17" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.4502 0.13 0.5391 0.1688" coverage="0">
+      <picture id="r.1.그림1" box="0.4537 0.1325 0.5356 0.1663" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 71%"/>
+    </group>
+    <block id="r.2" level="L2" lines="2" xh="14" lead="27" box="0.4502 0.17 0.6317 0.2288"/>
+    <group id="r.3" box="0.452 0.26 0.5534 0.3412" coverage="0">
+      <picture id="r.3.그림1" box="0.4555 0.3175 0.5409 0.3387" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 61%"/>
+      <picture id="r.3.그림2" box="0.5356 0.33 0.5498 0.3387" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+    </group>
+    <block id="r.4" level="L1" lines="5" xh="5" lead="13" box="0.4555 0.8825 0.5587 0.9587"/>
+    <block id="r.5" level="L3" lines="3" xh="17" lead="18" box="0.9715 0.9012 0.984 0.96"/>
+    <picture id="r.그림1" box="0.516 0.0025 0.9964 0.9625" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    <picture id="r.그림2" box="0.0036 0.1462 0.4733 0.87" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 34%"/>
+  </content>
+</poster>

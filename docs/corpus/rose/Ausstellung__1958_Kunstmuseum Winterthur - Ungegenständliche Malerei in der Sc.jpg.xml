@@ -1,0 +1,28 @@
+<poster version="0.1">
+  <source file="1958_Kunstmuseum Winterthur - Ungegenständliche Malerei in der Sc.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="141" wobble="0.574" unit="px">
+      <axis id="1" at="58"/>
+      <axis id="2" at="118"/>
+      <axis id="3" at="340"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="7">
+      <tested how="null-model" deviation="0.0536" null="0.0999" percentile="0" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="1"/>
+      <level id="L2" xh="13" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="13" lead="27" box="0.2025 0.0126 0.4947 0.07"/>
+    <block id="r.2" level="L2" lines="3" xh="13" lead="27" box="0.1074 0.6138 0.4965 0.7063"/>
+    <block id="r.3" level="L1" lines="3" xh="8" lead="14" box="0.5933 0.8 0.9472 0.8512"/>
+    <picture id="r.그림1" box="0.0123 0.0025 0.9859 0.3663" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 46%"/>
+    <picture id="r.그림2" box="0.0792 0.79 0.9947 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 26%"/>
+    <picture id="r.그림3" box="0.6004 0.4375 0.9965 0.7188" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+    <picture id="r.그림4" box="0.1039 0.4375 0.4982 0.7188" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+  </content>
+</poster>

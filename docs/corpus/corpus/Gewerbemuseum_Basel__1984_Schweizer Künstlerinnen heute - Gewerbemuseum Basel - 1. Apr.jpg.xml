@@ -1,0 +1,32 @@
+<poster version="0.1">
+  <source file="1984_Schweizer Künstlerinnen heute - Gewerbemuseum Basel - 1. Apr.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="5" pitch="44.5" wobble="1.918" unit="px">
+      <axis id="1" at="101"/>
+      <axis id="2" at="128"/>
+      <axis id="3" at="169"/>
+      <axis id="4" at="217"/>
+      <axis id="5" at="452"/>
+      <tested how="leave-one-out" error="41" null="46.91" ratio="1.14" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0914" null="0.0906" percentile="0.52" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="3.8" n="2"/>
+      <level id="L2" xh="6" n="1"/>
+      <level id="L3" xh="10.2" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="10.5" lead="26" box="0.7933 0.2188 0.9046 0.2725"/>
+    <block id="r.2" level="L1" lines="1" xh="4" box="0.3887 0.2375 0.6678 0.2462"/>
+    <block id="r.3" level="L3" lines="1" xh="10" box="0.2261 0.47 0.2739 0.4813"/>
+    <block id="r.4" level="L2" lines="1" xh="6" box="0.3039 0.5288 0.3993 0.5475"/>
+    <block id="r.5" level="L1" lines="2" xh="3.5" lead="11" box="0.1749 0.8225 0.765 0.8463"/>
+    <picture id="r.6" box="0.1749 0.85 0.9558 0.9163" why="대비 13.7 이 이 판 전체 대비 191.3 의 15%(28.7)에 못 미친다"/>
+    <picture id="r.7" box="0.1749 0.9225 0.7862 0.9875" why="대비 17.1 이 이 판 전체 대비 191.3 의 15%(28.7)에 못 미친다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.8137" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 98%"/>
+  </content>
+</poster>

@@ -1,0 +1,47 @@
+<poster version="0.1">
+  <source file="1969_Spitzen - Gewerbemuseum Basel.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="53" wobble="0.364" unit="px">
+      <axis id="1" at="144"/>
+      <axis id="2" at="162"/>
+      <axis id="3" at="215"/>
+      <axis id="4" at="278"/>
+      <tested how="leave-one-out" error="5" null="45.86" ratio="9.17" n="8"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1452" null="0.138" percentile="0.68" n="12"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="6" n="1"/>
+      <level id="L3" xh="8" n="1"/>
+      <level id="L4" xh="12.5" n="2"/>
+      <level id="L5" xh="19" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="4" xh="5" lead="8" box="0.2593 0.455 0.2716 0.495"/>
+    <group id="r.2" box="0.2857 0.4938 0.5485 0.6038" coverage="0.54">
+      <block id="r.2.1" level="L2" lines="1" xh="6" box="0.2857 0.5038 0.5009 0.5138"/>
+      <group id="r.2.2" box="0.2857 0.5388 0.5467 0.6038" coverage="0.952">
+        <block id="r.2.2.1" level="L3" lines="1" xh="8" box="0.5009 0.5425 0.545 0.5525"/>
+        <block id="r.2.2.2" level="L5" lines="2" xh="21.5" lead="41" box="0.2857 0.5537 0.5432 0.6038"/>
+      </group>
+      <picture id="r.2.그림1" box="0.2892 0.4963 0.545 0.5388" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 40%"/>
+    </group>
+    <group id="r.3" box="0.2875 0.5225 0.7513 0.6837" coverage="0.259">
+      <group id="r.3.1" box="0.2875 0.6562 0.3898 0.6837" coverage="0.605">
+        <block id="r.3.1.1" level="L4" lines="1" xh="13" box="0.2875 0.6587 0.3721 0.6737"/>
+        <block id="r.3.1.2" level="L4" lines="1" xh="12" box="0.2875 0.6737 0.3439 0.6825"/>
+        <picture id="r.3.1.그림1" box="0.3721 0.6587 0.3862 0.6813" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 16%"/>
+      </group>
+      <block id="r.3.2" level="L5" lines="1" xh="18" box="0.4903 0.6575 0.5573 0.675"/>
+      <block id="r.3.3" level="L5" lines="1" xh="19" box="0.3845 0.6587 0.4321 0.6787"/>
+      <picture id="r.3.그림1" box="0.6755 0.525 0.7478 0.6812" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 46%"/>
+      <picture id="r.3.그림2" box="0.5714 0.6575 0.6155 0.6812" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 5%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.6931 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 74%"/>
+    <picture id="r.그림2" box="0.6949 0.2188 0.9965 0.77" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 20%"/>
+  </content>
+</poster>

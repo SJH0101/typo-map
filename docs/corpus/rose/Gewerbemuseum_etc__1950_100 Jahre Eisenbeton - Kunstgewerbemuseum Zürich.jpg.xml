@@ -1,0 +1,22 @@
+<poster version="0.1">
+  <source file="1950_100 Jahre Eisenbeton - Kunstgewerbemuseum Zürich.jpg" w="570" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="325.5" unit="px">
+      <axis id="1" at="1.5"/>
+      <axis id="2" at="327"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="16" n="1"/>
+      <level id="L3" xh="26" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="26" lead="37" box="0.5632 0.0125 0.9947 0.1"/>
+    <block id="r.2" level="L2" lines="1" xh="16" box="0.0 0.8575 0.7614 0.8925"/>
+    <block id="r.3" level="L1" lines="1" xh="5" box="0.0 0.9475 0.7579 0.9537"/>
+    <picture id="r.그림1" box="0.0035 0.005 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 85%"/>
+  </content>
+</poster>

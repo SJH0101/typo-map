@@ -1,0 +1,31 @@
+<poster version="0.1">
+  <source file="1964_Christoph Iselin - Jacques Düblin - Walter Schneider - Karl .jpg" w="554" h="780"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="168" wobble="0.744" unit="px">
+      <axis id="1" at="28"/>
+      <axis id="2" at="71"/>
+      <axis id="3" at="364"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="2" n="1"/>
+      <level id="L2" xh="16" n="1"/>
+      <level id="L3" xh="25" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="25" box="0.6498 0.6026 0.9206 0.6474"/>
+    <group id="r.2" box="0.0054 0.641 0.3899 0.9154" coverage="0.298">
+      <block id="r.2.1" level="L1" lines="1" xh="2" box="0.056 0.6679 0.1155 0.6885"/>
+      <block id="r.2.2" level="L2" lines="3" xh="16" lead="14" box="0.1354 0.8269 0.3339 0.909"/>
+      <picture id="r.2.그림1" box="0.009 0.6436 0.3267 0.9128" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 66%"/>
+    </group>
+    <picture id="r.3" box="0.37 0.7231 0.583 0.8179" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.4" box="0.8213 0.8564 0.9982 0.9526" coverage="0">
+      <picture id="r.4.그림1" box="0.8249 0.859 0.9946 0.95" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 79%"/>
+    </group>
+    <picture id="r.5" box="0.5199 0.9038 0.6552 0.9949" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0036 0.041 0.9296 0.6449" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 95%"/>
+  </content>
+</poster>

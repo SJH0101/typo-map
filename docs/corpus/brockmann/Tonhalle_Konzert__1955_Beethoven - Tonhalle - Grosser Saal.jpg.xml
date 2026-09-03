@@ -1,0 +1,29 @@
+<poster version="0.1">
+  <source file="1955_Beethoven - Tonhalle - Grosser Saal.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="57.5" wobble="0.304" unit="px">
+      <axis id="1" at="29"/>
+      <axis id="2" at="104"/>
+      <axis id="3" at="144"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1508" null="0.1441" percentile="0.64" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="5" n="1"/>
+      <level id="L3" xh="13" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="13" box="0.0462 0.6362 0.2629 0.66"/>
+    <group id="r.2" box="0.1812 0.7163 0.5062 0.8975" coverage="0.519">
+      <block id="r.2.1" level="L2" lines="13" xh="5" lead="10" box="0.2629 0.7188 0.5027 0.8938"/>
+      <block id="r.2.2" level="L1" lines="1" xh="4" box="0.1847 0.86 0.2682 0.8688"/>
+      <picture id="r.2.그림1" box="0.1847 0.7188 0.2629 0.8438" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 41%"/>
+    </group>
+    <picture id="r.그림1" box="0.0675 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 96%"/>
+  </content>
+</poster>

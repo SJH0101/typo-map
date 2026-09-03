@@ -1,0 +1,21 @@
+<poster version="0.1">
+  <source file="1961_Zürich plant und baut - Helmhaus Zürich - 12.Oktober -15.Nov.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="11"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="8" n="2"/>
+      <level id="L2" xh="34" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="34" box="0.0176 0.82 0.9894 0.8912"/>
+    <block id="r.2" level="L1" lines="1" xh="8" box="0.0141 0.9187 0.6349 0.9375"/>
+    <block id="r.3" level="L1" lines="2" xh="8" lead="14" box="0.0141 0.9387 0.9912 0.9725"/>
+    <picture id="r.그림1" box="0.0035 0.12 0.9965 0.95" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 71%"/>
+    <picture id="r.그림2" box="0.164 0.14 0.6649 0.4225" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 13%"/>
+  </content>
+</poster>

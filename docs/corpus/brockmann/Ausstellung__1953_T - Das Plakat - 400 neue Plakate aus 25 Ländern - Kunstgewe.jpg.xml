@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1953_T - Das Plakat - 400 neue Plakate aus 25 Ländern - Kunstgewe.jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="127.5" unit="px">
+      <axis id="1" at="192"/>
+      <axis id="2" at="207"/>
+      <axis id="3" at="334.5"/>
+      <tested how="leave-one-out" error="10" null="70.81" ratio="7.08" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.2049" null="0.1895" percentile="1" n="46"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4" n="2"/>
+      <level id="L2" xh="7" n="1"/>
+      <level id="L3" xh="11" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="23" xh="4" lead="8" box="0.594 0.0838 0.6135 0.385"/>
+    <group id="r.2" box="0.3369 0.0912 0.5621 0.14" coverage="0.376">
+      <block id="r.2.1" level="L3" lines="1" xh="11" box="0.3723 0.0963 0.5603 0.115"/>
+      <block id="r.2.2" level="L1" lines="1" xh="4" box="0.3369 0.1263 0.5603 0.1363"/>
+      <picture id="r.2.그림1" box="0.3404 0.1 0.5585 0.1263" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 43%"/>
+    </group>
+    <block id="r.3" level="L2" lines="21" xh="7" lead="12" box="0.594 0.4125 0.6152 0.8662"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.6099 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 40%"/>
+    <picture id="r.그림2" box="0.6223 0.2462 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 30%"/>
+    <picture id="r.그림3" box="0.1241 0.3325 0.4574 0.8013" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 18%"/>
+    <picture id="r.그림4" box="0.367 0.42 0.5496 0.7812" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+  </content>
+</poster>

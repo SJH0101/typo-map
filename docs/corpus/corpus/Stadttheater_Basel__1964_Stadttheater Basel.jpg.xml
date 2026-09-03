@@ -1,0 +1,31 @@
+<poster version="0.1">
+  <source file="1964_Stadttheater Basel.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="51" unit="px">
+      <axis id="1" at="13"/>
+      <axis id="2" at="64"/>
+      <tested how="leave-one-out" error="0" null="170.5" n="4"/>
+    </axes>
+    <baseline-grid found="yes" unit="10">
+      <tested how="null-model" deviation="0.0786" null="0.137" percentile="0" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="3" n="1"/>
+      <level id="L2" xh="3.8" n="2"/>
+      <level id="L3" xh="37" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="37" lead="33" box="0.1186 0.0088 0.3699 0.1225"/>
+    <block id="r.2" level="L2" lines="8" xh="4" lead="10" box="0.0195 0.4125 0.1257 0.5225"/>
+    <group id="r.3" box="0.0177 0.5487 0.1416 0.6475" coverage="0.747">
+      <block id="r.3.1" level="L2" lines="2" xh="3.5" lead="11" box="0.0195 0.6142 0.1381 0.6339"/>
+      <block id="r.3.2" level="L1" lines="2" xh="3" lead="10" box="0.0177 0.6339 0.1274 0.6463"/>
+      <picture id="r.3.그림1" box="0.1274 0.5512 0.1381 0.5611" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+    </group>
+    <picture id="r.그림1" box="0.3717 0.2612 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    <picture id="r.그림2" box="0.1274 0.17 0.3097 0.99" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+    <picture id="r.그림3" box="0.3699 0.0025 0.9947 0.1375" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+  </content>
+</poster>

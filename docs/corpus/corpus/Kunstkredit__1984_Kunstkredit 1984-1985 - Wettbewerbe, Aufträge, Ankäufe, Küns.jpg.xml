@@ -1,0 +1,24 @@
+<poster version="0.1">
+  <source file="1984_Kunstkredit 1984-1985 - Wettbewerbe, Aufträge, Ankäufe, Küns.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="208" unit="px">
+      <axis id="1" at="77"/>
+      <axis id="2" at="285"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1605" null="0.1321" percentile="1" n="13"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="7" n="1"/>
+      <level id="L2" xh="18.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="3" xh="18" lead="37.5" box="0.4912 0.02 0.8322 0.145"/>
+    <block id="r.2" level="L1" lines="9" xh="7" lead="12" box="0.5035 0.79 0.8534 0.935"/>
+    <block id="r.3" level="L2" lines="1" xh="19" box="0.1307 0.94 0.4788 0.9825"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 79%"/>
+  </content>
+</poster>

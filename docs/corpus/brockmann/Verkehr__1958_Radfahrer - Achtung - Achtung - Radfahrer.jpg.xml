@@ -1,0 +1,17 @@
+<poster version="0.1">
+  <source file="1958_Radfahrer - Achtung - Achtung - Radfahrer.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="15.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="2" xh="15.5" lead="28" box="0.0089 0.0175 0.286 0.0862"/>
+    <picture id="r.2" box="0.0089 0.0925 0.2629 0.17" why="대비 6.8 이 이 판 전체 대비 171.4 의 15%(25.7)에 못 미친다"/>
+    <picture id="r.3" box="0.595 0.2462 0.8117 0.4012" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.4" box="0.7549 0.9175 0.8774 0.9587" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.8788" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 44%"/>
+    <picture id="r.그림2" box="0.3943 0.2913 0.9964 0.9237" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 41%"/>
+  </content>
+</poster>

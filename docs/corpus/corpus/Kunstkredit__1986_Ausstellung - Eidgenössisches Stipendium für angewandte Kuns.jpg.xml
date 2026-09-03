@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1986_Ausstellung - Eidgenössisches Stipendium für angewandte Kuns.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="165.7" unit="px">
+      <axis id="1" at="52"/>
+      <axis id="2" at="217.7"/>
+      <tested how="leave-one-out" error="0.75" null="103.5" ratio="138.1" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.103" null="0.1025" percentile="0.48" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="6" n="1"/>
+      <level id="L3" xh="11" n="1"/>
+      <level id="L4" xh="13" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L4" lines="2" xh="13" lead="21" box="0.3774 0.8413 0.8836 0.8888"/>
+    <block id="r.2" level="L3" lines="1" xh="11" box="0.0864 0.8137 0.2998 0.8387"/>
+    <block id="r.3" level="L2" lines="3" xh="6" lead="12" box="0.3792 0.9025 0.8995 0.9437"/>
+    <block id="r.4" level="L1" lines="1" xh="5" box="0.381 0.9637 0.6667 0.9775"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 87%"/>
+  </content>
+</poster>

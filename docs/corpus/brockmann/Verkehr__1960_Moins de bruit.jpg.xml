@@ -1,0 +1,23 @@
+<poster version="0.1">
+  <source file="1960_Moins de bruit.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="13" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.7788 0.0 0.9221 0.1363" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.2" level="L1" lines="2" xh="13" lead="15" box="0.8195 0.235 0.8407 0.2625"/>
+    <picture id="r.3" box="0.8372 0.2587 0.8973 0.33" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.4" box="0.4124 0.3713 0.4885 0.4375" coverage="0">
+      <picture id="r.4.그림1" box="0.4159 0.3738 0.485 0.435" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 84%"/>
+    </group>
+    <group id="r.5" box="0.3469 0.4375 0.4195 0.4975" coverage="0">
+      <picture id="r.5.그림1" box="0.3504 0.4525 0.4159 0.495" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 88%"/>
+    </group>
+    <picture id="r.6" box="0.2549 0.4825 0.3381 0.59" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 89%"/>
+    <picture id="r.그림2" box="0.5522 0.125 0.9434 0.4562" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 5%"/>
+  </content>
+</poster>

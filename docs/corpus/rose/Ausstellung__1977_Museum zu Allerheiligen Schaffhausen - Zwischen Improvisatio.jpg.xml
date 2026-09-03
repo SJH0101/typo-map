@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1977_Museum zu Allerheiligen Schaffhausen - Zwischen Improvisatio.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="34.8" wobble="0.368" unit="px">
+      <axis id="1" at="320.3"/>
+      <axis id="2" at="368"/>
+      <axis id="3" at="390"/>
+      <tested how="leave-one-out" error="0.5" null="58.03" ratio="116.1" n="6"/>
+    </axes>
+    <baseline-grid found="yes" unit="13">
+      <tested how="null-model" deviation="0.0909" null="0.1326" percentile="0.02" n="11"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="3"/>
+      <level id="L2" xh="8" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="8" lead="17" box="0.5583 0.0175 0.871 0.055"/>
+    <group id="r.2" box="0.5601 0.0563 0.9859 0.3125" coverage="0.441">
+      <block id="r.2.1" level="L2" lines="3" xh="9" lead="21.5" box="0.5618 0.0588 0.9841 0.1298"/>
+      <block id="r.2.2" level="L1" lines="2" xh="5" lead="13" box="0.6466 0.1837 0.7244 0.2087"/>
+      <block id="r.2.3" level="L1" lines="1" xh="5" box="0.6466 0.2325 0.6996 0.2425"/>
+      <group id="r.2.4" box="0.5636 0.265 0.8834 0.31" coverage="0.962">
+        <block id="r.2.4.1" level="L1" lines="3" xh="5" lead="13" box="0.5636 0.2662 0.8816 0.31"/>
+        <block id="r.2.4.2" level="L2" lines="1" xh="7" box="0.6943 0.2674 0.7456 0.2759"/>
+      </group>
+      <picture id="r.2.그림1" box="0.5636 0.145 0.9117 0.265" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 50%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0138 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 87%"/>
+  </content>
+</poster>

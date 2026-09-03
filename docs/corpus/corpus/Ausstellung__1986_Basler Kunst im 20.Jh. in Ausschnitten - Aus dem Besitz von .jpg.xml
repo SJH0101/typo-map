@@ -1,0 +1,14 @@
+<poster version="0.1">
+  <source file="1986_Basler Kunst im 20.Jh. in Ausschnitten - Aus dem Besitz von .jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="42" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="3" xh="42" lead="51.5" box="0.0388 0.025 0.7901 0.22"/>
+    <picture id="r.2" box="0.0265 0.3113 0.2575 0.54" why="대비 37.4 이 이 판 전체 대비 320.6 의 15%(48.1)에 못 미친다"/>
+    <picture id="r.그림1" box="0.2063 0.2213 0.9824 0.9663" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 97%"/>
+  </content>
+</poster>

@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1955_Ausstellung Helmhaus Zürich - Theaterbau von der Antike bis .jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="293.5"/>
+      <tested how="leave-one-out" error="2" null="139" ratio="69.49" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1144" null="0.1221" percentile="0.22" n="11"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="2" n="2"/>
+      <level id="L2" xh="11" n="1"/>
+      <level id="L3" xh="35.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="4" xh="35.5" lead="46" box="0.5168 0.0138 0.9101 0.2312"/>
+    <block id="r.2" level="L2" lines="3" xh="11" lead="15.5" box="0.5115 0.6088 0.6984 0.675"/>
+    <block id="r.3" level="L1" lines="3" xh="2" lead="10.5" box="0.5097 0.68 0.6173 0.7325"/>
+    <block id="r.4" level="L1" lines="1" xh="2" box="0.5115 0.7362 0.5926 0.76"/>
+    <picture id="r.5" box="0.5115 0.7412 0.6049 0.7612" why="대비 18.7 이 이 판 전체 대비 238.2 의 15%(35.7)에 못 미친다"/>
+    <group id="r.6" box="0.5397 0.8113 0.9965 0.985" coverage="0.114">
+      <picture id="r.6.1" box="0.776 0.8287 0.8607 0.8513" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.6.2" box="0.9418 0.885 0.9965 0.9175" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.6.3" box="0.6949 0.9437 0.8554 0.9738" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.6.그림1" box="0.5432 0.8137 0.9929 0.9825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 84%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.2687 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 34%"/>
+    <picture id="r.그림2" box="0.0035 0.0025 0.9965 0.45" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 31%"/>
+  </content>
+</poster>

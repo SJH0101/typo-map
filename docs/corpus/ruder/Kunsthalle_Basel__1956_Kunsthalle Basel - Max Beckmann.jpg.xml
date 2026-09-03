@@ -1,0 +1,12 @@
+<poster version="0.1">
+  <source file="1956_Kunsthalle Basel - Max Beckmann.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system/>
+  <content>
+    <picture id="r.2" box="0.5898 0.8662 0.9842 0.9725" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 84%"/>
+  </content>
+  <unmeasured>
+    <item id="r.1" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

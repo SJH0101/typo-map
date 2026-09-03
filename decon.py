@@ -154,6 +154,13 @@ def analyse(e):
     r = dict(크기=[W, H], 단=columns(bs, W), 격자=grid(bs), 계층=levels(bs),
              n블록=len(bs))
     got, null = rebuild(bs, W)
+    if not len(got) or not len(null):
+        # 남은 마디가 셋도 안 되면 빼놓고 맞힐 수가 없다. 빈 배열의 중앙값은
+        # nan 이고 그것이 조용히 표에 실렸다. 못 잰 것은 못 잤다고 적는다.
+        r['맞힘'] = dict(어긋남중앙=None, 귀무중앙=None, 배수=None, 판폭대비=None,
+                       n=0, 왜=f'마디 {len(bs)}개로는 빼놓고 맞힐 수 없다')
+        r['격자검사'] = grid_null(bs)
+        return r
     # 어긋남이 0 에 가까우면 배수가 터진다 (4.4e+10 이 나왔다). None 으로 둔다.
     r['맞힘'] = dict(
         어긋남중앙=round(float(np.median(got)), 2),

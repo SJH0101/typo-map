@@ -1,0 +1,40 @@
+<poster version="0.1">
+  <source file="1961_Gedächtnis Ausstellungen Paul Burckhardt - Emil Schill - Aus.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="138.2" wobble="0.531" unit="px">
+      <axis id="1" at="132.5"/>
+      <axis id="2" at="197.3"/>
+      <axis id="3" at="409"/>
+      <tested how="leave-one-out" error="1" null="63" ratio="63" n="6"/>
+    </axes>
+    <baseline-grid found="yes" unit="32">
+      <tested how="null-model" deviation="0.0195" null="0.0982" percentile="0" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="14" n="1"/>
+      <level id="L3" xh="22" n="3"/>
+      <level id="L4" xh="51" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="22" box="0.3463 0.3862 0.5689 0.425"/>
+    <block id="r.2" level="L3" lines="2" xh="21" lead="31" box="0.3445 0.43 0.5583 0.5037"/>
+    <block id="r.3" level="L2" lines="1" xh="14" box="0.3498 0.613 0.4399 0.6291"/>
+    <group id="r.4" box="0.7191 0.6587 0.9611 0.8025" coverage="0.592">
+      <block id="r.4.1" level="L4" lines="1" xh="51" box="0.7191 0.6699 0.9594 0.7488"/>
+      <picture id="r.4.2" box="0.7191 0.7488 0.8339 0.79" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.4.그림1" box="0.7862 0.755 0.9576 0.8" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 33%"/>
+    </group>
+    <group id="r.5" box="0.2314 0.8625 0.447 0.9487" coverage="1">
+      <block id="r.5.1" level="L1" lines="1" xh="6" box="0.2314 0.8625 0.3357 0.8675"/>
+      <block id="r.5.2" level="L3" lines="3" xh="22" lead="32.5" box="0.2314 0.8625 0.447 0.9487"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 79%"/>
+    <picture id="r.그림2" box="0.0035 0.4763 0.341 0.7825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+  </content>
+  <unmeasured>
+    <item id="r.6" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

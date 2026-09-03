@@ -1,0 +1,31 @@
+<poster version="0.1">
+  <source file="1957_Kunsthalle Basel - Fernand Léger - Alexander Calder.jpg" w="575" h="798"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="34.7" unit="px">
+      <axis id="1" at="461.3"/>
+      <axis id="2" at="496"/>
+      <tested how="leave-one-out" error="0.75" null="93.61" ratio="124.8" n="4"/>
+    </axes>
+    <baseline-grid found="yes" unit="17">
+      <tested how="null-model" deviation="0.0441" null="0.1109" percentile="0" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="8.8" n="2"/>
+      <level id="L3" xh="11" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.7965 0.6742 0.9322 0.7218" coverage="0.395">
+      <block id="r.1.1" level="L2" lines="1" xh="9" box="0.7965 0.6817 0.9322 0.6992"/>
+      <block id="r.1.2" level="L1" lines="1" xh="6" box="0.833 0.7043 0.9304 0.713"/>
+      <picture id="r.1.그림1" box="0.8 0.6992 0.9287 0.713" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 26%"/>
+      <picture id="r.1.그림2" box="0.8 0.6767 0.9287 0.6817" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 20%"/>
+    </group>
+    <block id="r.2" level="L2" lines="4" xh="8.5" lead="17" box="0.7948 0.7256 0.9322 0.7995"/>
+    <block id="r.3" level="L3" lines="2" xh="11" lead="17" box="0.7965 0.8133 0.9322 0.8496"/>
+    <picture id="r.그림1" box="0.2783 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+    <picture id="r.그림2" box="0.0035 0.1203 0.32 0.6717" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 21%"/>
+  </content>
+</poster>

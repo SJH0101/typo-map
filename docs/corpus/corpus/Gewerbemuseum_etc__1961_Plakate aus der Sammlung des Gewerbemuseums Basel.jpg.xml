@@ -1,0 +1,17 @@
+<poster version="0.1">
+  <source file="1961_Plakate aus der Sammlung des Gewerbemuseums Basel.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="15" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.3665 0.1888 0.5285 0.2787" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.2" level="L1" lines="1" xh="15" box="0.0053 0.3625 0.3897 0.395"/>
+    <picture id="r.3" box="0.0036 0.39 0.2705 0.4675" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.4" box="0.0071 0.4575 0.2438 0.5625" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.6833 0.8925" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 59%"/>
+    <picture id="r.그림2" box="0.3648 0.2988 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 26%"/>
+  </content>
+</poster>

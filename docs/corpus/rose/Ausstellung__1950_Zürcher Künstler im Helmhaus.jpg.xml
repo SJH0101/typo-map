@@ -1,0 +1,40 @@
+<poster version="0.1">
+  <source file="1950_Zürcher Künstler im Helmhaus.jpg" w="572" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="137.7" unit="px">
+      <axis id="1" at="189"/>
+      <axis id="2" at="326.7"/>
+      <tested how="leave-one-out" error="0.75" null="86.01" ratio="114.7" n="4"/>
+    </axes>
+    <baseline-grid found="yes" unit="4.25">
+      <tested how="null-model" deviation="0.1134" null="0.1385" percentile="0.02" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="8.5" n="2"/>
+      <level id="L3" xh="12.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="10" xh="8" lead="17" box="0.5682 0.0125 0.972 0.2325"/>
+    <group id="r.2" box="0.1853 0.595 0.9773 0.77" coverage="0.971">
+      <group id="r.2.1" box="0.1853 0.6 0.9755 0.77" coverage="0.59">
+        <block id="r.2.1.1" level="L3" lines="2" xh="12.5" lead="26" box="0.3371 0.6175 0.5202 0.6475"/>
+        <picture id="r.2.1.2" box="0.5629 0.7238 0.9738 0.77" why="검출기가 상자를 내지 않았다"/>
+        <picture id="r.2.1.그림1" box="0.4493 0.65 0.8252 0.7675" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 34%"/>
+      </group>
+      <group id="r.2.2" box="0.5594 0.6825 0.6678 0.7037" coverage="0">
+        <picture id="r.2.2.그림1" box="0.6031 0.685 0.6206 0.7013" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 23%"/>
+        <picture id="r.2.2.그림2" box="0.6329 0.685 0.6486 0.7013" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 21%"/>
+        <picture id="r.2.2.그림3" box="0.5629 0.685 0.5717 0.7013" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+        <picture id="r.2.2.그림4" box="0.5822 0.685 0.5909 0.7013" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 10%"/>
+      </group>
+    </group>
+    <picture id="r.3" box="0.5752 0.6763 0.6521 0.7075" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.4" level="L1" lines="1" xh="5" box="0.5699 0.7812 0.9738 0.7963"/>
+    <block id="r.5" level="L2" lines="1" xh="9" box="0.5682 0.8662 0.9738 0.8838"/>
+    <picture id="r.그림1" box="0.0035 0.5425 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 41%"/>
+    <picture id="r.그림2" box="0.0035 0.0025 0.9965 0.33" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+  </content>
+</poster>

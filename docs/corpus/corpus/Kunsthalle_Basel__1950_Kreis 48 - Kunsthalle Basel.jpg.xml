@@ -1,0 +1,47 @@
+<poster version="0.1">
+  <source file="1950_Kreis 48 - Kunsthalle Basel.jpg" w="575" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="7" pitch="41" wobble="0.636" unit="px">
+      <axis id="1" at="181"/>
+      <axis id="2" at="222"/>
+      <axis id="3" at="325.5"/>
+      <axis id="4" at="366"/>
+      <axis id="5" at="402"/>
+      <axis id="6" at="476"/>
+      <axis id="7" at="490"/>
+      <tested how="leave-one-out" error="25" null="30.16" ratio="1.21" n="8"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1221" null="0.1017" percentile="0.86" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8.5" n="5"/>
+      <level id="L2" xh="11" n="2"/>
+      <level id="L3" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.8748 0.0112 0.9774 0.0338" coverage="0">
+      <picture id="r.1.그림1" box="0.8783 0.0175 0.9739 0.0312" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 82%"/>
+    </group>
+    <group id="r.2" box="0.5061 0.0288 0.9322 0.0725" coverage="0.508">
+      <block id="r.2.1" level="L3" lines="1" xh="16" box="0.5687 0.0416 0.6991 0.0674"/>
+      <picture id="r.2.2" box="0.8 0.0378 0.9304 0.0699" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.그림1" box="0.5096 0.0313 0.9287 0.0699" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 35%"/>
+    </group>
+    <block id="r.3" level="L1" lines="1" xh="9" box="0.3809 0.1125 0.5096 0.13"/>
+    <group id="r.4" box="0.7304 0.1263 0.8191 0.1475" coverage="0">
+      <picture id="r.4.그림1" box="0.7339 0.1288 0.8157 0.145" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 50%"/>
+    </group>
+    <picture id="r.5" box="0.5548 0.1363 0.6174 0.16" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.6" level="L1" lines="2" xh="9" lead="26" box="0.32 0.18 0.473 0.2288"/>
+    <block id="r.7" level="L2" lines="1" xh="11" box="0.8226 0.1787 0.9357 0.1963"/>
+    <block id="r.8" level="L1" lines="2" xh="8.5" lead="26" box="0.6435 0.195 0.7878 0.24"/>
+    <block id="r.9" level="L1" lines="1" xh="8" box="0.847 0.2947 0.9687 0.3101"/>
+    <block id="r.10" level="L1" lines="1" xh="8" box="0.5635 0.3197 0.6765 0.3363"/>
+    <block id="r.11" level="L2" lines="1" xh="11" box="0.6939 0.915 0.967 0.935"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 75%"/>
+    <picture id="r.그림2" box="0.36 0.8087 0.5791 0.9825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 5%"/>
+  </content>
+</poster>

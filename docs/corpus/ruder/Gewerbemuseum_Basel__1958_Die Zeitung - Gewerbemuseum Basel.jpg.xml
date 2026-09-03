@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1958_Die Zeitung - Gewerbemuseum Basel.jpg" w="570" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="35" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="35" lead="81" box="0.6632 0.8263 0.9105 0.9738"/>
+    <block id="r.2" level="L1" lines="7" xh="6" lead="19" box="0.0228 0.8187 0.2649 0.98"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 96%"/>
+  </content>
+</poster>

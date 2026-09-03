@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1958_Kunsthalle Basel - Sammlung Cavellini - Moderne italienische.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="145.8" wobble="0.324" unit="px">
+      <axis id="1" at="126"/>
+      <axis id="2" at="319"/>
+      <axis id="3" at="417.5"/>
+      <tested how="leave-one-out" error="50.75" null="72.31" ratio="1.42" n="4"/>
+    </axes>
+    <baseline-grid found="yes" unit="23.75">
+      <tested how="null-model" deviation="0.034" null="0.139" percentile="0" n="13"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="15" n="3"/>
+      <level id="L2" xh="18" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="3" xh="15" lead="22" box="0.7337 0.1626 0.9665 0.2411"/>
+    <block id="r.2" level="L2" lines="2" xh="18" lead="23" box="0.7266 0.2512 0.9683 0.3075"/>
+    <block id="r.3" level="L1" lines="4" xh="15.5" lead="24" box="0.2275 0.2775 0.5732 0.425"/>
+    <picture id="r.4" box="0.3228 0.4275 0.4092 0.4587" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.5" level="L1" lines="4" xh="14" lead="24" box="0.5573 0.4326 0.746 0.5475"/>
+    <picture id="r.그림1" box="0.0035 0.0375 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 81%"/>
+  </content>
+</poster>

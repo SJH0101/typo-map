@@ -1,0 +1,26 @@
+<poster version="0.1">
+  <source file="1958_Fly Viscount - the Rolls Royce of the skies - BEA - British .jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="149.5" unit="px">
+      <axis id="1" at="233"/>
+      <axis id="2" at="382.5"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1081" null="0.1016" percentile="0.64" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="13" n="2"/>
+      <level id="L2" xh="22" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="3" xh="13" lead="27" box="0.6702 0.0387 0.9383 0.1363"/>
+    <block id="r.2" level="L2" lines="3" xh="22" lead="35" box="0.4074 0.7037 0.6473 0.8237"/>
+    <block id="r.3" level="L1" lines="3" xh="13" lead="24.5" box="0.6702 0.8287 0.97 0.9125"/>
+    <picture id="r.4" box="0.0617 0.7638 0.2875 0.8488" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9877 0.4975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 56%"/>
+    <picture id="r.그림2" box="0.0035 0.54 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 31%"/>
+  </content>
+</poster>

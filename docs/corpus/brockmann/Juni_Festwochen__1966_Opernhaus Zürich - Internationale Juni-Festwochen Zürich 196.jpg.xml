@@ -1,0 +1,19 @@
+<poster version="0.1">
+  <source file="1966_Opernhaus Zürich - Internationale Juni-Festwochen Zürich 196.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="17.5" n="1"/>
+      <level id="L2" xh="51.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="51.5" lead="85" box="0.2293 0.145 0.9206 0.3212"/>
+    <block id="r.2" level="L1" lines="2" xh="17.5" lead="28" box="0.0705 0.38 0.7549 0.4425"/>
+    <picture id="r.3" box="0.3351 0.4738 0.5891 0.6625" why="대비 4.6 이 이 판 전체 대비 199.5 의 15%(29.9)에 못 미친다"/>
+    <picture id="r.4" box="0.6049 0.4738 0.8889 0.84" why="대비 5.2 이 이 판 전체 대비 199.5 의 15%(29.9)에 못 미친다"/>
+    <picture id="r.5" box="0.0723 0.4763 0.3192 0.84" why="대비 13.3 이 이 판 전체 대비 199.5 의 15%(29.9)에 못 미친다"/>
+    <picture id="r.6" box="0.3351 0.6863 0.5802 0.8387" why="대비 6.6 이 이 판 전체 대비 199.5 의 15%(29.9)에 못 미친다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 75%"/>
+  </content>
+</poster>

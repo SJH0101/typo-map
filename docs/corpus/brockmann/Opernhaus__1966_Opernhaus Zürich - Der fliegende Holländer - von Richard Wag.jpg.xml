@@ -1,0 +1,32 @@
+<poster version="0.1">
+  <source file="1966_Opernhaus Zürich - Der fliegende Holländer - von Richard Wag.jpg" w="570" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="41.2"/>
+      <tested how="leave-one-out" error="1.65" null="253.1" ratio="153.4" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1065" null="0.0883" percentile="0.92" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="1"/>
+      <level id="L2" xh="10" n="1"/>
+      <level id="L3" xh="45.5" n="1"/>
+      <level id="L4" xh="62" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0596 0.1025 0.9263 0.6975" coverage="0.638">
+      <block id="r.1.1" level="L4" lines="2" xh="62" lead="87" box="0.0596 0.135 0.9246 0.315"/>
+      <block id="r.1.2" level="L3" lines="2" xh="45.5" lead="82" box="0.0596 0.5212 0.7912 0.6975"/>
+      <picture id="r.1.그림1" box="0.0632 0.315 0.9228 0.695" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 20%"/>
+      <picture id="r.1.그림2" box="0.0632 0.105 0.9228 0.1237" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+      <picture id="r.1.그림3" box="0.0684 0.3712 0.4456 0.4225" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <block id="r.2" level="L2" lines="2" xh="10" lead="16" box="0.0702 0.3787 0.4439 0.4125"/>
+    <picture id="r.3" box="0.0702 0.4713 0.1947 0.5062" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.4" level="L1" lines="1" xh="8" box="0.0719 0.8125 0.3456 0.8263"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 40%"/>
+  </content>
+</poster>

@@ -1,0 +1,45 @@
+<poster version="0.1">
+  <source file="1966_Opernhaus Zürich - Wenn ich König wär... - Oper von Adolphe .jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="183.9" unit="px">
+      <axis id="1" at="41.4"/>
+      <axis id="2" at="225.3"/>
+      <tested how="leave-one-out" error="0.7" null="115" ratio="164.3" n="10"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0903" null="0.1138" percentile="0.12" n="10"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="7"/>
+      <level id="L2" xh="11" n="1"/>
+      <level id="L3" xh="21" n="1"/>
+      <level id="L4" xh="62.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0621 0.1325 0.9238 0.8275" coverage="0.588">
+      <block id="r.1.1" level="L4" lines="2" xh="62.5" lead="87" box="0.0621 0.1463 0.9149 0.3275"/>
+      <group id="r.1.2" box="0.0621 0.4938 0.8848 0.705" coverage="0.421">
+        <block id="r.1.2.2" level="L3" lines="1" xh="21" box="0.0621 0.6738 0.8848 0.705"/>
+        <picture id="r.1.2.그림1" box="0.0656 0.4963 0.8812 0.6025" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 55%"/>
+      </group>
+      <block id="r.1.3" level="L1" lines="1" xh="9" box="0.0709 0.7663 0.3794 0.785"/>
+      <block id="r.1.4" level="L1" lines="1" xh="8" box="0.3954 0.7675 0.5585 0.7825"/>
+      <group id="r.1.5" box="0.0691 0.7837 0.6223 0.8275" coverage="0.719">
+        <block id="r.1.5.1" level="L1" lines="2" xh="8" lead="15" box="0.0691 0.7875 0.6206 0.8213"/>
+        <block id="r.1.5.2" level="L2" lines="1" xh="11" box="0.3936 0.7875 0.5496 0.8013"/>
+        <picture id="r.1.5.그림1" box="0.0727 0.8225 0.6188 0.825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+      </group>
+      <picture id="r.1.그림1" box="0.0656 0.3613 0.9149 0.825" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 41%"/>
+    </group>
+    <block id="r.2" level="L1" lines="1" xh="9" box="0.0709 0.3738 0.6596 0.3912"/>
+    <block id="r.3" level="L1" lines="1" xh="8" box="0.0709 0.7362 0.6489 0.755"/>
+    <block id="r.4" level="L1" lines="1" xh="8" box="0.3954 0.825 0.5833 0.84"/>
+    <block id="r.5" level="L1" lines="1" xh="8" box="0.0709 0.8263 0.1613 0.84"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 58%"/>
+  </content>
+  <unmeasured>
+    <item id="r.1.2.1" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

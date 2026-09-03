@@ -1,0 +1,15 @@
+<poster version="0.1">
+  <source file="1958_Werkstoff Holz - Ausstellung im Gewerbemuseum Basel.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="7" n="1"/>
+      <level id="L2" xh="16" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="5" xh="7" lead="15.5" box="0.6314 0.0225 0.8113 0.1138"/>
+    <block id="r.2" level="L2" lines="7" xh="16" lead="33" box="0.6349 0.7075 0.9224 0.9875"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 88%"/>
+  </content>
+</poster>

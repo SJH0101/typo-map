@@ -1,0 +1,25 @@
+<poster version="0.1">
+  <source file="1970_Lohse - Kunsthalle Bern.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="123.5" unit="px">
+      <axis id="1" at="162"/>
+      <axis id="2" at="285.5"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0515" null="0.0818" percentile="0.06" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="1"/>
+      <level id="L2" xh="17" n="1"/>
+      <level id="L3" xh="26" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="26" box="0.2796 0.6475 0.5115 0.6913"/>
+    <block id="r.2" level="L1" lines="4" xh="8" lead="14" box="0.4991 0.8125 0.8779 0.8812"/>
+    <block id="r.3" level="L2" lines="1" xh="17" box="0.4991 0.9262 0.8761 0.9475"/>
+    <picture id="r.그림1" box="0.0035 0.035 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 92%"/>
+  </content>
+</poster>

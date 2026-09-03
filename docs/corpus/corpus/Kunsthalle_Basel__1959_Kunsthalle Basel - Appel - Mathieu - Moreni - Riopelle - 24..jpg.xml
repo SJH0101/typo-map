@@ -1,0 +1,18 @@
+<poster version="0.1">
+  <source file="1959_Kunsthalle Basel - Appel - Mathieu - Moreni - Riopelle - 24..jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="60" n="1"/>
+      <level id="L2" xh="96" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.3422 0.09 0.4344 0.1537" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.2" level="L1" lines="1" xh="60" box="0.672 0.1888 0.9876 0.29"/>
+    <picture id="r.3" box="0.1241 0.545 0.3457 0.625" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.4" level="L2" lines="1" xh="96" box="0.3865 0.8312 0.8812 0.9712"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.46" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 40%"/>
+    <picture id="r.그림2" box="0.0035 0.45 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 31%"/>
+  </content>
+</poster>

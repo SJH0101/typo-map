@@ -1,0 +1,25 @@
+<poster version="0.1">
+  <source file="1959_Kunsthalle Basel - Hans Fischer - Ernst Georg Rüegg.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="14.7"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="yes" unit="39.75">
+      <tested how="null-model" deviation="0.0178" null="0.0838" percentile="0" n="6"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="27" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="2" xh="27" lead="40" box="0.0231 0.3438 0.2931 0.435"/>
+    <block id="r.2" level="L1" lines="2" xh="26.5" lead="40" box="0.0213 0.4425 0.3339 0.5337"/>
+    <block id="r.3" level="L1" lines="2" xh="30.5" lead="43" box="0.016 0.5437 0.3108 0.6362"/>
+    <picture id="r.그림1" box="0.302 0.0025 0.9964 0.86" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 88%"/>
+  </content>
+  <unmeasured>
+    <item id="r.4" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>

@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1965_Opernhaus Zürich - Schwanensee - Ballett von Peter I. Tschai.jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="40.3"/>
+      <tested how="leave-one-out" error="0.8" null="251.9" ratio="314.8" n="6"/>
+    </axes>
+    <baseline-grid found="yes" unit="11">
+      <tested how="null-model" deviation="0.0606" null="0.1065" percentile="0.02" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="11" n="4"/>
+      <level id="L2" xh="37" n="1"/>
+      <level id="L3" xh="62" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="2" xh="62" lead="87" box="0.0604 0.1325 0.9272 0.3287"/>
+    <block id="r.2" level="L1" lines="1" xh="12" box="0.0675 0.3787 0.6341 0.4"/>
+    <block id="r.3" level="L1" lines="1" xh="11" box="0.0675 0.53 0.357 0.5513"/>
+    <block id="r.4" level="L2" lines="1" xh="37" box="0.0657 0.5837 0.849 0.63"/>
+    <block id="r.5" level="L1" lines="1" xh="11" box="0.0675 0.7238 0.6199 0.745"/>
+    <block id="r.6" level="L1" lines="3" xh="11" lead="21.5" box="0.0657 0.7688 0.8686 0.8438"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 62%"/>
+  </content>
+</poster>

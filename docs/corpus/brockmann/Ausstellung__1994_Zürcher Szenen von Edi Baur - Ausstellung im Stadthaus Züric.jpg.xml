@@ -1,0 +1,36 @@
+<poster version="0.1">
+  <source file="1994_Zürcher Szenen von Edi Baur - Ausstellung im Stadthaus Züric.jpg" w="568" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="152.5" wobble="0.228" unit="px">
+      <axis id="1" at="12"/>
+      <axis id="2" at="199.3"/>
+      <axis id="3" at="317"/>
+      <tested how="leave-one-out" error="1" null="61.14" ratio="61.14" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1103" null="0.0998" percentile="0.68" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="6.5" n="1"/>
+      <level id="L2" xh="8" n="2"/>
+      <level id="L3" xh="11" n="1"/>
+      <level id="L4" xh="22" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0123 0.4338 0.9842 0.5225" coverage="0.33">
+      <block id="r.1.1" level="L4" lines="1" xh="22" box="0.5325 0.44 0.9824 0.48"/>
+      <block id="r.1.2" level="L3" lines="1" xh="11" box="0.0123 0.5012 0.5431 0.5188"/>
+      <picture id="r.1.그림1" box="0.0158 0.48 0.9016 0.52" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 48%"/>
+      <picture id="r.1.그림2" box="0.044 0.4363 0.6485 0.44" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <group id="r.2" box="0.3468 0.7362 0.6356 0.835" coverage="0.426">
+      <block id="r.2.1" level="L2" lines="1" xh="8" box="0.3468 0.7387 0.6338 0.7512"/>
+      <block id="r.2.2" level="L2" lines="1" xh="8" box="0.3468 0.82 0.4443 0.8325"/>
+      <picture id="r.2.그림1" box="0.3504 0.7512 0.632 0.8325" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 51%"/>
+    </group>
+    <block id="r.3" level="L1" lines="4" xh="6.5" lead="13" box="0.3468 0.93 0.6127 0.9875"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 76%"/>
+  </content>
+</poster>

@@ -1,0 +1,71 @@
+<poster version="0.1">
+  <source file="1960_Juni-Festwochen Zürich 1960 - Stadttheater.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="5" pitch="81.4" wobble="0.429" unit="px">
+      <axis id="1" at="59.2"/>
+      <axis id="2" at="139"/>
+      <axis id="3" at="222"/>
+      <axis id="4" at="301.9"/>
+      <axis id="5" at="463.5"/>
+      <tested how="leave-one-out" error="1" null="39.24" ratio="39.24" n="21"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1467" null="0.1596" percentile="0.16" n="21"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="3" n="1"/>
+      <level id="L2" xh="4" n="13"/>
+      <level id="L3" xh="10.5" n="4"/>
+      <level id="L4" xh="15.5" n="2"/>
+      <level id="L5" xh="39" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L4" lines="1" xh="16" box="0.2314 0.0275 0.8922 0.0587"/>
+    <block id="r.2" level="L5" lines="1" xh="39" box="0.0883 0.12 0.9647 0.165"/>
+    <group id="r.3" box="0.2456 0.2612 0.7933 0.9725" coverage="0.444">
+      <picture id="r.3.1" box="0.2456 0.8975 0.3922 0.9388" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.3.2" box="0.6749 0.9363 0.7827 0.9713" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.3.3" level="L1" lines="2" xh="3.5" lead="7" box="0.3887 0.955 0.4717 0.9662"/>
+      <picture id="r.3.그림1" box="0.2509 0.9575 0.4134 0.97" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+      <picture id="r.3.그림2" box="0.6078 0.895 0.6802 0.915" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+      <picture id="r.3.그림3" box="0.5654 0.915 0.6307 0.9375" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <block id="r.4" level="L3" lines="1" xh="11" box="0.1042 0.2975 0.1961 0.3163"/>
+    <block id="r.5" level="L4" lines="1" xh="15" box="0.5389 0.3425 0.7792 0.36"/>
+    <picture id="r.6" box="0.8145 0.2975 0.9258 0.4025" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.7" level="L2" lines="1" xh="4" box="0.53 0.2988 0.6502 0.31"/>
+    <block id="r.8" level="L2" lines="1" xh="4" box="0.53 0.3663 0.6484 0.38"/>
+    <group id="r.9" box="0.1042 0.3675 0.2297 0.5625" coverage="0">
+      <picture id="r.9.그림1" box="0.1961 0.37 0.2261 0.5" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 68%"/>
+      <picture id="r.9.그림2" box="0.1078 0.52 0.2261 0.56" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+    </group>
+    <block id="r.10" level="L2" lines="1" xh="4" box="0.5318 0.4462 0.6484 0.4575"/>
+    <block id="r.11" level="L2" lines="2" xh="4" lead="6" box="0.8163 0.4462 0.9329 0.4637"/>
+    <block id="r.12" level="L2" lines="1" xh="4" box="0.5318 0.5262 0.6502 0.5375"/>
+    <block id="r.13" level="L2" lines="2" xh="4" lead="7" box="0.2491 0.5288 0.3569 0.545"/>
+    <block id="r.14" level="L2" lines="2" xh="4" lead="7" box="0.1042 0.6072 0.1696 0.6226"/>
+    <block id="r.15" level="L2" lines="1" xh="4" box="0.5318 0.6038 0.6502 0.615"/>
+    <picture id="r.16" box="0.818 0.605 0.9258 0.7638" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.17" level="L2" lines="1" xh="4" box="0.2491 0.6062 0.3675 0.6238"/>
+    <block id="r.18" level="L3" lines="1" xh="10" box="0.106 0.6763 0.1979 0.6925"/>
+    <block id="r.19" level="L1" lines="1" xh="3" box="0.5318 0.6737 0.6502 0.6863"/>
+    <block id="r.20" level="L3" lines="1" xh="10" box="0.1042 0.7462 0.2049 0.7638"/>
+    <block id="r.21" level="L2" lines="1" xh="4" box="0.53 0.7462 0.6502 0.7575"/>
+    <block id="r.22" level="L1" lines="2" xh="3.5" lead="6" box="0.2491 0.75 0.3657 0.7662"/>
+    <picture id="r.23" box="0.1025 0.8087 0.2049 0.895" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.24" box="0.6731 0.8113 0.7792 0.8988" coverage="0">
+      <picture id="r.24.그림1" box="0.6767 0.82 0.7756 0.8962" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 77%"/>
+    </group>
+    <block id="r.25" level="L2" lines="1" xh="4" box="0.818 0.8163 0.9099 0.8275"/>
+    <group id="r.26" box="0.2527 0.8263 0.3587 0.8488" coverage="0">
+      <picture id="r.26.그림1" box="0.311 0.8287 0.3551 0.8463" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 65%"/>
+    </group>
+    <group id="r.27" box="0.818 0.9363 0.947 0.9675" coverage="0">
+      <picture id="r.27.그림1" box="0.9223 0.9387 0.9435 0.965" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    </group>
+    <block id="r.28" level="L3" lines="1" xh="11" box="0.1042 0.9375 0.2049 0.9563"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.6525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 47%"/>
+  </content>
+</poster>

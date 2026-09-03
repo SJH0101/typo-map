@@ -1,0 +1,29 @@
+<poster version="0.1">
+  <source file="1949_Goethe - Iphigenie auf Tauris - Stadt Theater Basel.jpg" w="571" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="103.5" wobble="0.024" unit="px">
+      <axis id="1" at="174"/>
+      <axis id="2" at="275"/>
+      <axis id="3" at="381"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="6" n="1"/>
+      <level id="L2" xh="20" n="1"/>
+      <level id="L3" xh="81" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.3065 0.5663 0.4641 0.6975" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.2" box="0.606 0.6062 1.0 0.7075" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.3" level="L3" lines="2" xh="81" lead="82" box="0.289 0.705 0.9982 0.95"/>
+    <group id="r.4" box="0.4764 0.9525 0.9702 1.0" coverage="0.655">
+      <block id="r.4.1" level="L1" lines="1" xh="6" box="0.6375 0.9525 0.9685 0.9587"/>
+      <block id="r.4.2" level="L2" lines="1" xh="20" box="0.4764 0.9663 0.9702 0.995"/>
+      <picture id="r.4.그림1" box="0.4799 0.955 0.7706 0.9663" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 20%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.1037 0.7145 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 44%"/>
+    <picture id="r.그림2" box="0.6305 0.1787 0.9965 0.4213" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+  </content>
+</poster>

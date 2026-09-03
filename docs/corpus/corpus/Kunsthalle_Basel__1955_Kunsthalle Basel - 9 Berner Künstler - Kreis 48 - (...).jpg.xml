@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1955_Kunsthalle Basel - 9 Berner Künstler - Kreis 48 - (...).jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="436.8" unit="px">
+      <axis id="1" at="12.7"/>
+      <axis id="2" at="449.5"/>
+      <tested how="leave-one-out" error="1" null="118.2" ratio="118.2" n="5"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1458" null="0.1401" percentile="0.68" n="16"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="9" n="5"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="5" xh="9" lead="18.5" box="0.0178 0.02 0.2398 0.2638"/>
+    <block id="r.2" level="L1" lines="2" xh="8.5" lead="19" box="0.7957 0.1325 0.9076 0.1688"/>
+    <block id="r.3" level="L1" lines="2" xh="10" lead="18" box="0.0178 0.4462 0.1172 0.485"/>
+    <block id="r.4" level="L1" lines="1" xh="10" box="0.0178 0.5275 0.206 0.5438"/>
+    <group id="r.5" box="0.7904 0.6062 0.865 0.6488" coverage="0">
+      <picture id="r.5.그림1" box="0.794 0.6087 0.8615 0.6463" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 70%"/>
+    </group>
+    <group id="r.6" box="0.7922 0.7512 0.9307 0.9762" coverage="0.495">
+      <picture id="r.6.1" box="0.8597 0.7787 0.9201 0.815" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.6.2" level="L1" lines="6" xh="9" lead="18" box="0.7922 0.8462 0.9218 0.9738"/>
+      <picture id="r.6.그림1" box="0.7957 0.7537 0.9272 0.8462" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 45%"/>
+    </group>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 72%"/>
+    <picture id="r.그림2" box="0.1723 0.1575 0.5631 0.4963" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 12%"/>
+  </content>
+</poster>

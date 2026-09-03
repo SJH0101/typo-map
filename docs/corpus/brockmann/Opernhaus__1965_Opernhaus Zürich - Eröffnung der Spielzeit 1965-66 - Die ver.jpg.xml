@@ -1,0 +1,35 @@
+<poster version="0.1">
+  <source file="1965_Opernhaus Zürich - Eröffnung der Spielzeit 1965-66 - Die ver.jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="424" unit="px">
+      <axis id="1" at="83"/>
+      <axis id="2" at="507"/>
+      <tested how="leave-one-out" error="0" null="107" n="6"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.0893" null="0.0989" percentile="0.3" n="8"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="3"/>
+      <level id="L2" xh="31" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="32" box="0.1413 0.055 0.9011 0.1175"/>
+    <block id="r.2" level="L1" lines="1" xh="8" box="0.1449 0.1225 0.5371 0.1412"/>
+    <block id="r.3" level="L2" lines="1" xh="31" box="0.1431 0.31 0.9576 0.37"/>
+    <picture id="r.4" box="0.1449 0.3762 0.6873 0.4763" why="대비 4.1 이 이 판 전체 대비 69.4 의 15%(10.4)에 못 미친다"/>
+    <picture id="r.5" box="0.7155 0.4062 0.9523 0.4738" why="대비 7.2 이 이 판 전체 대비 69.4 의 15%(10.4)에 못 미친다"/>
+    <block id="r.6" level="L2" lines="1" xh="30" box="0.1413 0.774 0.8958 0.8238"/>
+    <block id="r.7" level="L1" lines="4" xh="8" lead="14" box="0.1431 0.6462 0.6784 0.7238"/>
+    <block id="r.8" level="L1" lines="2" xh="8" lead="28" box="0.9011 0.6775 0.9382 0.7238"/>
+    <picture id="r.9" box="0.1431 0.8313 0.689 0.9113" why="대비 6.9 이 이 판 전체 대비 69.4 의 15%(10.4)에 못 미친다"/>
+    <group id="r.10" box="0.7138 0.8612 0.9488 0.9125" coverage="0">
+      <picture id="r.10.그림1" box="0.9258 0.88 0.9452 0.91" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 63%"/>
+      <picture id="r.10.그림2" box="0.9258 0.8675 0.9329 0.8687" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.4062 0.9329 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 29%"/>
+    <picture id="r.그림2" box="0.0071 0.0025 0.7703 0.31" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+  </content>
+</poster>

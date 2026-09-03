@@ -1,0 +1,39 @@
+<poster version="0.1">
+  <source file="1953_Stadt Casino - Rotkreuz Bazar - Werk der Gemeindeschwestern .jpg" w="566" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="197.5" unit="px">
+      <axis id="1" at="281"/>
+      <axis id="2" at="478.5"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1087" null="0.1261" percentile="0.12" n="10"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="4.8" n="2"/>
+      <level id="L2" xh="6" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.3092 0.0 0.5813 0.1725" coverage="0.035">
+      <picture id="r.1.1" box="0.4117 0.0462 0.4541 0.0675" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.1.2" box="0.4205 0.1112 0.5389 0.1487" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.1.그림1" box="0.3127 0.0025 0.5777 0.17" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 75%"/>
+    </group>
+    <group id="r.2" box="0.3463 0.7388 0.5742 0.9912" coverage="0.124">
+      <picture id="r.2.1" box="0.424 0.8512 0.5141 0.9675" why="검출기가 상자를 내지 않았다"/>
+      <block id="r.2.2" level="L1" lines="3" xh="5" lead="9" box="0.4982 0.8538 0.5212 0.8838"/>
+      <picture id="r.2.3" box="0.523 0.8575 0.553 0.88" why="검출기가 상자를 내지 않았다"/>
+      <picture id="r.2.그림1" box="0.3498 0.7412 0.5707 0.9888" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 68%"/>
+    </group>
+    <group id="r.3" box="0.6908 0.7588 0.97 0.9725" coverage="0.988">
+      <block id="r.3.1" level="L2" lines="5" xh="6" lead="20.5" box="0.8498 0.7913 0.9664 0.8988"/>
+      <block id="r.3.2" level="L1" lines="2" xh="4.5" lead="11" box="0.8516 0.9475 0.9594 0.97"/>
+    </group>
+    <picture id="r.그림1" box="0.3569 0.0025 0.9965 0.4363" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+    <picture id="r.그림2" box="0.3534 0.3237 0.9965 0.7238" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 24%"/>
+    <picture id="r.그림3" box="0.0035 0.0025 0.3339 0.4775" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 17%"/>
+    <picture id="r.그림4" box="0.0318 0.5425 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+  </content>
+</poster>

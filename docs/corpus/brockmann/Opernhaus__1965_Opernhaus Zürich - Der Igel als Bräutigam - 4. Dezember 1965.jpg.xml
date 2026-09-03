@@ -1,0 +1,32 @@
+<poster version="0.1">
+  <source file="1965_Opernhaus Zürich - Der Igel als Bräutigam - 4. Dezember 1965.jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="3" pitch="144.2" wobble="0.054" unit="px">
+      <axis id="1" at="38.7"/>
+      <axis id="2" at="175"/>
+      <axis id="3" at="327"/>
+      <tested how="leave-one-out" error="8.5" null="79.69" ratio="9.37" n="5"/>
+    </axes>
+    <baseline-grid found="yes" unit="6.25">
+      <tested how="null-model" deviation="0.0514" null="0.092" percentile="0" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="3"/>
+      <level id="L2" xh="11" n="1"/>
+      <level id="L3" xh="70.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="4" xh="70.5" lead="88" box="0.0638 0.1275 0.9202 0.7175"/>
+    <block id="r.2" level="L1" lines="1" xh="8" box="0.0691 0.3738 0.3121 0.3925"/>
+    <picture id="r.3" box="0.0585 0.5112 0.2748 0.5863" why="검출기가 상자를 내지 않았다"/>
+    <group id="r.4" box="0.0709 0.7388 0.8404 0.845" coverage="0.211">
+      <block id="r.4.1" level="L2" lines="1" xh="11" box="0.0709 0.83 0.1897 0.8438"/>
+      <block id="r.4.2" level="L1" lines="1" xh="8" box="0.3067 0.83 0.422 0.8438"/>
+      <block id="r.4.3" level="L1" lines="1" xh="8" box="0.5762 0.83 0.7979 0.8438"/>
+      <picture id="r.4.그림1" box="0.3245 0.8237 0.8369 0.8425" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 66%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 57%"/>
+  </content>
+</poster>

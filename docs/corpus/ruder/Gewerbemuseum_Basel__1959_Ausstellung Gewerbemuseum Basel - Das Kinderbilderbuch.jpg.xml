@@ -1,0 +1,23 @@
+<poster version="0.1">
+  <source file="1959_Ausstellung Gewerbemuseum Basel - Das Kinderbilderbuch.jpg" w="567" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <levels>
+      <level id="L1" xh="7" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.2857 0.03 0.4656 0.0775" why="대비 32.1 이 이 판 전체 대비 219.2 의 15%(32.9)에 못 미친다"/>
+    <picture id="r.2" box="0.5538 0.03 0.7407 0.0663" why="대비 26.8 이 이 판 전체 대비 219.2 의 15%(32.9)에 못 미친다"/>
+    <block id="r.3" level="L1" lines="3" xh="7" lead="12.5" box="0.0071 0.0338 0.1887 0.0788"/>
+    <block id="r.4" level="L1" lines="1" xh="7" box="0.5556 0.0625 0.6649 0.0788"/>
+    <picture id="r.5" box="0.2857 0.0762 0.9982 0.1412" why="대비 25.1 이 이 판 전체 대비 219.2 의 15%(32.9)에 못 미친다"/>
+    <group id="r.6" box="0.0018 0.0775 0.1623 0.145" coverage="0">
+      <picture id="r.6.그림1" box="0.0053 0.08 0.1587 0.1425" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 74%"/>
+      <picture id="r.6.그림2" box="0.0229 0.1068 0.0476 0.1284" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+    </group>
+    <picture id="r.그림1" box="0.0035 0.1475 0.8942 0.975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 79%"/>
+    <picture id="r.그림2" box="0.5185 0.4888 0.9965 0.6625" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 10%"/>
+    <picture id="r.그림3" box="0.7496 0.6438 0.8942 0.9762" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+  </content>
+</poster>

@@ -1,0 +1,28 @@
+<poster version="0.1">
+  <source file="1965_Opernhaus Zürich - Andrea Chenier - Musikalisches Drama von .jpg" w="563" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="1" unit="px">
+      <axis id="1" at="42.2"/>
+      <tested how="leave-one-out" error="1" null="248.5" ratio="248.5" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.102" null="0.0886" percentile="0.76" n="7"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="10" n="3"/>
+      <level id="L2" xh="61.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="2" xh="61.5" lead="87" box="0.0639 0.1413 0.9165 0.3262"/>
+    <block id="r.2" level="L1" lines="1" xh="10" box="0.071 0.3962 0.4867 0.4288"/>
+    <block id="r.3" level="L1" lines="2" xh="9" lead="21" box="0.0728 0.7687 0.6927 0.8137"/>
+    <block id="r.4" level="L1" lines="2" xh="10.5" lead="29" box="0.071 0.7037 0.794 0.7625"/>
+    <group id="r.5" box="0.0746 0.8187 0.4245 0.84" coverage="0">
+      <picture id="r.5.그림1" box="0.0782 0.8212 0.421 0.8375" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 73%"/>
+    </group>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.38" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 35%"/>
+    <picture id="r.그림2" box="0.0036 0.7675 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+  </content>
+</poster>

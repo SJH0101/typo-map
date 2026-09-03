@@ -1,0 +1,24 @@
+<poster version="0.1">
+  <source file="1962_Richard P. Lohse - Max Truninger - Kunsthaus Zürich.jpg" w="565" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="227.5" unit="px">
+      <axis id="1" at="13"/>
+      <axis id="2" at="240.5"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1061" null="0.1219" percentile="0.18" n="11"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="23.2" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="1" xh="23" box="0.4248 0.0113 0.977 0.0562"/>
+    <block id="r.2" level="L1" lines="6" xh="5" lead="11" box="0.0195 0.07 0.2549 0.1562"/>
+    <block id="r.3" level="L2" lines="4" xh="23.5" lead="36" box="0.4265 0.835 0.9044 0.98"/>
+    <picture id="r.그림1" box="0.023 0.165 0.9752 0.8363" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 91%"/>
+  </content>
+</poster>

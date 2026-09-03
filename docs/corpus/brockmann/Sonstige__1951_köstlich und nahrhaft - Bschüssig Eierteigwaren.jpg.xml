@@ -1,0 +1,27 @@
+<poster version="0.1">
+  <source file="1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="52" wobble="1.704" unit="px">
+      <axis id="1" at="0"/>
+      <axis id="2" at="225"/>
+      <axis id="3" at="250"/>
+      <axis id="4" at="302"/>
+      <tested how="leave-one-out" error="38.5" null="63.85" ratio="1.66" n="4"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="4" n="1"/>
+      <level id="L2" xh="5" n="1"/>
+      <level id="L3" xh="6" n="1"/>
+      <level id="L4" xh="10" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L4" lines="1" xh="10" box="0.3954 0.5663 0.7358 0.585"/>
+    <picture id="r.2" box="0.3759 0.595 0.8032 0.7125" why="대비 28.1 이 이 판 전체 대비 198.1 의 15%(29.7)에 못 미친다"/>
+    <block id="r.3" level="L3" lines="1" xh="6" box="0.5408 0.7788 0.6152 0.7975"/>
+    <block id="r.4" level="L2" lines="1" xh="5" box="0.4486 0.9137 0.6879 0.9313"/>
+    <block id="r.5" level="L1" lines="1" xh="4" box="0.0035 0.9163 0.2589 0.9313"/>
+    <picture id="r.그림1" box="0.0053 0.0025 0.984 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 93%"/>
+  </content>
+</poster>

@@ -1,0 +1,44 @@
+<poster version="0.1">
+  <source file="1957_Musica Viva - Grosser Saal Tonhalle - Leitung Erich Schmid.jpg" w="560" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="5" pitch="108.5" wobble="0.443" unit="px">
+      <axis id="1" at="6.5"/>
+      <axis id="2" at="86"/>
+      <axis id="3" at="144.5"/>
+      <axis id="4" at="282"/>
+      <axis id="5" at="462.3"/>
+      <tested how="leave-one-out" error="1" null="42.21" ratio="42.21" n="9"/>
+    </axes>
+    <baseline-grid found="yes" unit="17.5">
+      <tested how="null-model" deviation="0.0643" null="0.1471" percentile="0" n="16"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="9" n="9"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L1" lines="3" xh="9" lead="17" box="0.4982 0.235 0.7286 0.2725"/>
+    <group id="r.2" box="0.7446 0.02 0.9946 0.1663" coverage="0.161">
+      <block id="r.2.1" level="L1" lines="2" xh="9" lead="17" box="0.8286 0.0225 0.9946 0.06"/>
+      <block id="r.2.2" level="L1" lines="1" xh="8" box="0.8304 0.1125 0.9018 0.12"/>
+      <block id="r.2.3" level="L1" lines="1" xh="11" box="0.8321 0.1525 0.8911 0.165"/>
+      <picture id="r.2.그림1" box="0.7482 0.0225 0.9571 0.1638" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 76%"/>
+    </group>
+    <group id="r.3" box="0.0089 0.0225 0.4804 0.235" coverage="0.436">
+      <group id="r.3.1" box="0.2536 0.0225 0.4786 0.2125" coverage="0.503">
+        <block id="r.3.1.1" level="L1" lines="5" xh="9" lead="17" box="0.2554 0.0238 0.475 0.1237"/>
+        <block id="r.3.1.2" level="L1" lines="1" xh="8" box="0.2554 0.1791 0.3982 0.1875"/>
+        <picture id="r.3.1.그림1" box="0.2571 0.125 0.475 0.21" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 44%"/>
+      </group>
+      <block id="r.3.2" level="L1" lines="1" xh="10" box="0.1607 0.1312 0.2411 0.1475"/>
+      <block id="r.3.3" level="L1" lines="2" xh="9" lead="17" box="0.0089 0.1987 0.2411 0.2325"/>
+      <picture id="r.3.그림1" box="0.0125 0.025 0.2536 0.1912" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 49%"/>
+    </group>
+    <block id="r.4" level="L1" lines="1" xh="8" box="0.0071 0.0238 0.1554 0.04"/>
+    <picture id="r.5" box="0.0071 0.0663 0.1643 0.1688" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0036 0.0025 0.9964 0.8625" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 42%"/>
+    <picture id="r.그림2" box="0.1429 0.8575 0.9482 0.9962" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 14%"/>
+    <picture id="r.그림3" box="0.5339 0.8037 0.9964 0.985" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 6%"/>
+  </content>
+</poster>

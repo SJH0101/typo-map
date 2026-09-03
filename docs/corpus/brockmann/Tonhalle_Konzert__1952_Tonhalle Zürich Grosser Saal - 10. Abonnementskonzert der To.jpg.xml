@@ -1,0 +1,40 @@
+<poster version="0.1">
+  <source file="1952_Tonhalle Zürich Grosser Saal - 10. Abonnementskonzert der To.jpg" w="569" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="6" pitch="48" wobble="0.725" unit="px">
+      <axis id="1" at="162"/>
+      <axis id="2" at="199"/>
+      <axis id="3" at="247"/>
+      <axis id="4" at="272"/>
+      <axis id="5" at="340"/>
+      <axis id="6" at="464"/>
+      <tested how="leave-one-out" error="25" null="32.95" ratio="1.32" n="7"/>
+    </axes>
+    <baseline-grid found="yes" unit="8.75">
+      <tested how="null-model" deviation="0.0714" null="0.1216" percentile="0.02" n="10"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="5" n="1"/>
+      <level id="L2" xh="8" n="3"/>
+      <level id="L3" xh="10" n="1"/>
+      <level id="L4" xh="21" n="1"/>
+      <level id="L5" xh="27.5" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L2" lines="4" xh="8.5" lead="18" box="0.4306 0.4637 0.5395 0.555"/>
+    <picture id="r.2" box="0.594 0.46 0.9824 0.5212" why="대비 16.7 이 이 판 전체 대비 155.5 의 15%(23.3)에 못 미친다"/>
+    <block id="r.3" level="L4" lines="1" xh="21" box="0.8263 0.5652 0.8787 0.6012"/>
+    <block id="r.4" level="L5" lines="2" xh="27.5" lead="60" box="0.2794 0.56 0.4341 0.6737"/>
+    <block id="r.5" level="L2" lines="1" xh="8" box="0.4728 0.6138 0.5378 0.63"/>
+    <picture id="r.6" box="0.594 0.6138 0.9174 0.675" why="대비 20.8 이 이 판 전체 대비 155.5 의 15%(23.3)에 못 미친다"/>
+    <group id="r.7" box="0.594 0.7125 0.8647 0.75" coverage="0.179">
+      <block id="r.7.1" level="L3" lines="1" xh="10" box="0.594 0.715 0.8067 0.73"/>
+      <block id="r.7.2" level="L2" lines="1" xh="8" box="0.8137 0.7325 0.8629 0.7488"/>
+      <picture id="r.7.그림1" box="0.5975 0.715 0.8612 0.7475" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 62%"/>
+    </group>
+    <block id="r.8" level="L1" lines="1" xh="5" box="0.3445 0.7375 0.5413 0.7512"/>
+    <picture id="r.그림1" box="0.0228 0.0675 0.9965 0.855" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 85%"/>
+  </content>
+</poster>

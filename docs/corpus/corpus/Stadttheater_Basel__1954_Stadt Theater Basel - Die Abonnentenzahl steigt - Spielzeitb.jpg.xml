@@ -1,0 +1,36 @@
+<poster version="0.1">
+  <source file="1954_Stadt Theater Basel - Die Abonnentenzahl steigt - Spielzeitb.jpg" w="564" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="4" pitch="141" wobble="0.495" unit="px">
+      <axis id="1" at="10"/>
+      <axis id="2" at="277"/>
+      <axis id="3" at="418"/>
+      <axis id="4" at="522"/>
+      <tested how="leave-one-out" error="104" null="66.03" ratio="0.63" n="5"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="3" n="1"/>
+      <level id="L2" xh="4" n="2"/>
+      <level id="L3" xh="13.5" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <block id="r.1" level="L3" lines="1" xh="13" box="0.0124 0.0437 0.5691 0.0788"/>
+    <block id="r.2" level="L3" lines="1" xh="14" box="0.4965 0.4263 0.9982 0.4613"/>
+    <block id="r.3" level="L1" lines="1" xh="3" box="0.7358 0.65 0.9309 0.665"/>
+    <group id="r.4" box="0.7358 0.6637 0.9805 0.6913" coverage="0">
+      <picture id="r.4.그림1" box="0.7394 0.6663 0.977 0.6887" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 77%"/>
+    </group>
+    <group id="r.5" box="0.7358 0.6913 0.9947 0.9637" coverage="0.476">
+      <block id="r.5.1" level="L2" lines="1" xh="4" box="0.9309 0.7488 0.9911 0.7612"/>
+      <block id="r.5.2" level="L2" lines="1" xh="4" box="0.7358 0.9525 0.8848 0.9625"/>
+      <picture id="r.5.그림1" box="0.8635 0.94 0.9787 0.9525" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+      <picture id="r.5.그림2" box="0.9309 0.7363 0.9592 0.7463" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 9%"/>
+      <picture id="r.5.그림3" box="0.9309 0.8125 0.9663 0.8213" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 8%"/>
+      <picture id="r.5.그림4" box="0.9309 0.7975 0.961 0.8063" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+    </group>
+    <picture id="r.6" box="0.617 0.9062 0.7039 0.95" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.9637" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 81%"/>
+  </content>
+</poster>

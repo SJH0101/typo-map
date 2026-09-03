@@ -1,0 +1,24 @@
+<poster version="0.1">
+  <source file="1957_Volg Traubensaft naturrein - Gesundheit.jpg" w="562" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="136" unit="px">
+      <axis id="1" at="15"/>
+      <axis id="2" at="151"/>
+      <tested how="leave-one-out" error="nan" null="nan" ratio="nan" n="0"/>
+    </axes>
+    <levels>
+      <level id="L1" xh="9" n="1"/>
+      <level id="L2" xh="16" n="2"/>
+    </levels>
+  </system>
+  <content>
+    <picture id="r.1" box="0.0 0.0325 0.5071 0.1625" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.2" level="L2" lines="1" xh="17" box="0.0071 0.225 0.5036 0.2437"/>
+    <block id="r.3" level="L1" lines="1" xh="9" box="0.0125 0.2787 0.1993 0.2863"/>
+    <picture id="r.4" box="0.8541 0.76 0.9164 0.7837" why="검출기가 상자를 내지 않았다"/>
+    <picture id="r.5" box="0.9093 0.7788 0.9911 0.8025" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.6" level="L2" lines="1" xh="15" box="0.2633 0.8987 0.5036 0.9287"/>
+    <picture id="r.그림1" box="0.0036 0.095 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 87%"/>
+  </content>
+</poster>

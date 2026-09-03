@@ -1,0 +1,37 @@
+<poster version="0.1">
+  <source file="1957_Sammlung Richard Doetsch-Benziger - Bücher, Ostasiatische Kl.jpg" w="561" h="800"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="365.3" unit="px">
+      <axis id="1" at="101.7"/>
+      <axis id="2" at="467"/>
+      <tested how="leave-one-out" error="0.75" null="97.96" ratio="130.6" n="4"/>
+    </axes>
+    <baseline-grid found="no">
+      <tested how="null-model" deviation="0.1304" null="0.1416" percentile="0.24" n="14"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="7" n="1"/>
+      <level id="L2" xh="18" n="3"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.1729 0.3638 0.6346 0.7475" coverage="0.826">
+      <block id="r.1.1" level="L2" lines="2" xh="18" lead="29" box="0.1729 0.3712 0.5827 0.4438"/>
+      <group id="r.1.2" box="0.1729 0.5963 0.6346 0.7475" coverage="0.617">
+        <block id="r.1.2.1" level="L2" lines="2" xh="18" lead="29" box="0.1729 0.6025 0.6328 0.6725"/>
+        <picture id="r.1.2.2" box="0.1729 0.6763 0.504 0.745" why="대비 11.7 이 이 판 전체 대비 184.0 의 15%(27.6)에 못 미친다"/>
+        <picture id="r.1.2.그림1" box="0.5004 0.6725 0.631 0.745" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+      </group>
+      <picture id="r.1.그림1" box="0.5845 0.3688 0.631 0.4338" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 7%"/>
+    </group>
+    <block id="r.2" level="L2" lines="4" xh="17.5" lead="29" box="0.1765 0.4475 0.5223 0.6012"/>
+    <block id="r.3" level="L1" lines="6" xh="7" lead="12" box="0.8307 0.655 0.9964 0.745"/>
+    <picture id="r.그림1" box="0.0053 0.0025 0.9697 0.3412" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 47%"/>
+    <picture id="r.그림2" box="0.0036 0.3688 0.6435 0.8912" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 15%"/>
+    <picture id="r.그림3" box="0.0178 0.7137 0.9964 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 8%"/>
+  </content>
+  <unmeasured>
+    <item id="r.4" what="text" why="너무작음" detail="상자가 작아 글줄을 못 찾았다"/>
+  </unmeasured>
+</poster>
