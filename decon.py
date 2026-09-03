@@ -142,15 +142,24 @@ def analyse(e):
     """원자료 한 장 → 규칙 + 다시 세운 자리 + 어긋남."""
     bs = [b for b in (e.get('blocks') or []) if b.get('bases')]
     if len(bs) < 3:
-        return None
+        # 마디가 셋도 안 되면 격자를 말할 수 없다. 빈 규칙을 낸다 — None 을
+        # 내면 부르는 쪽이 매번 방어해야 하고, «규칙이 없다» 와 «잴 수 없다» 가
+        # 구분되지 않는다.
+        W, H = e.get('size', [0, 0])
+        return dict(크기=[W, H], 단=dict(축=[], 판수=[], 피치=None, 피치흔들림=None),
+                    격자=None, 계층=levels(bs), n블록=len(bs),
+                    맞힘=None, 격자검사=None,
+                    왜=f'글줄 마디가 {len(bs)}개뿐이라 격자를 잴 수 없다')
     W, H = e['size']
     r = dict(크기=[W, H], 단=columns(bs, W), 격자=grid(bs), 계층=levels(bs),
              n블록=len(bs))
     got, null = rebuild(bs, W)
+    # 어긋남이 0 에 가까우면 배수가 터진다 (4.4e+10 이 나왔다). None 으로 둔다.
     r['맞힘'] = dict(
         어긋남중앙=round(float(np.median(got)), 2),
         귀무중앙=round(float(np.median(null)), 2),
-        배수=round(float(np.median(null)) / max(float(np.median(got)), 1e-9), 2),
+        배수=(None if float(np.median(got)) < 0.5 else
+            round(float(np.median(null)) / float(np.median(got)), 2)),
         판폭대비=round(float(np.median(got)) / W, 4), n=len(got))
     r['격자검사'] = grid_null(bs)
     return r

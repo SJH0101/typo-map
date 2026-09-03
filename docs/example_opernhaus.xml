@@ -1,0 +1,33 @@
+<poster version="0.1">
+  <source file="1966_Opernhaus Zürich - Die lustige Witwe - Operette von Franz Lé.jpg" w="565" h="800" physical="128 x 90.5 cm" format="Weltformat"/>
+  <made-by grounding="auto" detector="surya-ocr 0.22.1" measurer="measure/ground.py" date="2026-09-03"/>
+  <system>
+    <axes n="2" pitch="158.5" unit="px">
+      <axis id="1" at="38.5"/>
+      <axis id="2" at="197"/>
+      <tested how="leave-one-out" error="3.3" null="129.7" ratio="39.3" n="5"/>
+    </axes>
+    <baseline-grid found="yes" unit="15.5">
+      <tested how="null-model" deviation="0.0681" null="0.1073" percentile="0.02" n="9"/>
+    </baseline-grid>
+    <levels>
+      <level id="L1" xh="8" n="2"/>
+      <level id="L2" xh="11" n="1"/>
+      <level id="L3" xh="59" n="1"/>
+      <level id="L4" xh="139" n="1"/>
+    </levels>
+  </system>
+  <content>
+    <group id="r.1" box="0.0531 0.1212 0.9204 0.8225" coverage="0.345">
+      <block id="r.1.1" level="L3" lines="2" xh="59" lead="83" box="0.0779 0.1514 0.9044 0.3212"/>
+      <block id="r.1.2" level="L4" lines="1" xh="139" box="0.0531 0.6125 0.892 0.8225"/>
+      <picture id="r.1.그림1" box="0.0566 0.3612 0.9133 0.8" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 64%"/>
+    </group>
+    <block id="r.2" level="L1" lines="4" xh="8" lead="15" box="0.0655 0.4362 0.3009 0.5088"/>
+    <block id="r.3" level="L2" lines="1" xh="11" box="0.3451 0.515 0.4248 0.5275"/>
+    <picture id="r.4" box="0.6248 0.4363 0.8814 0.5288" why="검출기가 상자를 내지 않았다"/>
+    <block id="r.5" level="L1" lines="1" xh="8" box="0.0637 0.5675 0.3805 0.5863"/>
+    <picture id="r.그림1" box="0.0035 0.0025 0.9965 0.3588" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+    <picture id="r.그림2" box="0.0035 0.8 0.9965 0.9975" why="자식들이 덮지 않은 자리 — 이 마디 잉크의 28%"/>
+  </content>
+</poster>

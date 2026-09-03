@@ -91,15 +91,25 @@ def noise_floor(im, n=24):
 
 
 def _contrast(c):
-    """크롭 안 잉크 대비 — 오츠로 가른 두 무리의 밝기 차."""
-    g = np.asarray(c.convert('L'), float)
-    if g.size < 16:
+    """크롭 안 잉크 대비 — 두 무리의 «색» 거리.
+
+    회색조로 재면 안 된다. 분홍 위 빨강, 초록 위 파랑처럼 밝기가 거의 같고
+    색만 다른 조판을 놓친다 — Opernhaus 1966 의 분홍 패널 위 빨간 크레딧이
+    명도 대비 8.0 으로 나와 «그림» 으로 잘못 끝났다. 스위스 포스터가 늘
+    하는 짓이다.
+
+    RGB 에서 잰다. 명도로 두 무리를 가른 뒤 각 무리의 «평균 색» 사이 거리를
+    쓰면, 밝기 차든 색상 차든 둘 다 잡힌다.
+    """
+    a = np.asarray(c.convert('RGB'), float)
+    if a.size < 48:
         return 0.0
+    g = a.mean(2)
     t = float(np.percentile(g, 50))
-    lo, hi = g[g <= t], g[g > t]
+    lo, hi = a[g <= t], a[g > t]
     if not lo.size or not hi.size:
         return 0.0
-    return float(hi.mean() - lo.mean())
+    return float(np.linalg.norm(hi.reshape(-1, 3).mean(0) - lo.reshape(-1, 3).mean(0)))
 
 
 def _ink_cover(c, boxes):
@@ -114,6 +124,37 @@ def _ink_cover(c, boxes):
         x1, y1, x2, y2 = [int(v) for v in b]
         m[max(0, y1):y2, max(0, x1):x2] = True
     return round(float((ink & m).sum() / ink.sum()), 3)
+
+
+def _mask_siblings(c, mine, others):
+    """내려갈 크롭에서 «형제의 자리» 를 바탕색으로 덮는다.
+
+    group() 은 줄을 한 번씩만 쓰지만 «상자» 는 서로 품을 수 있다. 큰 쪽 안을
+    다시 검출하면 작은 쪽의 글줄이 또 잡혀 같은 글자가 트리에 두 번 들어간다.
+    Opernhaus 1966 에서 크레딧 네 블록이 r.2~r.5 로 한 번, r.1.2~r.1.5 로
+    또 한 번 나왔다.
+
+    형제를 «지우면» 안 된다 — 한 번 해봤더니 자식이 하나로 줄어 바로 멈췄고
+    트리가 비었다. 지울 것은 자식이 아니라 크롭 안의 그 자리다.
+    """
+    if not others:
+        return c
+    a = np.asarray(c).copy()
+    g = np.asarray(c.convert('L'), float)
+    bg = int(np.percentile(g, 75))          # 이 크롭의 «바탕» 밝기
+    mx1, my1, mx2, my2 = mine
+    myarea = max((mx2 - mx1) * (my2 - my1), 1)
+    for b in others:
+        x1, y1, x2, y2 = [int(v) for v in b[:4]]
+        ix = min(mx2, x2) - max(mx1, x1)
+        iy = min(my2, y2) - max(my1, y1)
+        # 나를 «품는» 형제는 덮지 않는다. 덮으면 내 크롭이 통째로 바탕이 되어
+        # 검출기가 아무것도 못 찾고 «그림» 으로 잘못 끝난다. 처음에 겹침을
+        # 형제 넓이로 재서 이 경우를 놓쳤다 — 내 넓이로 재야 한다.
+        if ix > 0 and iy > 0 and (ix * iy) / myarea > 0.5:
+            continue
+        a[max(0, y1):y2, max(0, x1):x2] = bg
+    return Image.fromarray(a)
 
 
 def _leftover(c, boxes, min_share=0.05):
@@ -167,13 +208,26 @@ def _abs(box, sub, cw, ch):
     return [x1 + a / cw * w, y1 + b / ch * h, x1 + c / cw * w, y1 + d / ch * h]
 
 
-def build(path, det, box=(0.0, 0.0, 1.0, 1.0), id='r', depth=0, log=None, floor=None):
+def build(path, det, box=(0.0, 0.0, 1.0, 1.0), id='r', depth=0, log=None, floor=None,
+          mask=None):
     log = log if log is not None else []
     im = Image.open(path).convert('RGB')
     if floor is None:
         floor = _contrast(im)          # 이 판 전체의 대비. 아래에서 잣대로 쓴다
     n = Node(id, list(box))
     c = _crop(im, box)
+    if mask is not None and c.width >= MIN_PX and c.height >= MIN_PX:
+        others, pbox, pw, ph = mask
+        W, H = im.size
+        px1, py1, px2, py2 = pbox
+        def to_c(b):                      # 부모 크롭 좌표 → 내 크롭 좌표
+            ax = px1 + b[0] / pw * (px2 - px1); ay = py1 + b[1] / ph * (py2 - py1)
+            bx = px1 + b[2] / pw * (px2 - px1); by = py1 + b[3] / ph * (py2 - py1)
+            return [(ax - box[0]) / max(box[2] - box[0], 1e-9) * c.width,
+                    (ay - box[1]) / max(box[3] - box[1], 1e-9) * c.height,
+                    (bx - box[0]) / max(box[2] - box[0], 1e-9) * c.width,
+                    (by - box[1]) / max(box[3] - box[1], 1e-9) * c.height]
+        c = _mask_siblings(c, (0, 0, c.width, c.height), [to_c(b) for b in others])
     if c.width < MIN_PX or c.height < MIN_PX:
         n.kind, n.why = '글줄', '크롭이 모델 입력 하한보다 작다'
         return n, log
@@ -220,7 +274,9 @@ def build(path, det, box=(0.0, 0.0, 1.0, 1.0), id='r', depth=0, log=None, floor=
         if [round(v, 6) for v in kb] == [round(v, 6) for v in box]:
             kn = Node(f'{id}.{i}', kb, '글줄', '자식 상자가 부모와 정확히 같다')
         else:
-            kn, log = build(path, det, kb, f'{id}.{i}', depth + 1, log, floor)
+            others = [k2[:4] for j, k2 in enumerate(kids) if j != i - 1]
+            kn, log = build(path, det, kb, f'{id}.{i}', depth + 1, log, floor,
+                            mask=(others, box, c.width, c.height))
         n.kids.append(kn)
 
     # ── 덮음 검사 ─────────────────────────────────────────────
