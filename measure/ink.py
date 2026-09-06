@@ -199,3 +199,68 @@ def split_marks(m, s, e, span, base):
     if kind == 'x_only':
         cap = None
     return dict(cap=cap, x_top=x_top, mark=mark, n_mark=n_mark, desc=None, kind=kind)
+
+
+# ── 획 마스크 ────────────────────────────────────────────────
+# 「활자가 덮은 넓이」를 상자 넓이로 세면 안 된다. 상자 안은 대부분 빈
+# 자리다. 큰 표제 한 줄의 상자는 판의 3% 를 덮지만 획은 그 안의 1/5 이다.
+# 눈으로 보면 바로 드러난다 — 열쇠 기호 하나가 통째로 «활자» 로 칠해졌다.
+
+def strokes(rgb, box, pad=1):
+    """상자 안의 «획» 화소. 상자를 통째로 칠하지 않는다.
+
+    잉크는 «어두운 것» 이 아니라 «바탕색에서 먼 것» 이다. 검은 바탕의 금색
+    글자, 붉은 바탕의 분홍 글자 — 밝기로만 보면 8밖에 안 떨어진다. 그래서
+    회색으로 바꾼 뒤 중앙값으로 가르는 방식이 세 판에 하나꼴로 뒤집혔다.
+
+    바탕색은 상자 안 «채널별 중앙값» 으로 본다. 활자는 제 상자 안에서도
+    소수라서 중앙값이 바탕에 앉는다. 그 색에서의 거리를 오츠로 둘로 가르고
+    «먼 쪽» 이 획이다.
+
+    문턱을 짓지 않는다 — 오츠가 집단간 분산이 최대인 자리를 고른다. 색이
+    한 가지뿐이면(획이 없으면) 거리가 전부 0에 몰려 아무것도 안 남는다.
+    """
+    H, W = rgb.shape[:2]
+    x1 = max(0, int(box[0]) - pad); y1 = max(0, int(box[1]) - pad)
+    x2 = min(W, int(box[2]) + pad); y2 = min(H, int(box[3]) + pad)
+    if x2 - x1 < 2 or y2 - y1 < 2:
+        return None, (x1, y1, x2, y2)
+    v = rgb[y1:y2, x1:x2].astype(np.float32)
+    bg = np.median(v.reshape(-1, v.shape[-1]), axis=0)
+    d = np.sqrt(((v - bg) ** 2).sum(-1))
+    if float(d.max()) < 1e-6:
+        return np.zeros(d.shape, bool), (x1, y1, x2, y2)
+    return d > _otsu_t(d.ravel()), (x1, y1, x2, y2)
+
+
+def _otsu_t(v):
+    """오츠 문턱. 나눗셈이 0이 되는 자리를 비워 둔다."""
+    h, ed = np.histogram(v, bins=64)
+    p = h / max(h.sum(), 1)
+    mids = (ed[:-1] + ed[1:]) / 2.0
+    w0 = np.cumsum(p); m0 = np.cumsum(p * mids); mt = m0[-1]
+    ok = (w0 > 1e-6) & (w0 < 1 - 1e-6)
+    if not ok.any():
+        return float(v.max()) + 1.0
+    bt = np.where(ok, (mt * w0 - m0) ** 2 / np.where(ok, w0 * (1 - w0), 1.0), 0.0)
+    return float(mids[int(np.argmax(bt))])
+
+
+def stroke_mask(path, blocks, gate=True):
+    """판 한 장 → 활자 획 마스크(원본 해상도)와 버린 상자.
+
+    원본 해상도에서 잰다. 300px 로 줄이면 본문 획이 안티에일리어싱으로
+    중간톤이 되어 통째로 사라진다.
+    """
+    import blockgate
+    im = Image.open(path).convert('RGB')
+    rgb = np.asarray(im)
+    g = np.asarray(im.convert('L'), np.float32)
+    keep, drop = (blockgate.filter_blocks(g, list(blocks)) if gate
+                  else (list(blocks), []))
+    m = np.zeros(rgb.shape[:2], bool)
+    for b in keep:
+        s, (x1, y1, x2, y2) = strokes(rgb, (b['x1'], b['y1'], b['x2'], b['y2']))
+        if s is not None:
+            m[y1:y2, x1:x2] |= s
+    return m, keep, drop
