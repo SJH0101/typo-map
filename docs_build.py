@@ -31,8 +31,7 @@ MISSING = ['글자 내용', '색', '서체', '자획 굵기']
 
 
 def one(path, det, source=None):
-    root, log = recurse.build(path, det)
-    recurse.measure(root, path)
+    root, _lines = recurse.read(path, det)
     W, H = Image.open(path).size
     leaf = [n for n in root.walk() if n.kind == '글줄']
     bs = []
@@ -49,6 +48,7 @@ def one(path, det, source=None):
                           made=dict(grounding='auto', detector='surya-ocr 0.22.1',
                                     date=datetime.date.today().isoformat()))
     c, un = schema.add_content(doc, root, levels=(rules or {}).get('계층'))
+    un += getattr(root, 'unmeasured', [])
     schema.add_unmeasured(doc, un)
     ns = list(root.walk())
     ax = (rules or {}).get('단') or {}
@@ -64,7 +64,7 @@ def one(path, det, source=None):
         세로격자=(None if not gt else ('있음' if gt.get('분위', 1) < 0.05 else '없음')),
         격자단위=((rules or {}).get('격자') or {}).get('단위'),
         계층=[l['xh'] for l in ((rules or {}).get('계층') or [])],
-        못잼=len(un), 깊이제한=bool(log))
+        못잼=len(un))
     return schema.to_xml(doc), row
 
 

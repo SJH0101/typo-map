@@ -18,24 +18,21 @@
     ① 줄을 받는다                      Surya, 판 전체에서 한 번
     ② 가장 큰 틈에서 둘로 가른다         끝까지. 이것이 덴드로그램이다
     ③ 마디마다 «한 행간인가» 를 묻는다    귀무모형. 예면 글줄 마디
-    ④ 줄이 안 덮은 잉크가 그림이다        판 전체에서 한 번 계산
+    ④ 줄이 아닌 것은 «못 잼» 으로 적는다   짚는 함수가 아직 없다
 
 ②에는 문턱이 없다. 「얼마나 벌어져야 자르나」를 묻지 않고 끝까지 자른다.
 나무 전체가 답이고, 문턱은 나무를 «잘라» 평평한 군집을 만들 때만 필요한데
 우리는 나무를 원한다.
 
-없어진 문턱: INK_R · MIN_PX · SAME · FILL · FRAG · SPLIT_MIN · 깊이제한.
+없어진 문턱: INK_R · MIN_PX · SAME · FILL · FRAG · SPLIT_MIN · PIC_MIN · 깊이제한.
+남은 문턱: MIN_AREA 하나.
 """
 import numpy as np
 from PIL import Image
-from scipy import ndimage
 
 MIN_AREA = 200        # 이보다 작은 줄상자는 부스러기로 본다 (검출기 산출물 정리)
 N_NULL = 400          # 「이 틈이 두드러지나」를 물을 때 섞어 보는 횟수
 ALPHA = 0.05          # 귀무 분위. 여느 판정과 같은 값을 쓴다
-PIC_MIN = 0.02        # 줄이 안 덮은 잉크 덩어리가 판의 이 비율은 되어야 마디로
-                      # 센다. 보고의 문턱이지 셈의 문턱이 아니다 — 값이 달라져도
-                      # 측정이 아니라 트리에 적히는 마디 수만 는다.
 
 
 class Node:
@@ -73,20 +70,27 @@ def _bbox(ls):
 def _widest_gap(ls):
     """가장 큰 틈 하나. (축, 자른 자리, 벌어진 정도)
 
-    크기·세로·가로 셋을 같은 잣대로 잰다 — 틈 ÷ 이웃 간격의 중앙값. 잣대가
-    같아야 어느 축으로 갈라야 할지 견줄 수 있다. 셋 다 틈이 없으면 None.
+    크기·세로·가로 셋을 같은 잣대로 잰다 — 틈 ÷ 틈의 «평균». 잣대가 같아야
+    어느 축으로 갈라야 할지 견줄 수 있다. 셋 다 잴 수 없으면 None.
+
+    처음에는 «틈 ÷ 이웃 간격의 중앙값» 을 썼다. 틀렸다. 중앙값은 우연히 0에
+    가까워질 수 있어서 이 비는 꼬리가 두껍고, 귀무 95분위가 n과 거의 상관없이
+    10배 언저리에 앉는다. 그러면 어떤 판도 못 가르다가 어쩌다 한 번 통과하면
+    끝까지 갈린다 — 한 마디 아니면 낱줄. 실제로 32줄짜리와 27줄짜리 판이
+    각각 1마디와 27마디로 갈렸다. 평균으로 나누면 값이 [1, n-1] 에 갇히고
+    귀무가 n에 따라 곱게 는다 (3줄 1.9 · 10줄 4.3 · 84줄 7.2).
     """
     best = (None, None, 0.0)
     for ax, vals in (('크기', [b[3] - b[1] for b in ls]),
                      ('세로', [(b[1] + b[3]) / 2 for b in ls]),
                      ('가로', [b[0] for b in ls])):
         v = np.sort(np.asarray(vals, float))
-        if len(v) < 2:
+        if len(v) < 3:
             continue
         d = np.diff(v)
-        m = float(np.median(d))
+        m = float(d.mean())
         if m <= 0:
-            m = float(d.max()) or 1.0
+            continue
         i = int(np.argmax(d))
         score = float(d[i] / m)
         if score > best[2]:
@@ -94,32 +98,35 @@ def _widest_gap(ls):
     return best
 
 
-def _stands_out(vals, score, n_null=N_NULL, seed=20260903):
+_NULL = {}
+
+
+def _stands_out(n, score, n_null=N_NULL, seed=20260903):
     """이 틈이 «우연보다» 두드러지나.
 
     「이웃의 2배 넘으면 가른다」 같은 배수를 쓰면 안 된다 — 그 배수가 어디서
     왔는지 말할 수 없고, 판마다 줄 수가 달라 같은 배수가 다른 뜻이 된다.
-    줄 다섯 개의 최대 틈은 우연히도 이웃의 2배가 되지만, 여든 개면 그렇지
+    줄 다섯 개의 최대 틈은 우연히도 평균의 3배가 되지만, 여든 개면 그렇지
     않다.
 
-    그래서 «같은 개수의 값을 같은 범위에 고르게 흩뿌렸을 때» 의 최대 틈과
-    견준다. 실제 틈이 그 분포의 위쪽 5% 밖이면 두드러진 것이고, 아니면
-    나눌 자리가 아니다.
+    그래서 «같은 개수를 고르게 흩뿌렸을 때» 와 견준다. 그리고 우리는 축 셋
+    중 «가장 큰» 값을 골라 왔으므로 귀무도 셋 중 가장 큰 값을 골라야 한다 —
+    안 그러면 세 번 뽑아 놓고 한 번 뽑은 것과 견주는 셈이다.
+
+    귀무는 개수에만 달렸다. 값은 안 쓴다. 그래서 한 번 내면 판 전체에서
+    다시 쓴다.
     """
-    v = np.sort(np.asarray(vals, float))
-    if len(v) < 3:
-        return len(v) == 2 and v[1] > v[0]      # 둘뿐이면 다르기만 하면 가른다
-    lo, hi = v[0], v[-1]
-    if hi <= lo:
+    if n < 3:
         return False
-    rnd = np.random.RandomState(seed)
-    null = []
-    for _ in range(n_null):
-        r = np.sort(rnd.uniform(lo, hi, len(v)))
-        d = np.diff(r)
-        m = float(np.median(d)) or 1.0
-        null.append(float(d.max() / m))
-    return score >= float(np.percentile(null, 100 * (1 - ALPHA)))
+    if n not in _NULL:
+        rnd = np.random.RandomState(seed + n)
+        best = np.zeros(n_null)
+        for _ in range(3):
+            r = np.sort(rnd.uniform(0, 1, (n_null, n)), axis=1)
+            d = np.diff(r, axis=1)
+            best = np.maximum(best, d.max(1) / d.mean(1))
+        _NULL[n] = float(np.percentile(best, 100 * (1 - ALPHA)))
+    return score >= _NULL[n]
 
 
 def _split(ls, ax, cut):
@@ -148,20 +155,18 @@ def build(lines, size, id='r'):
             return n
         ax, cut, score = _widest_gap(g)
         if ax is None:
-            n.kind, n.why = '글줄', '더 가를 틈이 없다'
+            n.kind, n.why = '글줄', f'줄 {len(g)}개로는 가를 근거가 없다'
             return n
-        vals = {'크기': [b[3] - b[1] for b in g],
-                '세로': [(b[1] + b[3]) / 2 for b in g],
-                '가로': [b[0] for b in g]}[ax]
-        if not _stands_out(vals, score):
+        if not _stands_out(len(g), score):
             n.kind = '글줄'
-            n.why = f'가장 큰 틈({ax}, 이웃의 {score:.1f}배)이 우연과 구분되지 않는다'
+            n.why = (f'가장 큰 틈({ax}, 평균의 {score:.1f}배)이 우연과 구분되지 않는다'
+                     f' — 줄 {len(g)}개의 귀무 문턱은 {_NULL[len(g)]:.1f}배')
             return n
         parts = _split(g, ax, cut)
         if len(parts) < 2:
             n.kind, n.why = '글줄', '더 가를 틈이 없다'
             return n
-        n.why = f'{ax} 틈에서 가름 (이웃의 {score:.1f}배)'
+        n.why = f'{ax} 틈에서 가름 (평균의 {score:.1f}배 · 문턱 {_NULL[len(g)]:.1f}배)'
         for i, p in enumerate(parts, 1):
             n.kids.append(go(p, f'{nid}.{i}'))
         return n
@@ -169,40 +174,27 @@ def build(lines, size, id='r'):
     return go(ls, id)
 
 
-def pictures(path, lines, root, min_share=PIC_MIN, work=400):
-    """줄이 덮지 않은 잉크 덩어리 = 그림. 판 전체에서 «한 번만» 낸다.
-
-    앞선 판은 마디마다 남은 잉크를 계산해 그림 마디를 붙였다. 마디가 겹치면
-    같은 자리가 여러 번 그림이 됐다. 판 전체에서 한 번 내고 트리 밑에 단다.
-    """
-    im = Image.open(path).convert('RGB')
-    W, H = im.size
-    s = im.copy(); s.thumbnail((work, work))
-    w, h = s.size
-    g = np.asarray(s.convert('L'), float)
-    t = float(np.percentile(g, 50))
-    ink = g < t if g.mean() > t else g > t
-    taken = np.zeros((h, w), bool)
-    for b in lines:
-        x1, y1, x2, y2 = _norm(b)
-        taken[max(0, int(y1 / H * h)):int(y2 / H * h) + 1,
-              max(0, int(x1 / W * w)):int(x2 / W * w) + 1] = True
-    rest = ndimage.binary_closing(ink & ~taken, np.ones((5, 5)))
-    lab, n = ndimage.label(rest)
-    if not n:
-        return []
-    tot = float(ink.sum()) or 1.0
-    out = []
-    for i in range(1, n + 1):
-        m = lab == i
-        share = float((m & ink).sum() / tot)
-        if share < min_share:
-            continue
-        ys, xs = np.where(m)
-        out.append(Node(f'{root.id}.그림{len(out) + 1}',
-                        [xs.min() / w, ys.min() / h, (xs.max() + 1) / w, (ys.max() + 1) / h],
-                        '그림', f'줄이 덮지 않은 잉크 — 판 잉크의 {share:.0%}'))
-    return sorted(out, key=lambda z: -(z.box[2] - z.box[0]) * (z.box[3] - z.box[1]))[:6]
+# ── 그림은 «못 잼» 으로 적는다 ────────────────────────────
+#
+# 앞선 판은 「줄이 덮지 않은 잉크」를 덩어리로 묶어 그림 마디를 붙였다. 잉크는
+# 판을 회색으로 바꾼 뒤 중앙값보다 어두운 화소로 봤다. 그 전제가 틀렸다.
+#
+# 중앙값 나누기는 «잉크가 판의 절반» 이라고 가정한다. 잉크는 소수다. 그리고
+# 「어두운 것 = 잉크」는 흰 바탕에서만 맞다. 네 장을 열어 보니:
+#
+#   Kreis 48 1963     검은 바탕 · 금색 선그림 → 바탕이 잉크로 잡혀 몫 0.93
+#   Schauspielhaus    분홍 바탕 · 흰 삽화     → 바탕이 잉크, 삽화는 빈 곳
+#   Lohse 1976        중간톤 색격자          → 격자가 잉크에서 빠짐
+#   Stadttheater 1961 흰 바탕 · 검은 막대     → 이것만 맞았다
+#
+# 뒤집기 판정(g.mean() > 중앙값)도 셋에서 틀렸다. 그래서 남은 잉크의 «몫» 도
+# 못 믿는다 — 자리만 틀린 게 아니라 분모가 틀렸다.
+#
+# 고칠 수 있는 문제지만, 고치기 전까지 그림 마디를 적으면 «틀린 값을 자신
+# 있게» 적는 것이다. 빈칸보다 나쁘다. 그래서 짚지 않고, 못 짚었다고 적는다.
+#
+# 다시 만들 때 지켜야 할 것: 잉크는 회색이 아니라 «판의 바탕색에서 얼마나
+# 먼가» 로 재야 한다 (붉은 바탕의 분홍 글자는 밝기로 8밖에 안 떨어졌다).
 
 
 def measure(root, path):
@@ -230,8 +222,9 @@ def read(path, det):
     im = Image.open(path).convert('RGB')
     lines = [[float(v) for v in b.bbox] for b in det([im])[0].bboxes]
     root = build(lines, im.size)
-    root.kids += pictures(path, lines, root)
     measure(root, path)
+    # 줄이 아닌 것 — 그림·색면·선 — 은 짚지 않는다. 위의 기록을 볼 것.
+    root.unmeasured = [(root.id, 'picture', '그림못짚음', None)]
     return root, lines
 
 
