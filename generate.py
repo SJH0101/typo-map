@@ -77,7 +77,9 @@ def draw(blocks, out, color=True):
     fills=[tw(d,t,font(e))/colw for _b,e,ls in fl for t in ls]
     return em, sum(fills)/len(fills), (y-gap-y0)/colh
 
-sys.path.insert(0,os.path.dirname(__file__))
-from gen2 import C
-d1=os.path.dirname(__file__)
-print('v4 색', draw(C, os.path.join(d1,'gen_f.png')))
+if __name__ == '__main__':
+    # 불러오기만으로 그림이 그려지면 안 된다. 부를 때만 그린다.
+    from content_1965 import C
+    out = sys.argv[1] if len(sys.argv) > 1 else 'gen_v4.png'
+    em, fill, page = draw(C, out)
+    print(f'{out}  활자 {em:.1f}px · 줄참함 {fill:.3f} · 판채움 {page:.3f}')

@@ -51,6 +51,7 @@ def draw(blocks, out):
                 활자=BODY_PT, 행간나눔xh=LEAD_EM/0.52,
                 채움=(y-lh*0.9-y0)/(H-2*MARGIN*H), 참함=sum(stats)/len(stats), 색수=3)
 
-sys.path.insert(0,os.path.dirname(__file__))
-from gen2 import C
-print(draw(C, os.path.join(os.path.dirname(__file__),'gen_naive.png')))
+if __name__ == '__main__':
+    from content_1965 import C
+    out = sys.argv[1] if len(sys.argv) > 1 else 'gen_naive.png'
+    print(out, draw(C, out))
