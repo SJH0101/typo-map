@@ -26,7 +26,7 @@ NAME={'brockmann':'브로크만','corpus':'호프만','rose':'로제','ruder':'�
 ORDER=['브로크만','호프만','로제','루더']
 RAW={}
 for c in surface.ROOTS:
-    RAW[NAME[c]]=json.load(open(os.path.join(docs_build.CACHE,c+'.json')))['raw']
+    RAW[NAME[c]]=docs_build.load_raw(c)
 
 def _rss(S,C):
     if len(S)<3: return float(((C-C.mean())**2).sum())

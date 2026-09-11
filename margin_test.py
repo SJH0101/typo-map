@@ -69,7 +69,7 @@ def loo(rows, target, mode):
         errs.append(abs(p-r[target]))
     return np.array(errs)
 
-RAW={NAME[c]: json.load(open(os.path.join(docs_build.CACHE,c+'.json')))['raw'] for c in surface.ROOTS}
+RAW={NAME[c]: docs_build.load_raw(c) for c in surface.ROOTS}
 MODES=['중앙값','활자','행간','넓이','블록']
 for who in ORDER:
     rows=rows_of(RAW[who])

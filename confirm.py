@@ -22,10 +22,11 @@ NAME = {'brockmann': '브로크만', 'corpus': '호프만', 'rose': '로제', 'r
 
 def blocks(cache):
     """블록 하나마다 (작가, 판, x높이, 행간). 판높이로 나눈 값."""
+    import docs_build
     import surface
     out = []
     for c in surface.ROOTS:
-        raw = json.load(open(os.path.join(cache, c + '.json')))['raw']
+        raw = docs_build.load_raw(c, cache)
         for k, r in raw.items():
             sz = r.get('size')
             if not sz or abs(r.get('angle', 0)) >= 1 or sz[1] <= 0:

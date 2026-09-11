@@ -32,7 +32,7 @@ RETRACTED={'활자몫','바탕몫','색면몫','사진몫','면맞음x','면맞�
 
 vals={n:{k:[] for k in ORDER} for n in features.NAMES}
 for c in surface.ROOTS:
-    raw=json.load(open(os.path.join(docs_build.CACHE,c+'.json')))['raw']
+    raw=docs_build.load_raw(c)
     X,keys,names=features.matrix(raw)
     for j,n in enumerate(names):
         v=X[:,j]; v=v[np.isfinite(v)]

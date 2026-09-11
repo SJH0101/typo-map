@@ -52,28 +52,72 @@ def _angle(reader, im):
     return round(float(np.median(A[np.argsort(-W)[:12]])), 2)
 
 
-def run(folder, name, cache=None, skew=True, batch=8):
+PIPELINE = 'surya+ground'
+
+
+def provenance(source=None, n=None):
+    """캐시가 «어느 경로로 · 언제 · 어느 코드로» 쟀는지.
+
+    옛 경로(baseline/scan + detect)와 이 경로가 같은 ~/.typo-mcp/{이름}.json 에
+    썼는데 옛 파일에는 표시가 없어서, 파일만 봐서는 어느 쪽 결과인지 몰랐다.
+    9월 검증 분석이 전부 옛 경로 값 위에서 돌았다는 것을 순서도를 그리고서야
+    알았다 (docs/y2_bug.json). 읽는 쪽은 docs_build.load_raw 로 이것을 확인한다.
+    """
+    import datetime
+    import subprocess
+    try:
+        from importlib.metadata import version
+        sv = version('surya-ocr')
+    except Exception:
+        sv = None
+    try:
+        commit = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                                cwd=os.path.dirname(os.path.abspath(__file__)),
+                                capture_output=True, text=True).stdout.strip() or None
+    except Exception:
+        commit = None
+    return dict(pipeline=PIPELINE,
+                detector=('surya-ocr ' + sv) if sv else 'surya-ocr',
+                grouping='detect_surya.boxes_norm', measurer='measure/ground.py',
+                skew='EasyOCR 상자 기울기 중앙값 · skewed = |각| >= %.0f°' % SKEW,
+                commit=commit, date=datetime.date.today().isoformat(),
+                source=source, n=n)
+
+
+def items_of(paths):
+    """경로 → [(열쇠, 경로)]. 열쇠는 «폴더__파일» 이다."""
+    return [(os.path.basename(os.path.dirname(p)) + '__' + os.path.basename(p), p)
+            for p in paths]
+
+
+def measure_items(items, skew=True, batch=8, log=print):
+    """[(열쇠, 경로)] → (raw, failed). 찾기는 Surya, 재기는 measure/ground.py.
+
+    열쇠를 받는 까닭 — 다시 잴 때 옛 캐시의 열쇠를 그대로 써야 결과를 견줄 수
+    있다. 로제 9장은 열쇠가 «..__폴더__파일» 모양이라 경로에서 다시 만들면
+    달라진다.
+
+    기울어진 판. 이 경로는 원본 좌표에서 재므로 angle 을 0 으로 두었는데, 읽는
+    쪽 지표들은 |angle| >= 1 로 기울어진 판을 거른다. 그래서 skewed(14° 이상,
+    labels/skewflag283 에서 정밀 100% · 재현 67%)인 판에만 그 각을 angle 에
+    적는다. 옛 경로는 4° 스캔 기울기도 걸렀으므로 걸리는 판이 다를 수 있다.
+    """
     from surya.detection import DetectionPredictor
-    paths = sorted(os.path.join(r, f)
-                   for r, _d, fs in os.walk(folder) for f in fs if f.endswith(EXTS))
-    if not paths:
-        return dict(ok=False, error=f'이미지가 없다: {folder}')
     det = DetectionPredictor()
     reader = None
     if skew:
         import easyocr
         reader = easyocr.Reader(['de', 'en'], gpu=False, verbose=False)
-
     raw, failed = {}, []
-    for i in range(0, len(paths), batch):
-        chunk = paths[i:i + batch]
-        imgs = [Image.open(p).convert('RGB') for p in chunk]
+    for i in range(0, len(items), batch):
+        chunk = items[i:i + batch]
+        imgs = [Image.open(p).convert('RGB') for _k, p in chunk]
         try:
             res = det(imgs)
         except Exception as e:
-            failed += [(p, f'surya: {e}') for p in chunk]
+            failed += [(p, f'surya: {e}') for _k, p in chunk]
             continue
-        for p, r, im in zip(chunk, res, imgs):
+        for (k, p), r, im in zip(chunk, res, imgs):
             W, H = im.size
             lines = [[float(v) for v in b.bbox] for b in r.bboxes]
             bx = DS.boxes_norm(lines, (W, H))
@@ -88,13 +132,29 @@ def run(folder, name, cache=None, skew=True, batch=8):
             a = _angle(reader, im) if reader else None
             e['skew'] = a
             e['skewed'] = bool(a is not None and abs(a) >= SKEW)
-            raw[os.path.basename(os.path.dirname(p)) + '__' + os.path.basename(p)] = e
-        print(f'  {min(i+batch, len(paths))}/{len(paths)}', flush=True)
+            if e['skewed']:
+                e['angle'] = float(a)
+            raw[k] = e
+        if log:
+            log(f'  {min(i + batch, len(items))}/{len(items)}', flush=True)
+    return raw, failed
 
-    cache = cache or os.path.expanduser(f'~/.typo-mcp/{name}.json')
+
+def write(cache, raw, rules=None, source=None):
     os.makedirs(os.path.dirname(cache), exist_ok=True)
-    json.dump(dict(raw=raw, rules={}, source=folder, detector='surya'),
+    json.dump(dict(raw=raw, rules=rules or {}, source=source, detector='surya',
+                   provenance=provenance(source, len(raw))),
               open(cache, 'w'), ensure_ascii=False)
+
+
+def run(folder, name, cache=None, skew=True, batch=8):
+    paths = sorted(os.path.join(r, f)
+                   for r, _d, fs in os.walk(folder) for f in fs if f.endswith(EXTS))
+    if not paths:
+        return dict(ok=False, error=f'이미지가 없다: {folder}')
+    raw, failed = measure_items(items_of(paths), skew=skew, batch=batch)
+    cache = cache or os.path.expanduser(f'~/.typo-mcp/{name}.json')
+    write(cache, raw, source=folder)
     n_skew = sum(1 for v in raw.values() if v.get('skewed'))
     print(f'\n{name} — 잰 판 {len(raw)}/{len(paths)} · 기울어짐 {n_skew} · 실패 {len(failed)}')
     for p, why in failed[:5]:

@@ -19,7 +19,7 @@ import surface, docs_build, distinct
 
 NAME={'brockmann':'브로크만','corpus':'호프만','rose':'로제','ruder':'루더'}
 ORDER=['브로크만','호프만','로제','루더']
-RAW={NAME[c]: json.load(open(os.path.join(docs_build.CACHE,c+'.json')))['raw']
+RAW={NAME[c]: docs_build.load_raw(c)
      for c in surface.ROOTS}
 
 def collect(fn):

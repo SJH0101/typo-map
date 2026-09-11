@@ -14,7 +14,7 @@ import surface, docs_build
 
 rows=[]
 for c in surface.ROOTS:
-    raw=json.load(open(os.path.join(docs_build.CACHE,c+'.json')))['raw']
+    raw=docs_build.load_raw(c)
     for k,r in raw.items():
         sz=r.get('size')
         if not sz or abs(r.get('angle',0))>=1 or sz[1]<=0: continue

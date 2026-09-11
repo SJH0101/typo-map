@@ -28,6 +28,24 @@ from measure import ground as G
 ROOTS = surface.ROOTS
 CACHE = os.path.expanduser('~/.typo-mcp')
 MISSING = ['글자 내용', '색', '서체', '자획 굵기']
+_WARNED = set()
+
+
+def load_raw(corpus, cache=None):
+    """캐시 한 코퍼스의 원자료. 어느 경로로 쟀는지 보고, 모르면 크게 알린다.
+
+    옛 경로 캐시에는 provenance 가 없다. 조용히 읽으면 옛 값 위에서 돈 결과가
+    새 값인 것처럼 섞인다 — 9월 검증 분석이 그랬다.
+    """
+    import sys
+    path = os.path.join(os.path.expanduser(cache or CACHE), corpus + '.json')
+    d = json.load(open(path))
+    pv = d.get('provenance') or {}
+    if pv.get('pipeline') != 'surya+ground' and path not in _WARNED:
+        _WARNED.add(path)
+        print(f'[주의] {path} — 측정 경로 표시가 없다. 옛 경로(baseline/detect) '
+              f'산출물일 수 있다 (docs/y2_bug.json).', file=sys.stderr)
+    return d['raw']
 
 
 def one(path, det, source=None):
@@ -78,7 +96,7 @@ def main():
     os.makedirs(a.out, exist_ok=True)
     rows = []
     for c, root_dir in ROOTS.items():
-        raw = json.load(open(os.path.join(CACHE, c + '.json')))['raw']
+        raw = load_raw(c)
         P = surface.resolve(raw, root_dir)
         ks = sorted(P)
         if a.n:
