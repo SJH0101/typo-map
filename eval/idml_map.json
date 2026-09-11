@@ -1,0 +1,23 @@
+{
+ "설명": "IDML 파일 이름 → 포스터 파일 이름에 든 글자. ~/Documents/poster/out/gt.py 의 MAP 을 옮겼다. Oberon_Carmen.idml(1964 Opernhaus Oberon 포스터와 크기가 같다)과 Arabella.idml(맞는 포스터를 못 찾음)은 아직 넣지 않았다 — 넣으면 idml_explore 결과가 달라진다",
+ "map": {
+  "AndreaChenier": "Andrea Ch",
+  "Dieiorangen": "Die Liebe",
+  "Doncarlos": "Don Carlo",
+  "Dornroschen": "Dornrösch",
+  "Grobiane": "Die vier",
+  "Hollander": "Der flieg",
+  "Igel": "Der Igel",
+  "Koeing": "Wenn ich",
+  "Liebestrank": "Der Liebe",
+  "Orpheus": "Orpheus",
+  "Schneekonigin": "Die Schne",
+  "Schwanensee": "Schwanens",
+  "Undine": "Undine",
+  "Vogelhandler": "Der Vogel",
+  "WienerBlut": "Wiener Bl",
+  "Witwe": "Die lusti",
+  "ballettabend": "Ballettab",
+  "opernball": "Der Opern"
+ }
+}

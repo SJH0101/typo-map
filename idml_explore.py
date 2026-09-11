@@ -1,44 +1,47 @@
 """IDML 가이드로 베이스라인·어센더선을 채점한다 — 방향 확인용 탐색.
 
 사전등록 없이 빠르게 한다. **결과는 논문 수치로 쓰지 않는다** (2026-09-11).
-가이드는 공동 연구자(공저자)가 InDesign 에서 오페라하우스 취리히 18점에 그었다.
+가이드는 공동 연구자(공저자)가 InDesign 에서 오페라하우스 취리히 포스터에 그었다.
 
 옛 채점(~/Documents/poster/out/gt.py · score.py)은 가이드 위치를 y/802×H 로
 환산했다. 판(Page)·틀(Rectangle)·그림(Image)의 ItemTransform 을 보지 않았다.
 여기서는 그 사슬을 거꾸로 따라가 가이드를 그림 픽셀로 옮긴다.
 
-    python idml_explore.py transforms   # 환산 확인 — 옛 y/802×H 와 몇 px 다른가
-    python idml_explore.py score        # docs/idml_explore.json
+경로는 모두 인자로 받는다. 한 번에 다시 돌리는 명령은 eval/run_all.py 다.
+
+    python idml_explore.py transforms --idml-dir IDML폴더 --map eval/idml_map.json --posters-dir 포스터폴더
+    python idml_explore.py score      --idml-dir IDML폴더 --map eval/idml_map.json --posters-dir 포스터폴더 \\
+                                      --out docs/idml_explore.json
+
+--map 은 {IDML 이름: 포스터 파일 이름에 든 글자} (gt.py 의 MAP). 포스터는
+--posters-dir/*/*.jpg 에서 찾는다.
 
 가르기: 간격이 PAIR pt 안인 가이드 둘을 짝으로 보고 위를 베이스라인, 아래를
 다음 줄 어센더선으로 둔다 (5a67500 과 같은 규칙). 짝이 없거나 셋 넘게 붙은
 선은 뺀다. 가이드가 불완전하므로 정밀도·헛검출은 내지 않는다.
 """
+import argparse
 import glob
 import json
 import os
-import sys
 import zipfile
 import xml.etree.ElementTree as ET
 
 import numpy as np
 from PIL import Image
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, 'docs', 'idml_explore.json')
-ARC = os.path.expanduser('~/Downloads/아카이브')
-BRO = os.path.expanduser('~/Documents/연구2/브로크만 정리/corpus/코어')
-MAP = {'AndreaChenier': 'Andrea Ch', 'Dieiorangen': 'Die Liebe', 'Doncarlos': 'Don Carlo',
-       'Dornroschen': 'Dornrösch', 'Grobiane': 'Die vier', 'Hollander': 'Der flieg', 'Igel': 'Der Igel',
-       'Koeing': 'Wenn ich', 'Liebestrank': 'Der Liebe', 'Orpheus': 'Orpheus', 'Schneekonigin': 'Die Schne',
-       'Schwanensee': 'Schwanens', 'Undine': 'Undine', 'Vogelhandler': 'Der Vogel', 'WienerBlut': 'Wiener Bl',
-       'Witwe': 'Die lusti', 'ballettabend': 'Ballettab', 'opernball': 'Der Opern'}   # gt.py 와 같다
 PAIR = 6.0          # pt
 TOLS = (1, 2, 3)    # px
 
 
-def poster(key):
-    c = [f for f in glob.glob(os.path.join(BRO, '*', '*.jpg')) if key in os.path.basename(f)]
+def load_map(path):
+    m = json.load(open(os.path.expanduser(path)))
+    return m.get('map', m)
+
+
+def poster(posters_dir, key):
+    c = [f for f in glob.glob(os.path.join(os.path.expanduser(posters_dir), '*', '*.jpg'))
+         if key in os.path.basename(f)]
     return c[0] if c else None
 
 
@@ -48,9 +51,9 @@ def _m(s):
     return np.array([[a, c, e], [b, d, f], [0.0, 0.0, 1.0]])
 
 
-def layout(name):
+def layout(idml_dir, name):
     """IDML 한 파일 → 판 · 그림 사슬 · 가로 가이드(pt, 판 좌표)."""
-    z = zipfile.ZipFile(os.path.join(ARC, name + '.idml'))
+    z = zipfile.ZipFile(os.path.join(os.path.expanduser(idml_dir), name + '.idml'))
     spreads = [n for n in z.namelist() if n.startswith('Spreads/')]
     assert len(spreads) == 1, (name, spreads)
     root = ET.fromstring(z.read(spreads[0]))
@@ -94,11 +97,11 @@ def old_px(y_pt, H):
     return y_pt / 802.0 * H          # gt.py · score.py 의 환산
 
 
-def transforms():
+def transforms(idml_dir, posters_dir, mp):
     rows = {}
-    for k, v in MAP.items():
-        L = layout(k)
-        p = poster(v)
+    for k, v in mp.items():
+        L = layout(idml_dir, k)
+        p = poster(posters_dir, v)
         W, H = Image.open(p).size
         bl, bt, br, bb = L['bounds']
         link = (round((br - bl) * L['ppi'][0] / 72.0, 1), round((bb - bt) * L['ppi'][1] / 72.0, 1))
@@ -175,11 +178,11 @@ def recall(guides_by, meas_by, which):
     return out
 
 
-def score():
+def score(idml_dir, posters_dir, mp, out_path):
     paths, Bn, An, Bo, Ao, cut = {}, {}, {}, {}, {}, 0
-    for k, v in MAP.items():
-        L = layout(k)
-        p = poster(v)
+    for k, v in mp.items():
+        L = layout(idml_dir, k)
+        p = poster(posters_dir, v)
         W, H = Image.open(p).size
         paths[k] = p
         B, A, c = split(L['guides'])
@@ -193,24 +196,38 @@ def score():
         용도='방향 확인용 탐색. 사전등록 없음. 논문 수치로 쓰지 않는다',
         가르기=dict(규칙=f'간격 {PAIR}pt 안의 가이드 둘 = 위 베이스라인 · 아래 어센더선. 짝 없는 선·셋 이상 붙은 선은 뺐다',
                   베이스라인=sum(map(len, Bn.values())), 어센더선=sum(map(len, An.values())), 뺀선=cut),
-        환산=transforms(),
+        환산=transforms(idml_dir, posters_dir, mp),
         결과={})
     for name, m in meas.items():
         res['결과'][name] = dict(베이스라인=recall(Bn, m, 'base'), 어센더선=recall(An, m, 'cap'),
                                옛환산으로_베이스라인=recall(Bo, m, 'base'),
                                측정줄=sum(len(x['base']) for x in m.values()))
-    json.dump(res, open(OUT, 'w'), ensure_ascii=False, indent=1)
+    json.dump(res, open(out_path, 'w'), ensure_ascii=False, indent=1)
     print(json.dumps(res['가르기'], ensure_ascii=False))
     for name, v in res['결과'].items():
         print(name, '측정줄', v['측정줄'])
         for part in ('베이스라인', '어센더선', '옛환산으로_베이스라인'):
             print('  ', part, {t: (x['재현율'], x['오차중앙_px']) for t, x in v[part].items()})
-    print('→', OUT)
+    print('→', out_path)
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description='IDML 가이드 탐색 채점. 경로는 모두 인자로 받는다.')
+    ap.add_argument('cmd', choices=['transforms', 'score'])
+    ap.add_argument('--idml-dir', required=True, help='IDML 파일 폴더')
+    ap.add_argument('--map', required=True, help='{IDML 이름: 포스터 파일 이름 글자} JSON')
+    ap.add_argument('--posters-dir', required=True, help='포스터 폴더 (그 아래 */*.jpg)')
+    ap.add_argument('--out', help='score 결과 JSON')
+    a = ap.parse_args(argv)
+    mp = load_map(a.map)
+    if a.cmd == 'transforms':
+        for k, v in transforms(a.idml_dir, a.posters_dir, mp).items():
+            print(k, json.dumps(v, ensure_ascii=False))
+    else:
+        if not a.out:
+            ap.error('score 는 --out 이 필요하다')
+        score(a.idml_dir, a.posters_dir, mp, a.out)
 
 
 if __name__ == '__main__':
-    if sys.argv[1] == 'transforms':
-        for k, v in transforms().items():
-            print(k, json.dumps(v, ensure_ascii=False))
-    else:
-        score()
+    main()

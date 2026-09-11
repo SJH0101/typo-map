@@ -1,0 +1,41 @@
+{
+ "설명": "지금 쓰는 참조 데이터와 결과 파일 경로. 새 참조가 오면 여기만 바꾸고 python eval/run_all.py eval/refs.json 을 돌린다. 경로는 저장소 루트 기준이거나 ~ 로 시작한다. 여기 적힌 참조는 모두 임시 자료이며 제대로 된 자료의 조건은 docs/VALIDATION_NEEDS.md 에 있다. detector_notes 는 지금 VLM pass1 파일에 딸린 기록이라 VLM 파일을 바꾸면 지운다",
+
+ "image_roots": null,
+
+ "human_boxes": {
+  "csv": "~/Downloads/boxes_송준혁-2.csv",
+  "date": "2026-08-21",
+  "tool": "~/Documents/poster/labeler/타이포덩어리-상자긋기.html",
+  "out": "boxes/human_v2.json"
+ },
+
+ "detectors": {
+  "EasyOCR": ["boxes/easyocr_run1.json", "boxes/easyocr_run2.json"],
+  "Surya": ["boxes/surya_run1.json", "boxes/surya_run2.json"],
+  "VLM": ["boxes/vlm_pass1.json", "boxes/vlm_pass2.json"]
+ },
+ "surya_lines": "boxes/surya_lines.json",
+
+ "detector_prereg": "docs/detector_preregister.json",
+ "detector_notes": {
+  "VLM_pass1_에이전트_자기보고": "164개라고 보고했으나 파일에는 127개 — 파일 값을 썼다"
+ },
+ "detector_out": "docs/detector_compare.json",
+
+ "oracle_prereg": "docs/oracle_preregister.json",
+ "oracle_out": "docs/oracle_upper.json",
+
+ "idml": {
+  "dir": "~/Downloads/아카이브",
+  "map": "eval/idml_map.json",
+  "posters_dir": "~/Documents/연구2/브로크만 정리/corpus/코어",
+  "out": "docs/idml_explore.json"
+ },
+
+ "hand_lines": {
+  "lines": "~/Downloads/lines_20260818-2048.csv",
+  "blocks": "~/Downloads/blocks_20260818-2048.csv",
+  "note": "place_text leave-one-out 용 손 찍기 (1958 Musica viva · 1958 Végh-Quartett · 1956 Hartmann). 아직 이 파일을 읽는 스크립트가 없다"
+ }
+}

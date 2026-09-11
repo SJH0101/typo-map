@@ -3,22 +3,22 @@
 하이브리드(Surya 줄 + VLM 묶기)를 짓기 전에, 묶기를 완벽하게 해도 줄
 검출이 허락하는 한계가 어디인지를 잰다. 묶기는 사람 상자를 보고 한다 —
 실제 시스템은 그것을 모른다. 그러니 이 값은 상한이고, **파라미터 튜닝에
-쓰지 않는다**. 정의는 돌리기 전에 docs/oracle_preregister.json 에 박았다.
+쓰지 않는다**. 정의는 docs/oracle_preregister.json 에 있다.
 
-    python detector_compare.py surya_lines   # boxes/surya_lines.json
-    python oracle_group.py                   # docs/oracle_upper.json
+경로는 모두 인자로 받는다. 한 번에 다시 돌리는 명령은 eval/run_all.py 다.
+
+    python oracle_group.py --ref boxes/human_v2.json --lines boxes/surya_lines.json \\
+        --group boxes/surya_run1.json --vlm boxes/vlm_pass1.json \\
+        --prereg docs/oracle_preregister.json --out docs/oracle_upper.json
 """
+import argparse
 import json
-import os
 from collections import Counter
 
 import numpy as np
 from PIL import Image
 
 import detector_score as S
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, 'docs', 'oracle_upper.json')
 
 OUTSIDE = 0.5    # 줄 넓이 중 이 몫 이상이 사람 상자 밖이면 «상자를 넘는 줄»
 COVER_X = 0.5    # 잉크 줄 폭 중 이 몫 이상 가로로 겹쳐야 «덮었다»
@@ -78,10 +78,20 @@ def cause(gray, i, R, L, owner):
     return '기타', how + ('' if ink is not None else ' · 잉크 줄 못 잼')
 
 
-def main():
-    _, ref = S.load('human_v2')
-    lines_doc, lines = S.load('surya_lines')
-    paths = S._paths()
+def main(argv=None):
+    ap = argparse.ArgumentParser(description='오라클 묶기 상한. 경로는 모두 인자로 받는다.')
+    ap.add_argument('--ref', required=True, help='참조 상자 파일')
+    ap.add_argument('--lines', required=True, help='group() 이전 Surya 줄 상자 파일')
+    ap.add_argument('--group', required=True, help='지금 Surya group 상자 파일')
+    ap.add_argument('--vlm', required=True, help='VLM 상자 파일')
+    ap.add_argument('--prereg', required=True)
+    ap.add_argument('--out', required=True)
+    ap.add_argument('--image-root', action='append')
+    a = ap.parse_args(argv)
+
+    _, ref = S.load(a.ref)
+    lines_doc, lines = S.load(a.lines)
+    paths = S._paths(a.ref, a.image_root)
     grays = {f: np.asarray(Image.open(paths[f]).convert('L')).astype(float) for f in ref}
 
     oracle, plus = {}, {}
@@ -117,18 +127,20 @@ def main():
                                 원인=c, 자세히=d))
 
     rows = {}
-    for name, got in (('Surya (지금 group)', S.load('surya_run1')[1]),
-                      ('VLM 1차', S.load('vlm_pass1')[1]),
+    for name, got in (('Surya (지금 group)', S.load(a.group)[1]),
+                      ('VLM 1차', S.load(a.vlm)[1]),
                       ('오라클 묶기', oracle),
                       ('오라클 묶기 + 안 겹치는 줄', plus)):
         rows[name], _ = S.score(ref, got, grays, 'A')
 
-    out = dict(
-        무엇='Surya 줄을 사람 상자를 아는 묶기로 묶었을 때 참조와의 일치도 — 상한',
-        용도='상한 확인용. 파라미터 튜닝에 쓰지 않는다',
-        사전등록='docs/oracle_preregister.json',
-        사전등록_커밋='정의는 실행 전 같은 세션에서 작성했으나 커밋은 실행 후에 했다',
-        줄=dict(파일='boxes/surya_lines.json', 수=n_lines, 장당=round(n_lines / len(ref), 2),
+    out = dict(무엇='Surya 줄을 사람 상자를 아는 묶기로 묶었을 때 참조와의 일치도 — 상한',
+               용도='상한 확인용. 파라미터 튜닝에 쓰지 않는다',
+               사전등록=a.prereg)
+    note = S._commit_note(a.prereg)
+    if note:
+        out['사전등록_커밋'] = note
+    out.update(
+        줄=dict(파일=a.lines, 수=n_lines, 장당=round(n_lines / len(ref), 2),
                group_재현=lines_doc['source'].get('group_reproduces_run1')),
         안겹치는줄=dict(수=orphan_n, 몫=round(orphan_n / n_lines, 3),
                    판면넓이_합_장평균=round(orphan_area / len(ref), 4),
@@ -136,7 +148,7 @@ def main():
         표=rows,
         오라클로도_못맞힌_사람상자=dict(수=sum(causes.values()), 원인=dict(causes),
                                 자세히=dict(detail), 상자별=per_box))
-    json.dump(out, open(OUT, 'w'), ensure_ascii=False, indent=1)
+    json.dump(out, open(a.out, 'w'), ensure_ascii=False, indent=1)
     print(f"줄 {n_lines} (장당 {n_lines / len(ref):.1f}) · group 재현 {out['줄']['group_재현']} · "
           f"안 겹치는 줄 {orphan_n} ({orphan_n / n_lines:.1%})")
     for k, v in rows.items():
@@ -144,7 +156,7 @@ def main():
               f"장당 {v['장당상자']:5.2f}  IoU {v['맞은짝_IoU_중앙값']}  참조쪽 {v['참조쪽']}")
     print('못 맞힌 사람 상자', sum(causes.values()), dict(causes))
     print('  자세히', dict(detail))
-    print('→', OUT)
+    print('→', a.out)
 
 
 if __name__ == '__main__':

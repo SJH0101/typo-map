@@ -1,9 +1,20 @@
-"""검출기 상자를 참조 상자(사람 v2)와 견준다 — docs/detector_preregister.json 의 정의 그대로.
+"""검출기 상자를 참조 상자와 견준다 — docs/detector_preregister.json 의 정의 그대로.
 
-    python detector_compare.py score   →  docs/detector_compare.json
+참조·출처·사전등록·출력 경로는 모두 인자로 받는다. 코드 안에 데이터 경로를
+박지 않는다. 한 번에 다시 돌리는 명령은 eval/run_all.py 다.
 
-«정확도» 가 아니라 «참조 상자와의 일치도» 다. 참조는 라벨러 한 명이 그었다.
+    python detector_score.py --ref boxes/human_v2.json \\
+        --source EasyOCR=boxes/easyocr_run1.json,boxes/easyocr_run2.json \\
+        --source Surya=boxes/surya_run1.json,boxes/surya_run2.json \\
+        --source VLM=boxes/vlm_pass1.json,boxes/vlm_pass2.json \\
+        --prereg docs/detector_preregister.json --out docs/detector_compare.json
+
+--source 는 «이름=첫째[,둘째]». 첫째를 채점에, 둘째를 재현성에 쓴다. 로컬·버전
+고정 여부는 상자 파일의 source.kind 로 정한다 (vlm 이면 아니다).
+
+«정확도» 가 아니라 «참조 상자와의 일치도» 다.
 """
+import argparse
 import hashlib
 import json
 import os
@@ -13,22 +24,12 @@ from collections import Counter
 import numpy as np
 from PIL import Image
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-BOXES = os.path.join(HERE, 'boxes')
-OUT = os.path.join(HERE, 'docs', 'detector_compare.json')
-
 IOU_MIN = 0.5      # 1:1 짝으로 인정하는 IoU
 INSIDE = 0.5       # «안에 들었다» 로 보는 넓이 몫
 TOUCH = 0.1        # «범위 어긋남» 으로 보는 최소 IoU
 N_BOOT = 2000
 SEED = 20260911
 F1_GAP = 0.05      # 사용자 지정 — 이보다 가까우면 재현성으로 고른다
-
-SOURCES = ['EasyOCR', 'Surya', 'VLM']
-RUNS = {'EasyOCR': ('easyocr_run1', 'easyocr_run2'),
-        'Surya': ('surya_run1', 'surya_run2'),
-        'VLM': ('vlm_pass1', 'vlm_pass2')}
-LOCAL = {'EasyOCR': True, 'Surya': True, 'VLM': False}
 
 
 # ── 상자 셈 ───────────────────────────────────────────────────
@@ -146,17 +147,26 @@ def tighten(gray, boxes, drop):
 
 # ── 읽기 ──────────────────────────────────────────────────────
 
-def load(name):
-    path = os.path.join(BOXES, name + '.json')
-    if not os.path.exists(path):
+def load(path):
+    if not path or not os.path.exists(path):
         return None
     d = json.load(open(path))
     return d, {p['file']: p for p in d['posters']}
 
 
-def _paths():
+def _paths(ref_path, roots=None):
     import detector_compare as DC
-    return {f: p for _c, f, p, _W, _H in DC.posters()}
+    return {f: p for _c, f, p, _W, _H in DC.ref_posters(ref_path, roots)}
+
+
+def _sha(path):
+    return hashlib.sha256(open(path, 'rb').read()).hexdigest()
+
+
+def _commit_note(prereg):
+    """사전등록 파일의 «커밋 시점» 첫 문장. 없으면 None."""
+    t = json.load(open(prereg)).get('커밋 시점')
+    return t.split('. ')[0] if t else None
 
 
 # ── 채점 ──────────────────────────────────────────────────────
@@ -246,54 +256,70 @@ def repeat(a, b):
     return dict(F1=round(prf(rows)[2], 3), 똑같은_장=same, 장=len(rows))
 
 
-def choose(table_a, rep):
+def choose(table_a, rep, local):
     f1 = {s: table_a[s]['F1'] for s in table_a}
     order = sorted(f1, key=lambda s: -f1[s])
     best = order[0]
     if len(order) > 1 and f1[best] - f1[order[1]] > F1_GAP:
         return best, f'F1 차이 {f1[best] - f1[order[1]]:.3f} > {F1_GAP} — 일치도가 높은 쪽'
     near = [s for s in order if f1[best] - f1[s] <= F1_GAP]
-    local = [s for s in near if LOCAL[s]] or near
-    pick = sorted(local, key=lambda s: (-(rep.get(s) or {}).get('F1', -1), -f1[s]))[0]
-    return pick, (f'최고 F1 에서 {F1_GAP} 안: {near} — 로컬·버전 고정 {local} 중 '
+    loc = [s for s in near if local.get(s, True)] or near
+    pick = sorted(loc, key=lambda s: (-(rep.get(s) or {}).get('F1', -1), -f1[s]))[0]
+    return pick, (f'최고 F1 에서 {F1_GAP} 안: {near} — 로컬·버전 고정 {loc} 중 '
                   f'실행 간 일치가 높은 쪽')
 
 
-def main():
-    ref_doc, ref = load('human_v2')
-    paths = _paths()
+def main(argv=None):
+    ap = argparse.ArgumentParser(description='검출기 상자를 참조 상자와 견준다. 경로는 모두 인자로 받는다.')
+    ap.add_argument('--ref', required=True, help='참조 상자 파일 (typo-boxes/1)')
+    ap.add_argument('--source', action='append', required=True, metavar='이름=첫째[,둘째]')
+    ap.add_argument('--prereg', required=True, help='사전등록 파일')
+    ap.add_argument('--out', required=True)
+    ap.add_argument('--note', action='append', default=[], metavar='키=글',
+                    help='«추가_사전등록밖» 에 함께 적을 기록')
+    ap.add_argument('--image-root', action='append', help='그림을 찾을 폴더. 생략하면 surface.ROOTS')
+    a = ap.parse_args(argv)
+
+    sources = [(s.split('=', 1)[0], s.split('=', 1)[1].split(',')) for s in a.source]
+    ref_doc, ref = load(a.ref)
+    paths = _paths(a.ref, a.image_root)
     grays = {f: np.asarray(Image.open(paths[f]).convert('L')).astype(float) for f in ref}
     out = dict(무엇='검출기 셋과 참조 상자(사람 v2, 라벨러 한 명)의 일치도 — 정확도가 아니다',
-               사전등록='docs/detector_preregister.json',
-               사전등록_sha256=hashlib.sha256(open(os.path.join(HERE, 'docs', 'detector_preregister.json'), 'rb').read()).hexdigest(),
-               사전등록_커밋='정의는 실행 전 같은 세션에서 작성했으나 커밋은 실행 후에 했다',
-               참조=ref_doc['source'], 출처={}, 표A={}, 표B={}, 재현성={})
-    rows_a = {}
-    for s in SOURCES:
-        got = load(RUNS[s][0])
+               사전등록=a.prereg, 사전등록_sha256=_sha(a.prereg))
+    note = _commit_note(a.prereg)
+    if note:
+        out['사전등록_커밋'] = note
+    out.update(참조=ref_doc['source'], 출처={}, 표A={}, 표B={}, 재현성={})
+
+    rows_a, local, seconds = {}, {}, {}
+    for name, files in sources:
+        got = load(files[0])
         if not got:
-            out['출처'][s] = '파일 없음'
+            out['출처'][name] = '파일 없음'
             continue
         doc, pred = got
-        out['출처'][s] = doc['source']
-        out['표A'][s], rows_a[s] = score(ref, pred, grays, 'A')
-        out['표B'][s], _ = score(ref, pred, grays, 'B')
-        second = load(RUNS[s][1])
-        out['재현성'][s] = repeat(pred, second[1]) if second else None
+        out['출처'][name] = doc['source']
+        local[name] = doc['source'].get('kind') != 'vlm'
+        out['표A'][name], rows_a[name] = score(ref, pred, grays, 'A')
+        out['표B'][name], _ = score(ref, pred, grays, 'B')
+        second = load(files[1]) if len(files) > 1 else None
+        out['재현성'][name] = repeat(pred, second[1]) if second else None
+        if second and doc['source'].get('kind') == 'vlm':
+            seconds[name] = second
     if len(rows_a) >= 2:
         out['F1_구간'], out['F1_차이_구간'] = boot(rows_a)
-    out['선택'], out['선택_이유'] = choose(out['표A'], out['재현성'])
-    ob, _ = choose(out['표B'], out['재현성'])
+    out['선택'], out['선택_이유'] = choose(out['표A'], out['재현성'], local)
+    ob, _ = choose(out['표B'], out['재현성'], local)
     out['표B로_골랐다면'] = ob
     out['표AB_엇갈림'] = ob != out['선택']
-    second = load('vlm_pass2')
-    if second:
-        p2, _ = score(ref, second[1], grays, 'A')
+    extra = {f'{name}_pass2_표A': score(ref, second[1], grays, 'A')[0]
+             for name, second in seconds.items()}
+    notes = dict(n.split('=', 1) for n in a.note)
+    if extra or notes:
         out['추가_사전등록밖'] = dict(
             무엇='VLM 둘째 패스를 참조에 댄 값 — 사전등록은 첫째만 채점에 쓰기로 했다. 선택에는 쓰지 않는다',
-            VLM_pass2_표A=p2,
-            VLM_pass1_에이전트_자기보고='164개라고 보고했으나 파일에는 127개 — 파일 값을 썼다')
-    json.dump(out, open(OUT, 'w'), ensure_ascii=False, indent=1)
+            **extra, **notes)
+    json.dump(out, open(a.out, 'w'), ensure_ascii=False, indent=1)
     for t in ('표A', '표B'):
         print(f'\n{t}')
         for s, v in out[t].items():
@@ -303,4 +329,8 @@ def main():
     print('\n재현성', out['재현성'])
     print('F1 구간', out.get('F1_구간'), '\n차이 구간', out.get('F1_차이_구간'))
     print('선택', out['선택'], '—', out['선택_이유'], '| 표B로는', ob)
-    print('→', OUT)
+    print('→', a.out)
+
+
+if __name__ == '__main__':
+    main()
