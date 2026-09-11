@@ -13,7 +13,8 @@
        만들어야 하므로 이 스크립트가 만들지 않는다
     3. 검출기 비교                               detector_score.py
     4. 오라클 묶기 상한                          oracle_group.py
-    5. IDML 가이드 탐색                          idml_explore.py score
+    5. place_text leave-one-out (탐색)          eval/loo_place_text.py
+    6. IDML 가이드 탐색                          idml_explore.py score
 """
 import argparse
 import json
@@ -91,13 +92,23 @@ def main(argv=None):
     run('oracle_group.py', '--ref', ref, '--lines', R['surya_lines'], '--group', det['Surya'][0],
         '--vlm', det['VLM'][0], '--prereg', R['oracle_prereg'], '--out', R['oracle_out'], *roots)
 
+    if R.get('loo_place_text') and R.get('hand_lines'):
+        P, H = R['loo_place_text'], R['hand_lines']
+        ps = []
+        for x in P['posters']:
+            ps += ['--poster', x]
+        run('eval/loo_place_text.py', '--lines', H['lines'], '--blocks', H['blocks'],
+            '--cache', P['cache'], *ps, '--out', P['out'])
+
     if R.get('idml') and not a.skip_idml:
         I = R['idml']
         run('idml_explore.py', 'score', '--idml-dir', I['dir'], '--map', I['map'],
             '--posters-dir', I['posters_dir'], '--out', I['out'])
 
     print('\n끝. 결과 파일이 커밋본과 달라졌는지:')
-    outs = [hb['out'], R['detector_out'], R['oracle_out']] + ([R['idml']['out']] if R.get('idml') else [])
+    outs = ([hb['out'], R['detector_out'], R['oracle_out']]
+            + ([R['loo_place_text']['out']] if R.get('loo_place_text') else [])
+            + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)
 
 

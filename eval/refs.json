@@ -36,6 +36,12 @@
  "hand_lines": {
   "lines": "~/Downloads/lines_20260818-2048.csv",
   "blocks": "~/Downloads/blocks_20260818-2048.csv",
-  "note": "place_text leave-one-out 용 손 찍기 (1958 Musica viva · 1958 Végh-Quartett · 1956 Hartmann). 아직 이 파일을 읽는 스크립트가 없다"
+  "note": "place_text leave-one-out 용 손 찍기 (1958 Musica viva · 1958 Végh-Quartett · 1956 Hartmann). eval/loo_place_text.py 가 읽는다"
+ },
+
+ "loo_place_text": {
+  "cache": "~/.typo-mcp/brockmann.json",
+  "posters": ["1958_Musica viva - Dienstag, den 7. Januar 1958", "1958_Végh-Quartett - Musica Viva"],
+  "out": "docs/loo_place_text.json"
  }
 }
