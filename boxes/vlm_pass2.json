@@ -1,0 +1,1562 @@
+{
+ "schema": "typo-boxes/1",
+ "source": {
+  "kind": "vlm",
+  "model": "claude-opus-5",
+  "how": "Claude Code 서브에이전트 (대화 맥락 없이 새로 시작, 모델은 부모 세션 상속)",
+  "date": "2026-09-11",
+  "pass_": 2,
+  "prompt": "docs/detector_vlm_prompt.md",
+  "prompt_sha256": "9c47f7f438b1dea46be0b560401464707613d63a7d82eadc8b853c254fa20b22",
+  "wrapper": "먼저 이 지시문 파일 하나를 Read 도구로 읽고 그대로 따르라: docs/detector_vlm_prompt.md / 이 지시문 파일, 거기 적힌 이미지 26장, 그리고 아래 출력 파일 말고는 어떤 파일도 열거나 찾지 말라. 셸 명령도 쓰지 말라. / 출력 파일 경로: <scratchpad>/vlm_pass2.raw.json",
+  "scale": "원본 배율 (이미지 파일 그대로 Read)",
+  "files_opened": [
+   "/Users/junhyeoksong/Documents/poster/files/docs/detector_vlm_prompt.md",
+   "/Users/junhyeoksong/Documents/연구2/로제정리/corpus/코어/Ausstellung/1985_Richard Paul Lohse - Kunstmuseum Luzern.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/F4/Gewerbemuseum_Basel/1952_Gewerbemuseum Basel - 14. Juni - 13. Juli 1952 - Die Ausbild.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Gewerbemuseum_Basel/1961_Basel und die Stadtstrassen der Zukunft - Gewerbemuseum Base.jpg",
+   "/Users/junhyeoksong/Documents/연구2/브로크만 정리/corpus/F4/Tonhalle_Konzert/1953_Tonhalle Zürich - 5. Frühjahrskonzert - Leitung Erich Schmid.jpg",
+   "/Users/junhyeoksong/Documents/연구2/브로크만 정리/corpus/F4/Tonhalle_Konzert/1952_de Boer-Reitz-Quartett - Tonhalle Kleiner Saal - 8. Kammermu.jpg",
+   "/Users/junhyeoksong/Documents/연구2/루더정리/corpus/코어/Kunsthalle_Basel/1956_Kunsthalle Basel - Bauchant - Bombois - Séraphine - Vivin - .jpg",
+   "/Users/junhyeoksong/Documents/연구2/브로크만 정리/corpus/코어/Musica_Viva/1960_Musica viva - Donnerstag, 10. März 1960 - Tonhalle Grosser S.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Kunsthalle_Basel/1957_Basler Privatbesitz - Kunsthalle Basel - 4. Juli - 29. Septe.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Stadttheater_Basel/1958_Stadt Theater Basel - Saison-Beginn 19. September 1958 - Sin.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Stadttheater_Basel/1959_Stadttheater Basel - Halbe Saison - Halbes Abonnement - Halb.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Sonstige/1957_Die Schweiz zur Römerzeit - Mustermesse Baslerhalle.jpg",
+   "/Users/junhyeoksong/Documents/연구2/브로크만 정리/corpus/코어/Opernhaus/1966_Opernhaus Zürich - Wenn ich König wär... - Oper von Adolphe .jpg",
+   "/Users/junhyeoksong/Documents/연구2/브로크만 정리/corpus/코어/Juni_Festwochen/1953_Tonhalle Grosser Saal - Juni-Festwochen Zürich 1953 - Tonhal.jpg",
+   "/Users/junhyeoksong/Documents/연구2/루더정리/corpus/코어/Gewerbemuseum_Basel/1956_Verborgene Schätze des Gewerbemuseums - Gewerbemuseum Basel.jpg",
+   "/Users/junhyeoksong/Documents/연구2/로제정리/corpus/코어/Ausstellung/1958_Kunstmuseum Winterthur - Ungegenständliche Malerei in der Sc.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Kunsthalle_Basel/1961_René Auberjonois - Ernest Bolens - Kunsthalle Basel.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Kunsthalle_Basel/1963_Kreis 48 - Ernst Messerli - Werner Witschi - (...) Kunsthall.jpg",
+   "/Users/junhyeoksong/Documents/연구2/로제정리/corpus/코어/Ausstellung/1950_Zürcher Künstler im Helmhaus.jpg",
+   "/Users/junhyeoksong/Documents/연구2/루더정리/corpus/코어/Kunsthalle_Basel/1965_Sektion Basel der Gesellschaft Schweizer Maler Bildhauer und.jpg",
+   "/Users/junhyeoksong/Documents/연구2/로제정리/corpus/코어/Gewerbemuseum_etc/1950_100 Jahre Eisenbeton - Kunstgewerbemuseum Zürich.jpg",
+   "/Users/junhyeoksong/Documents/연구2/호프만정리/corpus/코어/Gewerbemuseum_Basel/1949_Ausstellung im Gewerbemuseum Basel - Photographie in der Sch.jpg",
+   "/Users/junhyeoksong/Documents/연구2/로제정리/corpus/코어/Gewerbemuseum_etc/1958_Kunststoffe - Gewerbemuseum Winterthur.jpg",
+   "/Users/junhyeoksong/Documents/연구2/브로크만 정리/corpus/F4/Tonhalle_Konzert/1953_3. Frühjahrskonzert der Tonhalle-Gesellschaft - Dienstag 28..jpg",
+   "/Users/junhyeoksong/Documents/연구2/루더정리/corpus/코어/Gewerbemuseum_Basel/1962_Neue Wirtshausschilder - Gewerbemuseum Basel.jpg",
+   "/Users/junhyeoksong/Documents/연구2/브로크만 정리/corpus/코어/Musica_Viva/1959_Musica Viva - Kleiner Tonhallesaal - Matthias Hauer - Werner.jpg",
+   "/Users/junhyeoksong/Documents/연구2/로제정리/corpus/코어/Ausstellung/1970_Lohse - Kunsthalle Bern.jpg"
+  ],
+  "notes": "애매해서 끊은 곳: 1953 Juni-Festwochen 오른쪽 단(틈 비율이 2배 안팎이라 이름+부제 짝 단위로 끊음), 1960 Musica viva 오른쪽 단(줄 사이 약간 더 벌어진 세 자리에서 끊어 4덩어리), 1953 Tonhalle 두 장의 작은 라벨 줄(줄 사이 틈이 글자 높이보다 커서 줄마다 따로), 1949 Photographie 왼쪽 여섯 줄(줄 간격이 넓어 줄마다 따로), 한 줄 안에서 단어 사이가 크게 벌어진 경우(1952 Gewerbemuseum 상단, 1958 Stadt Theater 상단, 1953 3.Frühjahrskonzert 머리줄)는 따로. 1950 Helmhaus 세로쓰기는 붉은 틀에 걸린 'Zürcher' 와 위쪽 'Künstler im Helmhaus' 를 끊음. 1956 Kunsthalle Basel 오른쪽 덩어리는 아래 두 줄이 왼쪽으로 뻗어 상자가 왼쪽 덩어리 상자와 조금 겹침. 1963 Kreis 48 의 큰 손글씨 KREIS 48 은 넣었으나 그 위 원+화살표 기호는 글자가 아니라 뺌. 가장자리 세로 크레디트 같은 아주 작은 글자는 원본 배율에서 윤곽만 보여 좌표가 거침. 1959 Musica Viva 가운데 작은 라벨 단의 세로 위치는 추정 오차가 큼.",
+  "missing_posters": [],
+  "raw_sha256": "507a5cb5835b28c237602abd11db37fd1ee18944a8644f433d4f49f44098f429"
+ },
+ "coords": "px",
+ "posters": [
+  {
+   "corpus": "로제",
+   "file": "1985_Richard Paul Lohse - Kunstmuseum Luzern.jpg",
+   "img_w": 567,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      199.0,
+      640.0,
+      554.0,
+      683.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      199.0,
+      702.0,
+      554.0,
+      789.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1952_Gewerbemuseum Basel - 14. Juni - 13. Juli 1952 - Die Ausbild.jpg",
+   "img_w": 554,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      5.0,
+      37.0,
+      109.0,
+      59.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      127.0,
+      37.0,
+      286.0,
+      57.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      304.0,
+      37.0,
+      355.0,
+      57.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      357.0,
+      646.0,
+      497.0,
+      790.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      531.0,
+      735.0,
+      541.0,
+      785.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1961_Basel und die Stadtstrassen der Zukunft - Gewerbemuseum Base.jpg",
+   "img_w": 565,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      29.0,
+      87.0,
+      132.0,
+      227.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      29.0,
+      242.0,
+      138.0,
+      313.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      229.0,
+      4.0,
+      306.0,
+      153.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      370.0,
+      148.0,
+      394.0,
+      191.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      506.0,
+      28.0,
+      531.0,
+      76.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "브로크만",
+   "file": "1953_Tonhalle Zürich - 5. Frühjahrskonzert - Leitung Erich Schmid.jpg",
+   "img_w": 560,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      204.0,
+      459.0,
+      263.0,
+      484.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      274.0,
+      459.0,
+      379.0,
+      484.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      228.0,
+      509.0,
+      263.0,
+      520.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      231.0,
+      536.0,
+      263.0,
+      547.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      275.0,
+      502.0,
+      443.0,
+      550.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      186.0,
+      577.0,
+      263.0,
+      589.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      204.0,
+      603.0,
+      263.0,
+      616.0
+     ]
+    },
+    {
+     "id": "8",
+     "box": [
+      169.0,
+      630.0,
+      263.0,
+      643.0
+     ]
+    },
+    {
+     "id": "9",
+     "box": [
+      275.0,
+      569.0,
+      361.0,
+      644.0
+     ]
+    },
+    {
+     "id": "10",
+     "box": [
+      226.0,
+      655.0,
+      263.0,
+      666.0
+     ]
+    },
+    {
+     "id": "11",
+     "box": [
+      275.0,
+      655.0,
+      398.0,
+      666.0
+     ]
+    },
+    {
+     "id": "12",
+     "box": [
+      535.0,
+      596.0,
+      550.0,
+      692.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "브로크만",
+   "file": "1952_de Boer-Reitz-Quartett - Tonhalle Kleiner Saal - 8. Kammermu.jpg",
+   "img_w": 560,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      317.0,
+      36.0,
+      479.0,
+      109.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      39.0,
+      304.0,
+      159.0,
+      441.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      39.0,
+      484.0,
+      219.0,
+      504.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      317.0,
+      591.0,
+      491.0,
+      734.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      317.0,
+      750.0,
+      491.0,
+      780.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      539.0,
+      650.0,
+      551.0,
+      775.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "루더",
+   "file": "1956_Kunsthalle Basel - Bauchant - Bombois - Séraphine - Vivin - .jpg",
+   "img_w": 566,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      7.0,
+      540.0,
+      248.0,
+      664.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      218.0,
+      540.0,
+      562.0,
+      792.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      4.0,
+      764.0,
+      152.0,
+      776.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "브로크만",
+   "file": "1960_Musica viva - Donnerstag, 10. März 1960 - Tonhalle Grosser S.jpg",
+   "img_w": 563,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      12.0,
+      367.0,
+      158.0,
+      391.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      280.0,
+      6.0,
+      543.0,
+      166.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      280.0,
+      175.0,
+      488.0,
+      358.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      278.0,
+      367.0,
+      546.0,
+      683.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      280.0,
+      691.0,
+      532.0,
+      796.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      550.0,
+      355.0,
+      560.0,
+      435.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1957_Basler Privatbesitz - Kunsthalle Basel - 4. Juli - 29. Septe.jpg",
+   "img_w": 566,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      329.0,
+      7.0,
+      554.0,
+      173.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      409.0,
+      492.0,
+      521.0,
+      792.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      3.0,
+      690.0,
+      12.0,
+      775.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1958_Stadt Theater Basel - Saison-Beginn 19. September 1958 - Sin.jpg",
+   "img_w": 562,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      7.0,
+      13.0,
+      197.0,
+      36.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      222.0,
+      13.0,
+      556.0,
+      39.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      314.0,
+      61.0,
+      556.0,
+      85.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      7.0,
+      761.0,
+      52.0,
+      769.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      95.0,
+      761.0,
+      242.0,
+      769.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1959_Stadttheater Basel - Halbe Saison - Halbes Abonnement - Halb.jpg",
+   "img_w": 566,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      322.0,
+      69.0,
+      506.0,
+      108.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      44.0,
+      202.0,
+      326.0,
+      241.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      224.0,
+      339.0,
+      398.0,
+      378.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      225.0,
+      461.0,
+      317.0,
+      688.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      323.0,
+      461.0,
+      500.0,
+      689.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      135.0,
+      750.0,
+      401.0,
+      791.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      2.0,
+      715.0,
+      10.0,
+      775.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1957_Die Schweiz zur Römerzeit - Mustermesse Baslerhalle.jpg",
+   "img_w": 567,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      20.0,
+      14.0,
+      551.0,
+      326.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      314.0,
+      274.0,
+      446.0,
+      346.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      311.0,
+      705.0,
+      446.0,
+      792.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      10.0,
+      708.0,
+      152.0,
+      717.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "브로크만",
+   "file": "1966_Opernhaus Zürich - Wenn ich König wär... - Oper von Adolphe .jpg",
+   "img_w": 564,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      39.0,
+      104.0,
+      516.0,
+      264.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      41.0,
+      297.0,
+      373.0,
+      316.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      38.0,
+      398.0,
+      498.0,
+      558.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      41.0,
+      589.0,
+      368.0,
+      608.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      41.0,
+      612.0,
+      221.0,
+      674.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      225.0,
+      612.0,
+      350.0,
+      674.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "브로크만",
+   "file": "1953_Tonhalle Grosser Saal - Juni-Festwochen Zürich 1953 - Tonhal.jpg",
+   "img_w": 569,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      319.0,
+      83.0,
+      473.0,
+      111.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      34.0,
+      279.0,
+      199.0,
+      294.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      322.0,
+      215.0,
+      485.0,
+      269.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      322.0,
+      278.0,
+      546.0,
+      348.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      322.0,
+      355.0,
+      488.0,
+      369.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      322.0,
+      385.0,
+      500.0,
+      438.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      322.0,
+      448.0,
+      507.0,
+      500.0
+     ]
+    },
+    {
+     "id": "8",
+     "box": [
+      322.0,
+      511.0,
+      498.0,
+      561.0
+     ]
+    },
+    {
+     "id": "9",
+     "box": [
+      322.0,
+      638.0,
+      518.0,
+      684.0
+     ]
+    },
+    {
+     "id": "10",
+     "box": [
+      233.0,
+      767.0,
+      447.0,
+      776.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "루더",
+   "file": "1956_Verborgene Schätze des Gewerbemuseums - Gewerbemuseum Basel.jpg",
+   "img_w": 563,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      431.0,
+      14.0,
+      549.0,
+      129.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      431.0,
+      402.0,
+      542.0,
+      464.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      430.0,
+      767.0,
+      537.0,
+      776.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "로제",
+   "file": "1958_Kunstmuseum Winterthur - Ungegenständliche Malerei in der Sc.jpg",
+   "img_w": 568,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      116.0,
+      7.0,
+      281.0,
+      59.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      61.0,
+      487.0,
+      281.0,
+      573.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      339.0,
+      636.0,
+      541.0,
+      686.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      3.0,
+      685.0,
+      13.0,
+      765.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1961_René Auberjonois - Ernest Bolens - Kunsthalle Basel.jpg",
+   "img_w": 568,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      79.0,
+      257.0,
+      273.0,
+      433.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      385.0,
+      595.0,
+      461.0,
+      658.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      68.0,
+      767.0,
+      232.0,
+      776.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1963_Kreis 48 - Ernst Messerli - Werner Witschi - (...) Kunsthall.jpg",
+   "img_w": 566,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      199.0,
+      37.0,
+      223.0,
+      47.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      192.0,
+      69.0,
+      223.0,
+      79.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      228.0,
+      27.0,
+      343.0,
+      83.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      367.0,
+      262.0,
+      475.0,
+      331.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      480.0,
+      262.0,
+      551.0,
+      316.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      11.0,
+      521.0,
+      90.0,
+      606.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      128.0,
+      443.0,
+      477.0,
+      771.0
+     ]
+    },
+    {
+     "id": "8",
+     "box": [
+      366.0,
+      758.0,
+      471.0,
+      772.0
+     ]
+    },
+    {
+     "id": "9",
+     "box": [
+      3.0,
+      180.0,
+      14.0,
+      305.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "로제",
+   "file": "1950_Zürcher Künstler im Helmhaus.jpg",
+   "img_w": 572,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      326.0,
+      9.0,
+      534.0,
+      130.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      326.0,
+      137.0,
+      523.0,
+      191.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      64.0,
+      213.0,
+      213.0,
+      457.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      64.0,
+      476.0,
+      112.0,
+      663.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      127.0,
+      482.0,
+      561.0,
+      641.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      325.0,
+      692.0,
+      558.0,
+      711.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      3.0,
+      550.0,
+      16.0,
+      705.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "루더",
+   "file": "1965_Sektion Basel der Gesellschaft Schweizer Maler Bildhauer und.jpg",
+   "img_w": 563,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      7.0,
+      17.0,
+      556.0,
+      676.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      548.0,
+      695.0,
+      558.0,
+      785.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "로제",
+   "file": "1950_100 Jahre Eisenbeton - Kunstgewerbemuseum Zürich.jpg",
+   "img_w": 570,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      327.0,
+      9.0,
+      563.0,
+      84.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      26.0,
+      684.0,
+      533.0,
+      781.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      546.0,
+      552.0,
+      560.0,
+      602.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "호프만",
+   "file": "1949_Ausstellung im Gewerbemuseum Basel - Photographie in der Sch.jpg",
+   "img_w": 565,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      189.0,
+      60.0,
+      558.0,
+      93.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      32.0,
+      178.0,
+      99.0,
+      193.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      32.0,
+      220.0,
+      158.0,
+      235.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      32.0,
+      263.0,
+      153.0,
+      278.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      32.0,
+      305.0,
+      108.0,
+      320.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      32.0,
+      349.0,
+      138.0,
+      364.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      32.0,
+      392.0,
+      87.0,
+      406.0
+     ]
+    },
+    {
+     "id": "8",
+     "box": [
+      181.0,
+      310.0,
+      190.0,
+      415.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "로제",
+   "file": "1958_Kunststoffe - Gewerbemuseum Winterthur.jpg",
+   "img_w": 563,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      281.0,
+      334.0,
+      554.0,
+      394.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      281.0,
+      402.0,
+      452.0,
+      486.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      26.0,
+      554.0,
+      141.0,
+      631.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      3.0,
+      685.0,
+      12.0,
+      775.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "브로크만",
+   "file": "1953_3. Frühjahrskonzert der Tonhalle-Gesellschaft - Dienstag 28..jpg",
+   "img_w": 554,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      33.0,
+      433.0,
+      176.0,
+      446.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      206.0,
+      433.0,
+      271.0,
+      446.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      291.0,
+      433.0,
+      394.0,
+      446.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      33.0,
+      459.0,
+      143.0,
+      505.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      144.0,
+      469.0,
+      166.0,
+      480.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      144.0,
+      489.0,
+      164.0,
+      500.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      33.0,
+      519.0,
+      191.0,
+      532.0
+     ]
+    },
+    {
+     "id": "8",
+     "box": [
+      206.0,
+      459.0,
+      288.0,
+      532.0
+     ]
+    },
+    {
+     "id": "9",
+     "box": [
+      290.0,
+      466.0,
+      369.0,
+      479.0
+     ]
+    },
+    {
+     "id": "10",
+     "box": [
+      290.0,
+      490.0,
+      356.0,
+      501.0
+     ]
+    },
+    {
+     "id": "11",
+     "box": [
+      290.0,
+      513.0,
+      375.0,
+      526.0
+     ]
+    },
+    {
+     "id": "12",
+     "box": [
+      33.0,
+      764.0,
+      48.0,
+      776.0
+     ]
+    },
+    {
+     "id": "13",
+     "box": [
+      66.0,
+      764.0,
+      151.0,
+      776.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "루더",
+   "file": "1962_Neue Wirtshausschilder - Gewerbemuseum Basel.jpg",
+   "img_w": 563,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      7.0,
+      494.0,
+      337.0,
+      589.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      7.0,
+      706.0,
+      299.0,
+      754.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      368.0,
+      706.0,
+      544.0,
+      791.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      6.0,
+      771.0,
+      67.0,
+      780.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "브로크만",
+   "file": "1959_Musica Viva - Kleiner Tonhallesaal - Matthias Hauer - Werner.jpg",
+   "img_w": 563,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      14.0,
+      29.0,
+      161.0,
+      54.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      14.0,
+      597.0,
+      286.0,
+      758.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      299.0,
+      597.0,
+      371.0,
+      607.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      311.0,
+      651.0,
+      361.0,
+      661.0
+     ]
+    },
+    {
+     "id": "5",
+     "box": [
+      299.0,
+      670.0,
+      361.0,
+      703.0
+     ]
+    },
+    {
+     "id": "6",
+     "box": [
+      304.0,
+      708.0,
+      361.0,
+      719.0
+     ]
+    },
+    {
+     "id": "7",
+     "box": [
+      374.0,
+      596.0,
+      558.0,
+      780.0
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "로제",
+   "file": "1970_Lohse - Kunsthalle Bern.jpg",
+   "img_w": 565,
+   "img_h": 800,
+   "boxes": [
+    {
+     "id": "1",
+     "box": [
+      161.0,
+      517.0,
+      288.0,
+      554.0
+     ]
+    },
+    {
+     "id": "2",
+     "box": [
+      284.0,
+      648.0,
+      494.0,
+      708.0
+     ]
+    },
+    {
+     "id": "3",
+     "box": [
+      284.0,
+      734.0,
+      494.0,
+      761.0
+     ]
+    },
+    {
+     "id": "4",
+     "box": [
+      284.0,
+      767.0,
+      342.0,
+      775.0
+     ]
+    }
+   ]
+  }
+ ]
+}
