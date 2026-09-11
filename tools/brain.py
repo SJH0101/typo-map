@@ -34,7 +34,6 @@ def add_designer(args):
     """
     import glob
     import rules as _rules
-    from baseline import scan
 
     name = (args.get("name") or "").strip()
     d = os.path.expanduser(args.get("directory") or "")
@@ -56,7 +55,9 @@ def add_designer(args):
     slug = _slug(name)
     cache = os.path.join(os.path.dirname(_cache(args)), slug + ".json")
     errors = []
-    raw = scan.collect(paths, errors=errors)
+    import measure_corpus as MC                       # 옛 경로(baseline/scan)를 더 쓰지 않는다
+    raw, _failed = MC.measure_items(MC.items_of(paths), log=None)
+    errors += [{"path": p, "why": why} for p, why in _failed]
     if not raw:
         return {"ok": False, "error": "측정에 성공한 포스터가 없다", "failed": errors}
     # 폴더 구조를 이름에 담는다 — 나중에 계열별로 나눠 볼 수 있다
@@ -69,7 +70,7 @@ def add_designer(args):
         keyed["__".join(rel.split(os.sep)) if os.sep in rel else b] = raw[b]
 
     R = _rules.derive(keyed)
-    _rules.save(cache, keyed, R)
+    _rules.save(cache, keyed, R, provenance=MC.provenance(source=cache, n=len(keyed)))
     b = _brain.build(keyed, name, derived=R)
     bp = _path(cache)
     json.dump(b, open(bp, "w"), ensure_ascii=False)

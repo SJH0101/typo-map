@@ -522,8 +522,13 @@ def compare(key, raws):
                 separated=pairs)
 
 
-def save(path, raw, rules):
-    json.dump(dict(raw=raw, rules=rules), open(path, 'w'), ensure_ascii=False)
+def save(path, raw, rules, provenance=None):
+    """provenance 가 없으면 이 캐시를 어느 경로로 쟀는지 파일만 봐서는 모른다
+    (docs/y2_bug.json). measure_corpus.provenance() 를 넘긴다."""
+    d = dict(raw=raw, rules=rules)
+    if provenance:
+        d['provenance'] = provenance
+    json.dump(d, open(path, 'w'), ensure_ascii=False)
 
 
 def load(path):

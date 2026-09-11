@@ -20,12 +20,14 @@ def measure_corpus(args):
     if not paths:
         return {"ok": False, "error": "이미지가 없다"}
     errors = []
-    raw = scan.collect(paths, errors=errors)
+    import measure_corpus as MC                       # 옛 경로(baseline/scan)를 더 쓰지 않는다
+    raw, _failed = MC.measure_items(MC.items_of(paths), log=None)
+    errors += [{"path": p, "why": why} for p, why in _failed]
     if not raw:
         return {"ok": False, "error": "측정에 성공한 포스터가 없다", "failed": errors}
     refs, missing = _refs(args)
     r = rules.derive(raw, references=refs or None)
-    rules.save(_cache(args), raw, r)
+    rules.save(_cache(args), raw, r, provenance=MC.provenance(source=d, n=len(raw)))
     out = {"ok": True, "cache": _cache(args), "n_found": len(paths), **r,
            "n_failed": len(errors), "failed": errors,
            "note": ("실패한 포스터는 failed 에 이유와 함께 나온다. 조용히 빠지지 않는다.")}
