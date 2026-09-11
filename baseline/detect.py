@@ -8,6 +8,7 @@
 재는 일은 하지 않는다 — measure/ink.py 를 불러 쓴다. 의존은 한 방향이다.
 """
 import numpy as np
+from PIL import Image          # run() 이 경로를 받으면 쓴다 — 빠져 있어 NameError 가 났다
 from scipy import ndimage
 
 from measure.ink import polarity, threshold, lines
@@ -306,7 +307,11 @@ def seeded(g, seeds, covered):
             d = dict(l)
             for k in ('base', 'top', 'x_top'):
                 d[k] = l[k] + y0
-            for k in ('cap', 'mark_top', 'desc', 'ink_top'):
+            # ink_bot 이 이 목록에서 빠져 있었다. 창 안 행 번호로 남은 채 box() 의
+            # 아래끝이 되어, 보강 덩어리의 y2 가 «창 안 행 + region 위끝» 이 됐다
+            # (1950 Helmhaus: y1 542 인데 y2 502 = 465 + 37). 캐시 덩어리 289개가
+            # 위끝은 맞고 아래끝만 뒤집혔던 원인이다.
+            for k in ('cap', 'mark_top', 'desc', 'ink_top', 'ink_bot'):
                 if d.get(k) is not None:
                     d[k] = l[k] + y0
             d['xs'] = l['xs'] + x0; d['xe'] = l['xe'] + x0
