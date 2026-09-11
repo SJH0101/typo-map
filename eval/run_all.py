@@ -14,7 +14,8 @@
     3. 검출기 비교                               detector_score.py
     4. 오라클 묶기 상한                          oracle_group.py
     5. place_text leave-one-out (탐색)          eval/loo_place_text.py
-    6. IDML 가이드 탐색                          idml_explore.py score
+    6. 시리즈 판별 시험 (탐색)                   eval/series_check.py
+    7. IDML 가이드 탐색                          idml_explore.py score
 """
 import argparse
 import json
@@ -100,6 +101,21 @@ def main(argv=None):
         run('eval/loo_place_text.py', '--lines', H['lines'], '--blocks', H['blocks'],
             '--cache', P['cache'], *ps, '--out', P['out'])
 
+    if R.get('series_check'):
+        C, H = R['series_check'], R.get('hand_lines') or {}
+        extra = []
+        for n, p in C['others'].items():
+            extra += ['--other', f'{n}={p}']
+        if H:
+            extra += ['--hand-lines', H['lines'], '--hand-blocks', H['blocks']]
+            for x in C.get('hand_posters', []):
+                extra += ['--hand-poster', x]
+        run('eval/series_check.py', '--cache', C['cache'], '--series', C['series'], *extra,
+            '--prereg', C['prereg'], '--out', C['out'])
+        if C.get('diag_out'):
+            run('eval/series_check_diag.py', '--cache', C['cache'], '--series', C['series'],
+                '--out', C['diag_out'])
+
     if R.get('idml') and not a.skip_idml:
         I = R['idml']
         run('idml_explore.py', 'score', '--idml-dir', I['dir'], '--map', I['map'],
@@ -108,6 +124,7 @@ def main(argv=None):
     print('\n끝. 결과 파일이 커밋본과 달라졌는지:')
     outs = ([hb['out'], R['detector_out'], R['oracle_out']]
             + ([R['loo_place_text']['out']] if R.get('loo_place_text') else [])
+            + ([R['series_check']['out']] if R.get('series_check') else [])
             + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)
 

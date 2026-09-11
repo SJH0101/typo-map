@@ -43,5 +43,15 @@
   "cache": "~/.typo-mcp/brockmann.json",
   "posters": ["1958_Musica viva - Dienstag, den 7. Januar 1958", "1958_Végh-Quartett - Musica Viva"],
   "out": "docs/loo_place_text.json"
+ },
+
+ "series_check": {
+  "cache": "~/.typo-mcp/brockmann.json",
+  "series": "Musica_Viva",
+  "others": {"로제": "~/.typo-mcp/rose.json", "루더": "~/.typo-mcp/ruder.json", "호프만": "~/.typo-mcp/corpus.json"},
+  "hand_posters": ["1958_Musica viva - Dienstag, den 7. Januar 1958", "1958_Végh-Quartett - Musica Viva"],
+  "prereg": "docs/series_check_preregister.json",
+  "out": "docs/series_check.json",
+  "diag_out": "docs/series_check_diag.json"
  }
 }
