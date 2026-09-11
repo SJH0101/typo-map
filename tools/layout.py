@@ -1,4 +1,5 @@
 """배치를 다루는 도구 — 규칙대로 놓고, 놓은 것을 규칙과 대조한다."""
+import os
 from statistics import median
 
 from tools.shared import (CACHE_ARG, _rules, _need, _lines, _lead,
@@ -50,7 +51,8 @@ def _candidate(args):
     if img:
         p = os.path.expanduser(img)
         if os.path.exists(p):
-            out.update(rules.color_features(p))
+            from color import fields          # 코퍼스를 잰 것과 같은 함수 (measure/ground.py 와 같다)
+            out.update(fields.features(p))
         else:
             notes.append(f"이미지를 찾을 수 없다: {img}")
     return out, notes
