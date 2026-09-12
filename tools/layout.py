@@ -1,4 +1,5 @@
 """배치를 다루는 도구 — 규칙대로 놓고, 놓은 것을 규칙과 대조한다."""
+import math
 import os
 from statistics import median
 
@@ -6,6 +7,19 @@ from tools.shared import (CACHE_ARG, _rules, _need, _lines, _lead,
                           _layers, _layer_list, _pick)
 
 GAP_MIN_FALLBACK = 1.0     # 여백은 실측에서 「자유」로 나왔다. 겹침만 막는다.
+QUANT = 0.5                # 행간 · 캡 높이의 양자화 불확도 (px). 픽셀 격자의 반 — 자유 상수가 아니다.
+
+
+def _tol(lead, h):
+    """후보 비 r = 행간/캡 의 측정 불확도 반폭 δr.
+
+    행간과 캡 높이가 정수 px 로 재진다고 보고 각각 ±0.5px 를 두어 비로 전파한다.
+    보수적 상한이다 — 합성 실험에서 베이스라인 오차가 0.0px 였으므로 실제 불확도는
+    이보다 작다. 관대한 쪽이라 위반을 놓칠 수는 있어도 정답을 위반으로 몰지 않는다.
+    합성 실험 결과를 본 뒤 넣은 수정이다 (docs/check_layout_fix_preregister.json).
+    """
+    r = lead / h
+    return r * math.sqrt((QUANT / lead) ** 2 + (QUANT / h) ** 2)
 
 
 def _candidate(args):
@@ -81,6 +95,9 @@ def check_layout(args):
     blocks = args.get("blocks", [])
     if not blocks:
         return {"ok": False, "error": "blocks 가 비어 있다"}
+    # 판 전체를 넣었는지 블록 몇 개만 넣었는지는 호출하는 쪽이 안다. 부분 배치에
+    # 판 단위 지표(블록 개수 · 마진 · 덮음)를 대면 «블록 개수 = 1» 같은 헛위반이 난다.
+    complete = bool(args.get("complete")) or bool(args.get("canvas"))
     v, held = [], []
     for b in blocks:
         lead, h = _lead(b), b.get("cap_height")
@@ -88,6 +105,7 @@ def check_layout(args):
             continue
         if lyr:
             r = lead / h
+            t = _tol(lead, h)
             # layer 를 지정하면 그 계층으로만 검사한다. 지정하지 않으면 계층 전체를
             # 놓고 본다 — 채택된 계층에 들면 통과, 판정 보류인 계층에 들면 보류,
             # 어느 계층에도 없으면 위반이다. 코퍼스가 아직 판정하지 못한 값을
@@ -96,17 +114,18 @@ def check_layout(args):
             # 통과는 채택된 계층의 권장 범위(10~90%)로 본다 — 기존 판정 그대로.
             # 보류는 판정 못 한 계층의 실측 전폭으로 본다. 「코퍼스에 그런 값이
             # 있었는가」와 「권장 범위에 드는가」는 다른 질문이다.
+            # 후보는 점이 아니라 구간 [r − δr, r + δr] 이다. 띠와 겹치면 든 것으로 본다.
             ok_fit = [x for x in cands
-                      if x["verdict"] == "제약" and x["lo"] <= r <= x["hi"]]
+                      if x["verdict"] == "제약" and x["lo"] <= r + t and r - t <= x["hi"]]
             held_fit = [x for x in cands
                         if x["verdict"] != "제약"
-                        and x.get("min", x["lo"]) <= r <= x.get("max", x["hi"])]
+                        and x.get("min", x["lo"]) <= r + t and r - t <= x.get("max", x["hi"])]
             band = forced or (R.get("rules", {}).get("lead_over_cap") or lyr[0])
             if ok_fit:
                 pass
             elif held_fit:
                 x = held_fit[0]
-                held.append({"block": b.get("id"), "value": round(r, 2),
+                held.append({"block": b.get("id"), "value": round(r, 2), "tolerance": round(t, 3),
                              "layer": lyr.index(x) + 1,
                              "layer_observed": [x.get("min", x["lo"]), x.get("max", x["hi"])],
                              "layer_band": [x["lo"], x["hi"]],
@@ -116,6 +135,7 @@ def check_layout(args):
                                          f'위반으로 보지 않는다')})
             else:
                 v.append({"rule": band["label"], "block": b.get("id"), "value": round(r, 2),
+                          "tolerance": round(t, 3),
                           "expected": f'{band["lo"]}~{band["hi"]}',
                           "fix": round(h * band["median"], 1),
                           "message": (f'행간이 활자 높이의 {r:.2f}배. 코퍼스의 어느 계층에도 '
@@ -149,6 +169,11 @@ def check_layout(args):
         pos = _position(val, e)
         pos["label"] = e["label"]
         pos["corpus_verdict"] = e["verdict"]
+        if e.get("unit") == "포스터" and not complete:
+            pos["ok"] = None
+            pos["note"] = "부분 배치 — 판 단위 지표는 판정하지 않는다 (complete 나 canvas 를 주면 판정한다)"
+            reference[key] = pos
+            continue
         if e["verdict"] == "제약":
             pos["ok"] = pos["where"] == "10~90% 안"
             if not pos["ok"]:
@@ -165,13 +190,16 @@ def check_layout(args):
             "measured": reference,
             "not_measured": cnotes,
             "layer": (int(sel) if sel is not None else None),
+            "complete": complete,
             "layers": _layer_list(R),
             "checked_against": {k: {"n": x["n"], "cv": x["cv"]} for k, x in R["rules"].items()},
             "not_checked": [x["label"] for x in R["not_rules"].values()],
             "note": ("violations 는 「제약」으로 채택된 지표에서만 나온다. 「자유」·「표본 부족」 "
                      "지표는 measured 에 후보의 분포상 위치만 싣는다 — 코퍼스가 규칙이라 하지 "
                      "않은 것을 위반이라 부르지 않는다. canvas 와 블록 x·x_width 를 주면 마진을, "
-                     "image 를 주면 색까지 코퍼스와 같은 방식으로 잰다.")}
+                     "image 를 주면 색까지 코퍼스와 같은 방식으로 잰다. 행간/활자높이는 후보값에 "
+                     "±0.5px 양자화 불확도를 전파한 구간으로 판정한다 (tolerance). complete 나 "
+                     "canvas 가 없으면 판 단위 지표는 판정하지 않는다.")}
 
 
 def place_text(args):

@@ -11,6 +11,8 @@
 """
 import json
 import os
+import math
+
 import numpy as np
 
 CV_MAX = 0.30      # 이보다 흩어지면 제약으로 보지 않는다
@@ -295,15 +297,20 @@ def _judge(a, label, unit):
     """한 계층의 분포와 판정."""
     a = np.asarray(a, dtype=float)
     cv = float(a.std() / a.mean()) if a.mean() else 9.9
+    # 띠의 끝은 바깥쪽으로 자른다 — 안쪽으로 반올림하면 코퍼스에 실제로 있던 값이
+    # 띠 밖으로 나간다. 분산이 없는 코퍼스(합성 실험)에서 lo = hi 가 되었을 때
+    # 후보 정답값 1.4568 이 [1.455, 1.455] 밖으로 밀려났다 (docs/check_layout_fix_preregister.json).
+    down = lambda x: math.floor(float(x) * 1000) / 1000
+    up = lambda x: math.ceil(float(x) * 1000) / 1000
     d = dict(label=label, unit=unit, n=int(len(a)),
              median=round(float(np.median(a)), 3),
-             lo=round(float(np.percentile(a, 10)), 3),
-             hi=round(float(np.percentile(a, 90)), 3),
+             lo=down(np.percentile(a, 10)),
+             hi=up(np.percentile(a, 90)),
              # 실측 전폭. lo~hi 는 권장 범위이고 이쪽은 「코퍼스에 그런 값이
              # 있었는가」를 묻는 데 쓴다. 표본이 적으면 10~90% 밴드가 자기
              # 계층의 최대값조차 밀어내므로 둘을 구분해 둔다.
-             min=round(float(a.min()), 3),
-             max=round(float(a.max()), 3),
+             min=down(a.min()),
+             max=up(a.max()),
              cv=round(cv, 3))
     d['verdict'] = ('제약' if len(a) >= N_MIN and cv <= CV_MAX
                     else ('자유' if len(a) >= N_MIN else '표본 부족'))
