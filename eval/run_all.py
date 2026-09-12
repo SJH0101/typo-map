@@ -116,6 +116,11 @@ def main(argv=None):
             run('eval/series_check_diag.py', '--cache', C['cache'], '--series', C['series'],
                 '--out', C['diag_out'])
 
+    if R.get('synth'):
+        S = R['synth']
+        run('eval/synth_score.py', '--dir', S['dir'], '--manifest', S['manifest'],
+            '--prereg', S['prereg'], '--cache-dir', S['cache_dir'], '--out', S['out'])
+
     if R.get('idml') and not a.skip_idml:
         I = R['idml']
         run('idml_explore.py', 'score', '--idml-dir', I['dir'], '--map', I['map'],
@@ -125,6 +130,7 @@ def main(argv=None):
     outs = ([hb['out'], R['detector_out'], R['oracle_out']]
             + ([R['loo_place_text']['out']] if R.get('loo_place_text') else [])
             + ([R['series_check']['out']] if R.get('series_check') else [])
+            + ([R['synth']['out']] if R.get('synth') else [])
             + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)
 

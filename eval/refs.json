@@ -71,6 +71,8 @@
   "fonts": {
    "helvetica": "/System/Library/Fonts/Helvetica.ttc"
   },
-  "note": "합성 포스터 통제 실험. eval/synth_gen.py 가 만들고, 채점 스크립트(아직 없음)가 읽는다. 실물 캐시와 섞지 않는다"
+  "note": "합성 포스터 통제 실험. eval/synth_gen.py 가 만들고, 채점 스크립트(아직 없음)가 읽는다. 실물 캐시와 섞지 않는다",
+  "cache_dir": "~/.typo-mcp",
+  "out": "docs/synth_result.json"
  }
 }
