@@ -1,4 +1,4 @@
-# 인수인계 — 2026-09-11
+# 인수인계 — 2026-09-12 (합성 실험 뒤 갱신)
 
 브랜치 `remeasure-surya-20260911`. 새 세션은 이 문서만 읽고 시작할 수 있게 쓴다.
 
@@ -29,6 +29,25 @@
   - 규칙 도출 — 알려진 분포에서 `rules.derive` 가 규칙을 되찾는가
   - `check_layout` — 알려진 위반을 가르는가
   - `place_text`
+
+## 1a. 합성 포스터 통제 실험 — 결과 (2026-09-12)
+
+사전등록 `docs/synth_preregister.json` (af0b145 → 수정 1 3393dc0), 생성기 `eval/synth_gen.py`, 채점 `eval/synth_score.py`, 결과 `docs/synth_result.json`, manifest `docs/synth_manifest.json`, 이미지 · 정답 `~/.typo-mcp/synth/{셀}/{seed}.jpg|.json`, 셀별 캐시 `~/.typo-mcp/synth-{셀}.json` (provenance synthetic). 13셀 × 30장, 기준 = Helvetica Regular · 독일어 · 흰+검 · 566×800 · x높이 8 · JPEG 72 4:4:4 · 격자 공유.
+
+**확정으로 읽는 것 (사용자 결정).**
+1. **파이프라인의 재기는 해상도 · 압축 · 극성에 영향받지 않는다.** 베이스라인 측정 오차가 해상도 400 / 800 / 1600, JPEG 45 / 72 / 95, 흰 · 유색 · 어두운 바탕 어디서도 **0.0px** 였다 (10~90% 구간 [0, 0], 캡 오차 중앙 0.02px, 400px 에서 0.51px). 천장 효과가 아니라 결과다. 따라서 열화(잡음 · 흐림 · 하프톤)를 조작변인으로 더하는 실험은 하지 않는다 — 후속 연구로만 남긴다.
+2. **실물 IDML 의 0.4~0.5px 오차 원인은 미해결이다.** 후보 셋 — (a) 인쇄 · 스캔 열화 (b) 안티에일리어싱과 픽셀 격자 (c) 라벨러 손 오차 — 을 가르지 못했다. 다만 파이프라인은 해상도에 무관하게 0px 였으므로 **(b) 가 파이프라인 쪽 원인일 가능성은 배제된다.** 남은 가능성은 사람이 저해상도에서 픽셀 단위로밖에 찍지 못하는 데서 오는 참조선 쪽 불확도다. 이를 가르는 실험은 `docs/VALIDATION_NEEDS.md` 7번.
+3. **잃는 것은 재기가 아니라 찾기 · 묶기다.**
+   - 줄 재현 0.78 · 블록 재현 0.67 (기준 셀) 은 전부 과병합에서 온다. 오른쪽 단 B(8줄) · E(1줄) · D(4줄) 가 30장 모두 한 블록이 된다.
+   - **템플릿 E 의 자리(B 바로 아래 1g, 상자 틈 0.3 x높이)는 설계 잘못이다** — 사람 상자 v2 의 틈 분포 10%(0.88 x높이) 아래이고 사람 라벨 규칙으로도 같은 블록이다. 기록만 하고 고치지 않는다 (`docs/synth_gap_context.json`).
+   - **2g 틈(E–D, 상자 틈 2.3 x높이)의 과병합은 실물에도 있는 도구 한계다.** 사람 상자 틈 중앙값(1.94 x높이)과 같은 자리인데, 캐시에서 살아남은 블록 쌍 가운데 베이스라인 간격 ≤ 2g 는 10.5% 뿐이다 (검출기 비교의 과병합 43/130 과 같은 것). `Y_GAP` 은 고치지 않았다.
+   - x높이 3 에서 캡이 120 블록 중 1개만 잡힌다 (`x_only` 판정). 예측한 «측정 실패» 의 형태는 오차가 아니라 미검출이었다. x높이 5 에서 과분할 42.
+4. **`check_layout` 은 분산 없는 코퍼스에서 정답도 위반으로 판정한다** (정답 입력 통과율 0.0, 13셀 전부). 까닭 둘: 채택 띠가 lo=hi=1.455 로 점이 되고 소수 셋째 자리 반올림이 정답값 1.457 을 밖으로 밀어낸다; 블록 하나만 넣으면 «블록 개수 = 1» 이 코퍼스 10~90%(=4) 밖이라 «블록 밖 지표» 위반이 붙는다. **수정 설계는 6절 보류 작업에 있고, 이 수정은 합성 실험 결과를 본 뒤 이루어지는 것임을 여기 적어 둔다.** 시리즈 시험(a338546)의 비통과도 측정 잡음만이 아니라 띠 폭의 성질일 수 있다.
+5. 격자 공유 지표는 예상대로 갈렸다 — AUC 공유 1.0 · 독립 0.43 · 무작위 0.49 (정답 · 측정 입력 모두). `lead_over_cap` 은 12셀에서 채택(x높이 3 만 표본 부족), 독립 조건의 CV 0.135 는 실물(0.137)과 같다.
+
+**예측 판정.** 1600 재현율 ±0.03 맞음 · 1600 재기 이득 판단 불가(바닥 0) · x높이 3 실패 맞음(형태 다름) · 격자 AUC 맞음 · check_layout 틀림 · JPEG 틀림(효과 0) · 극성 맞음.
+
+**다음 단계.** 검증된 재기를 브로크만에 적용하기 전에 (i) check_layout 띠 수정 (설계 → 사전등록 → 수정), (ii) VALIDATION_NEEDS 7번 자료로 실물 0.4~0.5px 의 원인을 가른다.
 
 ## 2. 현재 파이프라인과 주요 파일
 
@@ -70,6 +89,7 @@ server.py (JSON-RPC) → tools/
 | `idml_explore.py` | IDML 가이드로 베이스라인 · 어센더선 재현율 | `docs/idml_explore.json` |
 | `eval/loo_place_text.py` | place_text leave-one-out | `docs/loo_place_text.json` |
 | `eval/series_check.py` · `series_check_diag.py` | 시리즈 판별 시험과 진단 | `docs/series_check*.json` |
+| `eval/synth_gen.py` · `eval/synth_score.py` · `eval/synth_gap_context.py` | 합성 포스터 생성 · 채점 · 실물 블록 간격 맥락 | `docs/synth_result.json` · `synth_manifest.json` · `synth_gap_context.json` |
 | `eval/refs.json` · `eval/idml_map.json` | 참조 데이터 경로 · IDML 짝 | — |
 
 **283장 재측정 · 9월 분석 재실행.**
@@ -112,6 +132,7 @@ server.py (JSON-RPC) → tools/
 
 | 작업 | 상태 · 다음에 할 일 |
 |---|---|
+| **check_layout 띠 붕괴 수정** | **설계 단계.** 합성 실험(1a절 4번)이 드러낸 것: 분산이 없거나 표본이 적으면 10~90% 띠가 점으로 무너지고, 3자리 반올림이 정답값을 밖으로 밀며, 블록 하나 입력에 «블록 개수» 지표가 위반으로 붙는다. 방안 후보 — 최소 폭 규칙 · 측정 불확도 여유 · 표본 부족 시 보류. 고치기 전에 사전등록을 쓴다. **이 수정은 합성 실험 결과를 본 뒤 이루어지는 것이다** (CLAUDE.md 규칙 5 의 예외이므로 그 사실을 사전등록과 커밋에 적는다) |
 | 시리즈 판별 시험 | 한 번 돌렸다 (`a338546`). 변형 (a) 의 부동소수 오차를 어떻게 처리할지 **결정이 남았다** — (i) 변형 베이스라인을 정수 px 로 반올림 (f 가 조금 어긋남), (ii) 진단을 나란히 두고 끝냄. 다른 시리즈 빼기는 안 했다. 새 방향에서는 합성 실험으로 `check_layout` 판별력을 먼저 보는 편이 맞다 |
 | 하이브리드 (Surya 줄 + VLM 묶기) | 오라클 상한(F1 0.820)만 확인했다. 개발하지 않았다. VLM 을 쓰면 상자를 파일로 고정해야 한다 (모델명 · 날짜 · 지시문) |
 | check_layout image 버그 | **고쳤다** (`2df4965`, `color.fields.features` 로). 남은 일 없음 |
@@ -127,7 +148,7 @@ server.py (JSON-RPC) → tools/
 
 - **Python.** `.venv/bin/python`. 셸은 zsh 라 따옴표 없는 변수가 단어로 쪼개지지 않는다 (`for s in "a 1"` 이 인자 하나로 들어간다).
 - **MCP 등록.** `~/.claude.json` 의 `typo` 가 이 폴더의 `server.py` 를 가리킨다. 작업 트리 그대로 돌기 때문에 파일을 옮기면 MCP 가 깨진다.
-- **캐시.** `~/.typo-mcp/{brockmann, corpus(호프만), rose, ruder}.json` (surya+ground, provenance 있음). `brockmann-ground.json` (Claude 가 짚은 4장, provenance 없음). 옛 캐시 `old-20260824/`.
+- **캐시.** `~/.typo-mcp/{brockmann, corpus(호프만), rose, ruder}.json` (surya+ground, provenance 있음). 합성: `~/.typo-mcp/synth/` (이미지 · 정답 390장) · `synth-{셀}.json` 13개 (provenance synthetic, 실물과 섞지 않는다). `brockmann-ground.json` (Claude 가 짚은 4장, provenance 없음). 옛 캐시 `old-20260824/`.
 - **외부 자료** (경로는 `eval/refs.json`):
   - 포스터: `~/Documents/연구2/{브로크만 정리, 호프만정리, 로제정리, 루더정리}` (브로크만 `corpus/index.csv` · `분류기준.md`)
   - 사람 상자: `~/Downloads/boxes_송준혁-2.csv`, 라벨 도구: `~/Documents/poster/labeler/`
