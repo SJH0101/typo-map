@@ -64,53 +64,97 @@ def detect(a):
         res = det(imgs)
         for (k, p, it), r, im in zip(chunk, res, imgs):
             ls = sorted(([float(v) for v in b.bbox] for b in r.bboxes), key=lambda b: (b[1], b[0]))
-            out[k] = dict(size=list(im.size), lines=ls, sha256=_sha(p))
+            nb = None
+            if a.order == 'columns':
+                ls, nb = order_columns(ls)
+            out[k] = dict(size=list(im.size), lines=ls, sha256=_sha(p), order=a.order, columns_found=nb)
         print(f'  {min(i + 8, len(items))}/{len(items)}', flush=True)
     prov = MC.provenance('eval/group_score.py detect', len(out)); prov['synthetic'] = True
-    json.dump(dict(lines=out, provenance=prov, note='줄 번호 = 목록 순서 + 1 (y1 → x1)'),
+    json.dump(dict(lines=out, provenance=prov, order=a.order,
+                   note=('줄 번호 = 목록 순서 + 1. order yx = 판 전체 y1 → x1, columns = 단 단위 (order_columns)')),
               open(os.path.expanduser(a.lines), 'w'), ensure_ascii=False)
     print('→', a.lines)
 
 
 # ── som ─────────────────────────────────────────────────────────
 
+SOM_FONT = ('/System/Library/Fonts/Helvetica.ttc', 15, 1)   # 딱지 글꼴 (파일, 크기, index=Bold)
+SOM_LABEL_H = 18
+
+
+def order_columns(lines):
+    """단 단위 줄 순서 — 사전등록 docs/clean_preregister.json 수정 1.
+
+    Surya 줄 상자들의 가로 범위를 모두 합친 구간이 서로 떨어진 자리(틈 > 0)에서 단을 나누고, 줄은 가로
+    중심이 든 단에 넣는다. 단은 왼쪽부터, 단 안에서는 위(y1) → 왼쪽(x1). 정답을 쓰지 않는다.
+    """
+    bands = []
+    for x1, x2 in sorted((b[0], b[2]) for b in lines):
+        if bands and x1 <= bands[-1][1]:
+            bands[-1][1] = max(bands[-1][1], x2)
+        else:
+            bands.append([x1, x2])
+
+    def band(b):
+        c = (b[0] + b[2]) / 2
+        return next((i for i, (u, v) in enumerate(bands) if u <= c <= v), len(bands))
+    return sorted(lines, key=lambda b: (band(b), b[1], b[0])), len(bands)
+
+
+def draw_som(im, lines, out_path=None):
+    """SoM 이미지 — 2배로 키워 줄 상자(빨강)와 번호 딱지(R2)를 그린다. 번호 = 줄 순서 + 1.
+
+    R2: 모든 딱지를 제 상자 왼쪽 위 바로 옆에 같은 글꼴 · 높이 · 색으로 둔다. 이웃을 보고 옮기지 않는다
+    (홀수 왼쪽 · 짝수 오른쪽이던 옛 규칙은 단 사이에서 딱지끼리 겹쳤다). 딱지 상자 목록을 돌려준다.
+    """
+    W, H = im.size
+    big = im.convert('RGB').resize((W * 2, H * 2), Image.Resampling.LANCZOS)
+    d = ImageDraw.Draw(big)
+    font = ImageFont.truetype(SOM_FONT[0], SOM_FONT[1], index=SOM_FONT[2])
+    for x1, y1, x2, y2 in lines:
+        d.rectangle([x1 * 2, y1 * 2, x2 * 2, y2 * 2], outline=(220, 30, 30), width=2)
+    rects = []
+    for i, (x1, y1, x2, y2) in enumerate(lines, 1):
+        lab = str(i); tw = d.textlength(lab, font=font) + 6; th = SOM_LABEL_H
+        bx = max(0, x1 * 2 - tw - 3); by = max(0, min(H * 2 - th, y1 * 2 - 1))
+        d.rectangle([bx, by, bx + tw, by + th], fill=(255, 255, 255), outline=(30, 60, 220), width=1)
+        d.text((bx + 3, by + 1), lab, font=font, fill=(30, 60, 220))
+        rects.append((bx, by, bx + tw, by + th))
+    if out_path:
+        big.save(out_path)
+    return rects
+
+
+def label_overlaps(rects, lines):
+    """못 읽는 딱지 (다른 딱지와 넓이 25% 넘게 겹침) · 다른 줄 글자를 가린 딱지 (다른 줄 상자와 25% 넘게) 수."""
+    def inter(a, b):
+        return max(0, min(a[2], b[2]) - max(a[0], b[0])) * max(0, min(a[3], b[3]) - max(a[1], b[1]))
+    area = lambda r: (r[2] - r[0]) * (r[3] - r[1])
+    boxes = [tuple(v * 2 for v in b) for b in lines]
+    bad = sum(1 for i, r in enumerate(rects) if any(i != j and inter(r, q) > 0.25 * area(r) for j, q in enumerate(rects)))
+    cover = sum(1 for i, r in enumerate(rects) if any(i != j and inter(r, q) > 0.25 * area(r) for j, q in enumerate(boxes)))
+    return bad, cover
+
+
 def som(a):
     D = os.path.expanduser(a.dir); M = json.load(open(a.manifest))
     L = json.load(open(os.path.expanduser(a.lines)))['lines']
     S = os.path.expanduser(a.som_dir); os.makedirs(S, exist_ok=True)
-    font = ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', 15, index=1)
     rows = []
     for k, p, it in _items(D, M):
         if not it.get('vlm_subset'):
             continue
-        im = Image.open(p).convert('RGB')
-        W, H = im.size
-        im = im.resize((W * 2, H * 2), Image.Resampling.LANCZOS)
-        d = ImageDraw.Draw(im)
-        for i, (x1, y1, x2, y2) in enumerate(L[k]['lines'], 1):
-            X1, Y1, X2, Y2 = x1 * 2, y1 * 2, x2 * 2, y2 * 2
-            d.rectangle([X1, Y1, X2, Y2], outline=(220, 30, 30), width=2)
-            lab = str(i); tw = d.textlength(lab, font=font) + 6; th = 18
-            # 딱지는 홀수 번호 왼쪽 · 짝수 번호 오른쪽 — 촘촘한 줄에서 딱지끼리 겹치지 않게
-            if i % 2 == 1:
-                bx = X1 - tw - 3
-                if bx < 0: bx = X1 + 2
-            else:
-                bx = X2 + 3
-                if bx + tw > W * 2: bx = X2 - tw - 2
-            by = max(0, min(H * 2 - th, Y1 - 1))
-            d.rectangle([bx, by, bx + tw, by + th], fill=(255, 255, 255), outline=(30, 60, 220), width=1)
-            d.text((bx + 3, by + 1), lab, font=font, fill=(30, 60, 220))
         op = os.path.join(S, f'{k}_som.png')
-        im.save(op)
-        rows.append(dict(file=f'{k}_som.png', path=op, n_lines=len(L[k]['lines'])))
+        rects = draw_som(Image.open(p), L[k]['lines'], op)
+        bad, cover = label_overlaps(rects, L[k]['lines'])
+        rows.append(dict(file=f'{k}_som.png', path=op, n_lines=len(L[k]['lines']), unreadable=bad, occluding=cover))
     lst = os.path.join(S, 'list.md')
     with open(lst, 'w') as f:
         f.write(f'## 이미지 {len(rows)}장\n')
         for r in rows:
             f.write(f'- file: {r["file"]}\n  path: {r["path"]}\n  상자 수: {r["n_lines"]}\n')
     json.dump(rows, open(os.path.join(S, 'list.json'), 'w'), ensure_ascii=False, indent=1)
-    print(f'{len(rows)}장 → {S} (목록 {lst})')
+    print(f'{len(rows)}장 → {S} (목록 {lst}) · 못 읽는 딱지 합 {sum(r["unreadable"] for r in rows)} · 글자 가림 합 {sum(r["occluding"] for r in rows)}')
 
 
 # ── score ───────────────────────────────────────────────────────
@@ -425,6 +469,9 @@ def main(argv=None):
     for name in ('detect', 'som', 'score'):
         s = sp.add_parser(name)
         s.add_argument('--dir', required=True); s.add_argument('--manifest', required=True); s.add_argument('--lines', required=True)
+        if name == 'detect':
+            s.add_argument('--order', default='yx', choices=('yx', 'columns'),
+                           help='줄 순서 (= SoM 번호 순서). columns 는 단 단위 (깨끗한 세트 수정 1)')
         if name == 'som':
             s.add_argument('--som-dir', required=True)
         if name == 'score':

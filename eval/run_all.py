@@ -142,6 +142,19 @@ def main(argv=None):
                 run('eval/group_diag.py', '--dir', Gp['dir'], '--manifest', Gp['manifest'],
                     '--lines', Gp['lines'], *vv, '--out', Gp['diag_out'])
 
+    if R.get('clean') and os.path.exists(os.path.join(ROOT, R['clean']['manifest'])):
+        Cl = R['clean']
+        hh = ['--human-check', json.dumps(Cl.get('human_check') or [], ensure_ascii=False)]
+        if Cl.get('human_check_pending'):
+            hh += ['--human-check-pending', Cl['human_check_pending']]
+        if Cl.get('new_from_seed') is not None:
+            hh += ['--new-from-seed', str(Cl['new_from_seed']), '--new-samples', str(Cl.get('new_samples', 0))]
+            if Cl.get('new_strata'):
+                hh += ['--new-strata', Cl['new_strata']]
+        run('eval/clean_check.py', '--dir', Cl['dir'], '--manifest', Cl['manifest'], '--prereg', Cl['prereg'],
+            '--out', Cl['check_out'], '--review-dir', Cl['review_dir'], *hh)
+        run('eval/clean_som_samples.py', '--check', Cl['check_out'], '--review-dir', Cl['review_dir'])
+
     if R.get('measure_pad'):
         Mp = R['measure_pad']
         if os.path.exists(os.path.expanduser(Mp['lines'])):
@@ -161,6 +174,7 @@ def main(argv=None):
             + ([R['series_check']['out']] if R.get('series_check') else [])
             + ([R['synth']['out']] if R.get('synth') else [])
             + ([R['group']['out'], R['group'].get('diag_out')] if R.get('group') and not R['group'].get('폐기') else [])
+            + ([R['clean']['check_out']] if R.get('clean') else [])
             + ([R['measure_pad']['out']] if R.get('measure_pad') else [])
             + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)

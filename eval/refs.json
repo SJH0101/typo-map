@@ -108,5 +108,50 @@
   "prereg": "docs/measure_pad_preregister.json",
   "out": "docs/measure_pad_result.json",
   "note": "줄 단위 재기 pad 규칙 검증 (seed 2001~2060). eval/group_gen.py 로 만들고 eval/group_score.py detect 로 줄을 짚은 뒤 eval/measure_pad_check.py"
+ },
+ "clean": {
+  "dir": "~/.typo-mcp/clean",
+  "manifest": "docs/clean_manifest.json",
+  "prereg": "docs/clean_preregister.json",
+  "check_out": "docs/clean_check.json",
+  "review_dir": "~/.typo-mcp/clean/review",
+  "human_check": [
+   {
+    "차수": 1,
+    "누가": "준혁",
+    "언제": "2026-09-14",
+    "본_것": "표본 9장 중 5장 — 검토판 3001 · 3003 · 3115, SoM 3003 · 3115",
+    "문제": "없음. 겹침 · 문구 반복 · 딱지 문제 없음, 표본 판 자체에 문제 없음. 줄 글의 낱말 나열은 받아들임"
+   },
+   {
+    "차수": 2,
+    "누가": "준혁",
+    "언제": "2026-09-14",
+    "본_것": "수정 2 추가 판 표본 2장 — 3232 · 3241 (둘 다 1단 · 12px) 검토판과 SoM",
+    "문제": "없음"
+   },
+   {
+    "차수": 3,
+    "누가": "준혁",
+    "언제": "2026-09-14",
+    "본_것": "수정 3 추가 판 표본 2장 — 3544 (1단 · 8px) · 3539 (2단 · 12px) 검토판과 SoM",
+    "문제": "없음"
+   }
+  ],
+  "lines": "~/.typo-mcp/clean-lines.json",
+  "som_dir": "~/.typo-mcp/clean/som",
+  "vlm": [
+   "boxes/clean_vlm_pass1.json",
+   "boxes/clean_vlm_pass2.json"
+  ],
+  "out": "docs/clean_result.json",
+  "c_pad_rule": "neighbor_half",
+  "note": "깨끗한 세트 (사전등록 4c06aa4 · 수정 1 4a763c8 · 수정 2 e502d98 · 수정 3 0952c15). eval/clean_gen.py 로 만들고 eval/clean_check.py 로 생성 검증 · 표본, eval/clean_som_samples.py 로 표본 SoM (표본 판에만 Surya). 사람 확인(human_check: {by, at, n, issues}) 전에는 평가 세트 검출 · VLM · 채점을 하지 않는다. 검출은 --order columns",
+  "vlm_prompt": "docs/clean_vlm_prompt.md",
+  "lines_order": "columns",
+  "som_samples_out": "~/.typo-mcp/clean/review/som_samples.json",
+  "new_from_seed": 3539,
+  "new_samples": 2,
+  "new_strata": "1:8,2:12"
  }
 }
