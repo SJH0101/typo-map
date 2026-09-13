@@ -1,4 +1,4 @@
-# 인수인계 — 2026-09-12 (합성 실험 뒤 갱신)
+# 인수인계 — 2026-09-14 (묶기 비교 뒤 갱신)
 
 브랜치 `remeasure-surya-20260911`. 새 세션은 이 문서만 읽고 시작할 수 있게 쓴다.
 
@@ -49,6 +49,29 @@
 
 **그 뒤 (2026-09-12).** check_layout 띠 수정을 사전등록(`7091e44`) → 수정(`75e569f`) 으로 마쳤다 — 정답 입력 통과 0 → 1.0 (11셀), Musica_Viva 통과율 0.564 → 0.692, «행간 일정» 위반은 그대로. x높이 3 의 «표본 부족 계층뿐일 때 위반» 은 후속 과제로 남겼다. **실험은 여기서 멈추고 원고 작업으로 넘어갔다** — 논문에 쓸 결과의 목록은 `docs/RESULTS_FOR_PAPER.md`.
 
+## 1b. 묶기 방식 비교 — 결과 (2026-09-14)
+
+사전등록 `docs/group_preregister.json` (`57f5dbe`) → 수정 1 `ef0cf65` (방식 C 추가 — **A · VLM 결과를 본 뒤 구현했다**). 세트는 무작위 배치 240장 (`eval/group_gen.py`, `~/.typo-mcp/group/`). 같은 Surya 줄을 네 가지로 묶었다: A `detect_surya.group` · VLM Set-of-Mark (120장 × 2패스, claude-fable-5-1, `boxes/group_vlm_pass1·2.json`) · C `group_gap.py` (간격 일정성, τ 1px, 3줄 미만은 A 폴백) · 오라클. 결과 `docs/group_result.json`, 진단 `docs/group_diag.json` (탐색용).
+
+| 120장 | 블록 F1 | 과병합 | 과분할 | 등크기 1.5g · 2g 병합률 |
+|---|---|---|---|---|
+| A | 0.654 | 186 | 76 | 1.00 · 0.71 |
+| VLM 1 / 2 | 0.808 / 0.835 | 169 / 154 | 10 / 6 | 0.00·0.00 / 0.04·0.00 |
+| C | 0.775 | 95 | **195** | 0.11 · 0.06 (두 블록 3줄 이상: 0 · 0) |
+| 오라클 | 0.973 | 23 | 13 | 0 · 0 |
+
+240장: A 0.661 · C 0.766 · 오라클 0.964.
+
+- **C 의 폴백 몫 (240장).**
+  - C 기전으로 묶인 몫: Surya 줄 87.5% · 짝지은 블록 77.8% · 쌍 59.8%.
+  - 나머지 쌍: 혼합 30.5% · A 폴백 5.3% · 판정 불가 4.4%.
+  - 혼합 쌍(한쪽은 패턴 블록, 한쪽은 폴백 묶음)은 구성상 항상 분리된다. 그 30% 의 분리는 C 의 간격 판단이 아니다.
+  - **폴백과 혼합이 쌍의 약 40% 라, «C 를 제안한다» 는 주장은 3줄 이상 블록이 이어진 자리로 좁혀진다.**
+- **C 의 약점은 과분할이다.** 줄 단위 재기가 줄을 늘리거나 뺀다 — 240장 Surya 줄 상자 7,302 중 469 (늘어남 282 · 빠짐 187). C 가 가른 등크기 1g 쌍 22개 가운데 13개가 이 탓이다 (진단, 탐색용). 사전등록 예측 «등크기 1g 병합 ≥ 0.90» 은 틀렸다 (0.84).
+- **정정.** 사전등록 수정 1 의 «seed 901~912 에서 326 중 14» 는 1~2줄 상자만 센 값이다. 같은 정의로 세면 19 (늘어남 9 · 빠짐 10).
+- **브로크만 τ 예측 (사전등록 수정 1).** 실물 캐시의 블록 내 간격 산포(중앙 3px)가 τ 1px 보다 크므로 C 는 실물에서 과분할할 것으로 예측한다. 적용할 때 이 예측을 먼저 확인하고, 예측대로면 τ 를 실물 측정 불확도 기준으로 재설정한다. 재설정 기준은 브로크만 결과를 보기 전에 정한다.
+- **다음.** 제안할 묶기(VLM / C / 결합)를 정하고 브로크만 적용 사전등록을 쓴다.
+
 ## 2. 현재 파이프라인과 주요 파일
 
 ```
@@ -90,6 +113,7 @@ server.py (JSON-RPC) → tools/
 | `eval/loo_place_text.py` | place_text leave-one-out | `docs/loo_place_text.json` |
 | `eval/series_check.py` · `series_check_diag.py` | 시리즈 판별 시험과 진단 | `docs/series_check*.json` |
 | `eval/synth_gen.py` · `eval/synth_score.py` · `eval/synth_gap_context.py` | 합성 포스터 생성 · 채점 · 실물 블록 간격 맥락 | `docs/synth_result.json` · `synth_manifest.json` · `synth_gap_context.json` |
+| `eval/group_gen.py` · `eval/group_score.py` · `eval/group_vlm_merge.py` · `eval/group_diag.py` · `group_gap.py` | 묶기 비교 세트 생성 · 채점 (A / VLM / C / 오라클) · VLM 출력 합치기 · 진단(탐색) · 방식 C | `docs/group_result.json` · `group_manifest.json` · `group_diag.json` · `boxes/group_vlm_pass*.json` |
 | `eval/refs.json` · `eval/idml_map.json` | 참조 데이터 경로 · IDML 짝 | — |
 
 **283장 재측정 · 9월 분석 재실행.**

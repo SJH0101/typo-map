@@ -5,7 +5,7 @@
     som     VLM 에 보일 번호 이미지(2배)를 그린다  python eval/group_score.py som --dir D --manifest M --lines L --som-dir S
     score   A · VLM · 오라클을 채점한다           python eval/group_score.py score --dir D --manifest M --lines L
                                                    [--vlm pass1.json --vlm pass2.json] --prereg P --out O
-줄 번호는 y1 → x1 순으로 1 부터. A 는 detect_surya.group 그대로, 줄 소속은 나온 블록 상자에
+줄 번호는 y1 → x1 순으로 1 부터. C 는 group_gap.group_gap (사전등록 수정 1). A 는 detect_surya.group 그대로, 줄 소속은 나온 블록 상자에
 줄 상자가 가장 많이 든 것으로 정한다. 오라클은 줄마다 잉크 상자가 가장 많이 겹치는 정답 블록.
 새 지표를 더하지 않는다.
 """
@@ -27,6 +27,7 @@ import detect_surya as DS          # noqa: E402
 import detector_score as DSc       # noqa: E402  iou · held · inside · match
 import measure_corpus as MC        # noqa: E402  provenance
 from measure import ground as G    # noqa: E402
+import group_gap as GG             # noqa: E402  방식 C (사전등록 수정 1)
 
 MAIN_LEVELS = (1.5, 2.0, 3.0, 5.0)
 LOW_LEVELS = (0.5, 1.0)
@@ -176,12 +177,13 @@ def boxes_of(lines, asg):
     return out
 
 
-def score_method(name, items, L, truths, asg_fn, measure=True):
+def score_method(name, items, L, truths, asg_fn, measure=True, src_fn=None):
     rows_blk = []; pair_rows = []; meas_rows = []
     tot = Counter()
     for k, p, it in items:
         lines = L[k]['lines']; t = truths[k]
         asg = asg_fn(k, lines, t)
+        src = src_fn(k) if src_fn else None
         boxes = boxes_of(lines, asg)
         P = [b[1][:4] for b in boxes]
         T = [tb['ink_box'] for tb in t['blocks']]
@@ -189,6 +191,17 @@ def score_method(name, items, L, truths, asg_fn, measure=True):
         merged = sum(1 for j, pb in enumerate(P) if sum(1 for r in T if DSc.held(pb, r) >= DSc.INSIDE) >= 2)
         split = sum(1 for j, pb in enumerate(P) if j not in mp and any(DSc.inside(pb, r) >= DSc.INSIDE for r in T))
         tot['참조'] += len(T); tot['출처'] += len(P); tot['맞음'] += len(mr); tot['과병합'] += merged; tot['과분할'] += split
+        gsrc = {}
+        if src is not None:
+            for i, j in enumerate(asg):
+                if j is not None:
+                    gsrc.setdefault(j, src[i])
+            for gid, _bx in boxes:
+                tot['묶음_' + str(gsrc.get(gid))] += 1
+            for _i, jj in mr.items():
+                tot['맞음_' + str(gsrc.get(boxes[jj][0]))] += 1
+            for i, j in enumerate(asg):
+                tot['줄_' + str(src[i] if j is not None else None)] += 1
         # 쌍
         orc = groups_oracle(lines, t)
         by_truth = defaultdict(list)
@@ -200,12 +213,20 @@ def score_method(name, items, L, truths, asg_fn, measure=True):
             u, l = idx[q['upper']], idx[q['lower']]
             gu = Counter(asg[i] for i in by_truth.get(u, []) if asg[i] is not None)
             gl = Counter(asg[i] for i in by_truth.get(l, []) if asg[i] is not None)
+            ps = '판정불가'
             if not gu or not gl:
                 dec = None
             else:
-                dec = (gu.most_common(1)[0][0] == gl.most_common(1)[0][0])
-            pair_rows.append(dict(seed=int(k), **{kk: q[kk] for kk in ('gap_level', 'size_ratio', 'column', 'bumped', 'upper_n', 'lower_n')},
-                                  columns=t['condition']['columns'], xh=t['condition']['xh_px_at_800'], merged=dec))
+                a_, b_ = gu.most_common(1)[0][0], gl.most_common(1)[0][0]
+                dec = (a_ == b_)
+                if src is not None:
+                    su, sl = gsrc.get(a_), gsrc.get(b_)
+                    ps = 'C 기전' if su == sl == 'C' else ('A 폴백' if su == sl == 'A' else '혼합')
+            row = dict(seed=int(k), **{kk: q[kk] for kk in ('gap_level', 'size_ratio', 'column', 'bumped', 'upper_n', 'lower_n')},
+                       columns=t['condition']['columns'], xh=t['condition']['xh_px_at_800'], merged=dec)
+            if src is not None:
+                row['src'] = ps
+            pair_rows.append(row)
         # 재기
         if measure and P:
             W, H = t['canvas']
@@ -222,10 +243,14 @@ def score_method(name, items, L, truths, asg_fn, measure=True):
     R = tot['맞음'] / tot['참조'] if tot['참조'] else None
     Pp = tot['맞음'] / tot['출처'] if tot['출처'] else None
     F = 2 * R * Pp / (R + Pp) if R and Pp else None
-    return dict(blocks=dict(판=len(items), 참조=tot['참조'], 출처=tot['출처'], 맞음=tot['맞음'],
-                            재현율=round(R, 4) if R is not None else None, 정밀도=round(Pp, 4) if Pp is not None else None,
-                            F1=round(F, 4) if F else None, 과병합=tot['과병합'], 과분할=tot['과분할']),
-                pairs=pair_rows, meas=meas_rows)
+    blocks = dict(판=len(items), 참조=tot['참조'], 출처=tot['출처'], 맞음=tot['맞음'],
+                  재현율=round(R, 4) if R is not None else None, 정밀도=round(Pp, 4) if Pp is not None else None,
+                  F1=round(F, 4) if F else None, 과병합=tot['과병합'], 과분할=tot['과분할'])
+    if src_fn:
+        blocks['출처별'] = dict(묶음_C기전=tot['묶음_C'], 묶음_A폴백=tot['묶음_A'],
+                              맞음_C기전=tot['맞음_C'], 맞음_A폴백=tot['맞음_A'],
+                              줄_C기전=tot['줄_C'], 줄_A폴백=tot['줄_A'], 줄_소속없음=tot['줄_None'])
+    return dict(blocks=blocks, pairs=pair_rows, meas=meas_rows)
 
 
 def pair_table(rows, levels, by=('size_ratio',)):
@@ -307,14 +332,49 @@ def score(a):
         out = {}
         out['A'] = score_method('A', items_, L, truths, lambda k, ls, t: groups_A(ls))
         out['오라클'] = score_method('오라클', items_, L, truths, lambda k, ls, t: groups_oracle(ls, t))
+        out['C'] = score_method('C', items_, L, truths, lambda k, ls, t: C[k], src_fn=lambda k: Cdiag[k]['source'])
         if tag == '120장_VLM표본':          # VLM 은 표본 120장만 있다
             for i, (vm, vinfo) in enumerate(vlms, 1):
                 out[f'VLM{i}'] = score_method(f'VLM{i}', items_, L, truths, lambda k, ls, t, vm=vm: groups_vlm(ls, vm.get(k))[0])
         return out
+    # 방식 C — 240장을 두 번 돌려 줄 소속이 같은지 본다
+    C, Cdiag, c_same = {}, {}, True
+    for k, p, it in items:
+        g = np.asarray(Image.open(p).convert('L')).astype(float)
+        a1, d1 = GG.group_gap(g, L[k]['lines'])
+        a2, _d2 = GG.group_gap(g, L[k]['lines'])
+        c_same = c_same and (a1 == a2)
+        C[k], Cdiag[k] = a1, d1
     # 결정론 확인: A · 오라클 두 번
     a1 = score_method('A', items[:20], L, truths, lambda k, ls, t: groups_A(ls), measure=False)
     a2 = score_method('A', items[:20], L, truths, lambda k, ls, t: groups_A(ls), measure=False)
     res['A_결정론_20장'] = (a1['blocks'] == a2['blocks'] and a1['pairs'] == a2['pairs'])
+    res['C_결정론_240장'] = c_same
+    res['정의']['C'] = ('group_gap.group_gap (사전등록 수정 1 · ef0cf65): 줄 상자마다 region.measure → X_OVER 세로 사슬 → '
+                       '간격 run (최대 − 최소 ≤ 1px) · 3줄 이상 = 패턴 블록 · 공유 요소는 x높이 · 남은 줄은 detect_surya.group 폴백')
+    res['정의']['3줄이상'] = '위 · 아래 블록이 모두 3줄 이상인 쌍만 (C 기전이 적용될 수 있는 쌍)'
+    res['정의']['쌍_출처'] = '위 · 아래 블록의 다수 묶음이 둘 다 C 기전 → C 기전, 둘 다 A 폴백 → A 폴백, 아니면 혼합'
+    res['정의']['폴백_범위'] = '폴백 비중이 크면 «C 를 제안한다» 는 주장의 범위가 그만큼 좁아진다 — 출처별 몫을 함께 읽는다'
+    def _gainloss(its):
+        c = Counter()
+        for k, p, it in its:
+            tl = [l['ink_box'] for b in truths[k]['blocks'] for l in b['lines']]
+            for box, n in zip(L[k]['lines'], Cdiag[k]['per_line_measured']):
+                ins = sum(1 for ib in tl if box[1] <= (ib[1] + ib[3]) / 2 <= box[3] and min(box[2], ib[2]) - max(box[0], ib[0]) > 0)
+                c['상자'] += 1
+                c['같음' if n == ins else ('늘어남' if n > ins else '빠짐')] += 1
+                c['정답 줄 없는 상자'] += (ins == 0)
+                c['못 잰 상자'] += (n == 0)
+        return dict(c)
+    res['줄단위_재기_늘어남빠짐'] = {'240장': _gainloss(items), '120장_VLM표본': _gainloss(sub)}
+    tie = Counter()
+    for d_ in Cdiag.values():
+        tie.update(d_['ties'])
+    res['C_진단_240장'] = dict(요소=sum(d_['n_elements'] for d_ in Cdiag.values()),
+                             패턴블록=sum(d_['n_pattern_blocks'] for d_ in Cdiag.values()),
+                             폴백묶음=sum(d_['n_fallback_blocks'] for d_ in Cdiag.values()),
+                             남은줄=sum(d_['n_leftover_lines'] for d_ in Cdiag.values()),
+                             공유요소=dict(tie))
     for tag, its in (('240장', items), ('120장_VLM표본', sub)):
         out = run_all(its, tag)
         block = {}
@@ -324,7 +384,13 @@ def score(a):
                             쌍_주곡선_단수별=pair_table(r['pairs'], MAIN_LEVELS, by=('columns',)),
                             쌍_주곡선_x높이별=pair_table(r['pairs'], MAIN_LEVELS, by=('xh',)),
                             쌍_1g이하=pair_table(r['pairs'], LOW_LEVELS, by=('size_ratio', 'bumped')),
-                            재기=meas_summary(r['meas']))
+                            재기=meas_summary(r['meas']),
+                            쌍_주곡선_3줄이상=pair_table([x for x in r['pairs'] if x['upper_n'] >= 3 and x['lower_n'] >= 3], MAIN_LEVELS),
+                            쌍_1g이하_3줄이상=pair_table([x for x in r['pairs'] if x['upper_n'] >= 3 and x['lower_n'] >= 3], LOW_LEVELS, by=('size_ratio', 'bumped')))
+            if m == 'C':
+                block[m]['쌍_출처_몫'] = dict(Counter(x['src'] for x in r['pairs']))
+                block[m]['쌍_출처별_주곡선'] = pair_table(r['pairs'], MAIN_LEVELS, by=('src', 'size_ratio'))
+                block[m]['쌍_출처별_1g이하'] = pair_table(r['pairs'], LOW_LEVELS, by=('src', 'size_ratio'))
         res[tag] = block
         if tag == '120장_VLM표본':
             vparse = {}
