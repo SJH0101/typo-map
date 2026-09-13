@@ -114,3 +114,43 @@
 - **무엇.** 합성 실험 x높이 3 셀에서 드러났다: 그 셀의 행간/캡 규칙이 «표본 부족»(캡이 잡힌 블록 1개) 계층 하나뿐이면 `check_layout` 은 «어느 계층에도 안 든다» 며 정답 배치를 «계층 밖» 위반으로 판정한다 (`docs/synth_result.json` xh_3 ③(a) 통과 0.0, 수정 뒤에도 같음). 채택된 계층이 하나도 없을 때 위반 대신 보류로 두는 것이 후보 수정이다 (`docs/check_layout_fix_preregister.json` 의 방안 3).
 - **왜 지금 안 고치나.** x높이 3px 은 파이프라인의 성능 경계 밖(캡 미검출 119/120)이고, 실물 코퍼스에는 표본 부족 계층만 있는 지표가 없다. 결과를 보고 판정 함수를 두 번 고치는 것보다 한계로 남겨 두는 편이 낫다. 논문에는 **«성능 경계 밖 조건에서 드러난 판정 함수의 한계»** 로 보고한다.
 - **고칠 때.** 새 사전등록을 쓰고, 합성 13셀 ③ 과 시리즈 시험을 다시 돌려 «채택 계층이 없을 때 보류» 가 실물 결과를 바꾸지 않음을 확인한다.
+
+## 9. 브로크만 선 긋기 50장 — 블록 상자와 줄마다 네 선 (2인 독립, 요청 준비 2026-09-14)
+
+- **무엇이 필요한가.**
+  - 포스터마다 블록 상자를 먼저 긋는다. 블록 규칙은 항목 1 의 사람 상자 규칙 전문이다.
+  - 블록 안의 줄마다 **베이스라인 · 캡선 · 어센더선 · x높이선**을 긋거나 «없음» · «못 가림» 을 표시한다.
+  - 좌표는 원본 픽셀 경계다.
+  - 요청서 `docs/LABELING_REQUEST.md`, 도구 `~/Documents/poster/labeler/선긋기.html` (원본 `docs/labeling/tool/`), 선정 · 근거 `docs/labeling/`.
+- **어떤 분석에 쓰이나.**
+  - **파이프라인 `caps` 가 무엇을 잡는가.** `measure/ink.split_marks` 의 `caps` 는 x높이 어깨보다 2px 넘게 올라간 몸통 잉크의 맨 위다. 대문자 · 어센더 · 숫자를 가리지 않는다. 대문자만 있는 줄에서는 `caps` 가 비고 `xtops` 가 캡선을 잡는다. 사람 캡선과 어센더선을 따로 받아야 `lead_over_cap`(채택 규칙) · `gap_px` · `asc_over_xh` · `cap_range` 의 분모가 무엇인지 말할 수 있다. 그래서 대문자 있는 판과 없는 판을 25장씩 넣었다.
+  - **재기 단계 참조 일치도.** `bases` · `xtops` · `caps` · 블록 상자를 사람 선에 대 본다. 항목 2 가 요구한 «선 종류를 구분한 가이드» 를 브로크만 50장에서 채운다. 오페라하우스 8장은 IDML 가이드와도 견줄 수 있다.
+  - **항목 3 · 6-2 의 블록별 값.** 블록 위 끝 · 캡 높이 · 줄마다 베이스라인 — `place_text` leave-one-out 과 `check_layout` 판별 시험.
+  - **항목 1 보강.** 2인 블록 상자.
+  - **2인 일치도.** 연습 판 2장에서 먼저 «같은 행을 고르는가» 를 `docs/labeling/compare_guides.py` 로 확인한다. 도구 검증에서 Claude 가 화면을 보고 x높이선을 정답보다 1행 아래로 고른 사례가 있었다 (`docs/labeling/tool/verify_synth.json`). ±1행은 읽기만으로 생기는 차이이므로 2인 일치도의 바닥으로 둔다. 본 목록의 일치도를 논문에 쓰려면 사전등록부터 쓴다.
+- **몇 장 · 몇 개.**
+  - 본 목록 50장 + 연습 판 2장. 파이프라인 추정 831줄 · 243블록, 라벨러 한 사람에 7~12시간.
+  - 층: 대문자 있음 25 (1단 13 · 2단+ 12) · 없음 25 (1단 17 · 2단+ 8).
+  - 회전 판 14장 · 40줄 초과 16장 · 디자인 변형 9장을 뺐다.
+  - **같은 틀 판이 몰려 있다.** 오페라하우스 머리판 8장, 1956 축제음악회 5장, 짝 3무리. 서로 다른 틀은 36개다. 같은 틀 판은 독립 표본이 아니다 (`docs/labeling/SELECTION.md`).
+- **누가 만들어야 하나.**
+  - 송준혁과 공동 연구자, 2인 독립이다. 연습 판 2장만 같이 본다.
+  - 송준혁은 이 판들의 검출 결과와 파이프라인 측정값을 이미 봤고, 본 목록 32 · 40 · 49 번에 상자를 그은 적이 있다.
+  - 공동 연구자는 본 목록 7 · 8 · 11 · 21 · 34 · 35 · 44 · 46 번에 IDML 가이드를 그었다.
+- **지금 임시로 쓰는 자료.** 없음. 요청서 · 도구 · 목록은 준비됐고, 받은 파일은 아직 없다.
+  - 선정에 쓴 대문자 유무 · 회전 블록 · 같은 틀은 **Claude 눈 판정**이다 (`docs/HUMAN_DATA.md` C절).
+- **`eval/refs.json` · `eval/run_all.py` 에 등록할 내용** (그 두 파일은 다른 세션 소관이라 아직 넣지 않았다).
+  - `refs.json` 에 `"guides50"` 항목:
+    - `request` `docs/LABELING_REQUEST.md`
+    - `caps` `docs/labeling/caps_claude_eye.json` · `ocr` `docs/labeling/ocr_easyocr.json` · `rotation` `docs/labeling/rotation.json`
+    - `cache` `~/.typo-mcp/brockmann.json` · `image_root` `~/Documents/연구2/브로크만 정리/corpus/코어` · `boxed_csv` `~/Downloads/boxes_송준혁-2.csv`
+    - `selection` `docs/labeling/selection.json` · `posters` `docs/labeling/posters_for_labelers.json` · `figure` `docs/labeling/lines.png`
+    - `tool_html` `~/Documents/poster/labeler/선긋기.html`
+    - 받으면 채울 `returns: {"송준혁": null, "공동연구자": null}`
+  - `run_all.py` 단계. 넷 다 2026-09-14 에 커밋본과 바이트 단위로 같게 나오는 것을 확인했다.
+    1. `docs/labeling/caps_compare.py caps ocr → caps_compare.json`
+    2. `docs/labeling/select.py cache caps rotation image_root docs/labeling --boxed_csv boxed_csv`
+    3. `docs/labeling/figure.py → lines.png`
+    4. `docs/labeling/mixed_size_check.py image_root → mixed_size_check.json` (요청서 5절 7 «크기 섞임» 규칙의 근거)
+  - 파일을 받은 뒤: `docs/labeling/compare_guides.py returns.송준혁 returns.공동연구자 --set practice|main` — 본 목록 일치도를 논문에 쓰려면 사전등록부터 쓴다.
+  - `ocr_run.py` 는 9분 걸려 run_all 에서 뺀다. `tool/build.py` 는 만든 시각이 박혀 바이트 재현 대상이 아니다.
