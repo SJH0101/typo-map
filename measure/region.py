@@ -61,14 +61,20 @@ def _clipped(box, win):
     return out
 
 
-def measure(src, box):
-    """box = (x1, y1, x2, y2), 원본 픽셀 좌표. 못 재면 n_lines 0 으로 돌려준다."""
+def measure(src, box, pad=None):
+    """box = (x1, y1, x2, y2), 원본 픽셀 좌표. 못 재면 n_lines 0 으로 돌려준다.
+
+    pad = (위, 아래) 를 주면 세로 창을 그만큼만 넓힌다. 주지 않으면 PAD — 지금까지와 같다.
+    좌우는 늘 PAD. 줄 상자를 하나씩 잴 때 이웃 줄 잉크가 창에 들어오지 않게 부르는 쪽이
+    줄인다 (group_gap 의 'neighbor_half', docs/measure_pad_preregister.json).
+    """
     g = (src.astype(float) if isinstance(src, np.ndarray)
          else np.asarray(Image.open(src).convert('L')).astype(float))
     H, W = g.shape
     x1, y1, x2, y2 = box
-    x1 = max(0, int(x1) - PAD); y1 = max(0, int(y1) - PAD)
-    x2 = min(W, int(x2) + PAD); y2 = min(H, int(y2) + PAD)
+    pt, pb = (PAD, PAD) if pad is None else (int(pad[0]), int(pad[1]))
+    x1 = max(0, int(x1) - PAD); y1 = max(0, int(y1) - pt)
+    x2 = min(W, int(x2) + PAD); y2 = min(H, int(y2) + pb)
     if x2 - x1 < 4 or y2 - y1 < 4:
         return dict(n_lines=0, why='상자가 너무 작다')
 

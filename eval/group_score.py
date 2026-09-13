@@ -341,8 +341,8 @@ def score(a):
     C, Cdiag, c_same = {}, {}, True
     for k, p, it in items:
         g = np.asarray(Image.open(p).convert('L')).astype(float)
-        a1, d1 = GG.group_gap(g, L[k]['lines'])
-        a2, _d2 = GG.group_gap(g, L[k]['lines'])
+        a1, d1 = GG.group_gap(g, L[k]['lines'], pad_rule=a.c_pad_rule)
+        a2, _d2 = GG.group_gap(g, L[k]['lines'], pad_rule=a.c_pad_rule)
         c_same = c_same and (a1 == a2)
         C[k], Cdiag[k] = a1, d1
     # 결정론 확인: A · 오라클 두 번
@@ -352,6 +352,7 @@ def score(a):
     res['C_결정론_240장'] = c_same
     res['정의']['C'] = ('group_gap.group_gap (사전등록 수정 1 · ef0cf65): 줄 상자마다 region.measure → X_OVER 세로 사슬 → '
                        '간격 run (최대 − 최소 ≤ 1px) · 3줄 이상 = 패턴 블록 · 공유 요소는 x높이 · 남은 줄은 detect_surya.group 폴백')
+    res['정의']['C_pad_rule'] = a.c_pad_rule
     res['정의']['3줄이상'] = '위 · 아래 블록이 모두 3줄 이상인 쌍만 (C 기전이 적용될 수 있는 쌍)'
     res['정의']['쌍_출처'] = '위 · 아래 블록의 다수 묶음이 둘 다 C 기전 → C 기전, 둘 다 A 폴백 → A 폴백, 아니면 혼합'
     res['정의']['폴백_범위'] = '폴백 비중이 크면 «C 를 제안한다» 는 주장의 범위가 그만큼 좁아진다 — 출처별 몫을 함께 읽는다'
@@ -429,6 +430,8 @@ def main(argv=None):
         if name == 'score':
             s.add_argument('--vlm', action='append'); s.add_argument('--prereg', required=True); s.add_argument('--out', required=True)
             s.add_argument('--note', action='append', help='실행 경위 (결과 파일 «경위» 에 그대로 싣는다)')
+            s.add_argument('--c-pad-rule', default='fixed', choices=GG.PAD_RULES,
+                           help='방식 C 줄 단위 재기의 세로 pad (docs/measure_pad_preregister.json)')
     a = ap.parse_args(argv)
     {'detect': detect, 'som': som, 'score': score}[a.cmd](a)
 

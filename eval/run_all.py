@@ -134,10 +134,19 @@ def main(argv=None):
             for n in Gp.get('notes', []):
                 nn += ['--note', n]
             run('eval/group_score.py', 'score', '--dir', Gp['dir'], '--manifest', Gp['manifest'],
-                '--lines', Gp['lines'], *vv, '--prereg', Gp['prereg'], '--out', Gp['out'], *nn)
+                '--lines', Gp['lines'], *vv, '--prereg', Gp['prereg'], '--out', Gp['out'], *nn,
+                '--c-pad-rule', Gp.get('c_pad_rule', 'fixed'))
             if Gp.get('diag_out'):
                 run('eval/group_diag.py', '--dir', Gp['dir'], '--manifest', Gp['manifest'],
                     '--lines', Gp['lines'], *vv, '--out', Gp['diag_out'])
+
+    if R.get('measure_pad'):
+        Mp = R['measure_pad']
+        if os.path.exists(os.path.expanduser(Mp['lines'])):
+            run('eval/measure_pad_check.py', '--dir', Mp['dir'], '--manifest', Mp['manifest'],
+                '--lines', Mp['lines'], '--prereg', Mp['prereg'], '--out', Mp['out'])
+        else:
+            print('pad 검증 줄 파일이 없다 — eval/group_score.py detect 로 먼저 짚는다. 건너뛴다')
 
     if R.get('idml') and not a.skip_idml:
         I = R['idml']
@@ -150,6 +159,7 @@ def main(argv=None):
             + ([R['series_check']['out']] if R.get('series_check') else [])
             + ([R['synth']['out']] if R.get('synth') else [])
             + ([R['group']['out'], R['group'].get('diag_out')] if R.get('group') else [])
+            + ([R['measure_pad']['out']] if R.get('measure_pad') else [])
             + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)
 

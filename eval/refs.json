@@ -92,6 +92,15 @@
    "pass1_b4 는 새 서브에이전트로 다시 돌렸다. 그사이 부모 세션 모델이 claude-opus-5 로 바뀌어, 한 패스 안에 모델이 섞이지 않도록 model=fable 을 명시했다. 8묶음 모두 claude-fable-5-1 (자기 보고)",
    "출력 검증: 240묶음-장(120장 × 2패스) 모두 줄 번호가 정확히 한 번씩 — 다시 요청한 장 0. 열어 본 파일은 묶음마다 지시문 · 목록 · 이미지 30장 = 32개, 그 밖 0 (자기 보고)"
   ],
-  "diag_out": "docs/group_diag.json"
+  "diag_out": "docs/group_diag.json",
+  "c_pad_rule": "fixed"
+ },
+ "measure_pad": {
+  "dir": "~/.typo-mcp/measure_pad",
+  "manifest": "docs/measure_pad_manifest.json",
+  "lines": "~/.typo-mcp/measure_pad-lines.json",
+  "prereg": "docs/measure_pad_preregister.json",
+  "out": "docs/measure_pad_result.json",
+  "note": "줄 단위 재기 pad 규칙 검증 (seed 2001~2060). eval/group_gen.py 로 만들고 eval/group_score.py detect 로 줄을 짚은 뒤 eval/measure_pad_check.py"
  }
 }

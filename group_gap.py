@@ -12,12 +12,14 @@ A 의 상수(Y_GAP · X_OVER · H_RATIO · MIN_AREA)는 바꾸지 않는다 — 
               check_layout «블록 내 행간 일정» 과 같은 수. 합성에서 정한 값이라 실물 스캔으로
               옮겨가지 않을 수 있다 — 사전등록은 브로크만에서 과분할을 예측한다.
 """
+import math
 from collections import Counter, defaultdict
 
 import detect_surya as DS
 from measure import region
 
 TAU = 1
+PAD_RULES = ('fixed', 'neighbor_half')   # 줄 상자를 잴 때 세로 pad. 묶기 비교 240장 세트는 'fixed'
 
 
 def _overlap(a, b):
@@ -25,11 +27,30 @@ def _overlap(a, b):
     return ix * iy
 
 
-def elements(gray, lines):
+def neighbor_pad(lines, i):
+    """P1 — 위 · 아래 pad = min(PAD, ⌊이웃 줄 상자까지 틈 / 2⌋), 틈 < 0 이면 0, 이웃 없으면 PAD.
+
+    이웃 = 가로 범위가 (좌우 PAD 로 넓힌) 이 상자와 겹치고 세로 중심이 위(아래)인 다른 줄 상자.
+    PAD 3 창에 이웃 줄 잉크가 들어와 줄이 늘던 것을 막는다. 사전등록 docs/measure_pad_preregister.json.
+    """
+    P = region.PAD
+    x1, y1, x2, y2 = lines[i]
+    cy = (y1 + y2) / 2
+    near = [b for j, b in enumerate(lines) if j != i and min(x2 + P, b[2]) - max(x1 - P, b[0]) > 0]
+    up = [b[3] for b in near if (b[1] + b[3]) / 2 < cy]
+    dn = [b[1] for b in near if (b[1] + b[3]) / 2 > cy]
+    pt = P if not up else max(0, min(P, math.floor((y1 - max(up)) / 2)))
+    pb = P if not dn else max(0, min(P, math.floor((min(dn) - y2) / 2)))
+    return pt, pb
+
+
+def elements(gray, lines, pad_rule='fixed'):
     """줄 상자마다 region.measure. 잰 줄 하나가 요소 하나다."""
+    if pad_rule not in PAD_RULES:
+        raise ValueError(f'pad_rule 은 {PAD_RULES} 가운데 하나다: {pad_rule!r}')
     els, per_line = [], []
     for i, box in enumerate(lines):
-        m = region.measure(gray, box)
+        m = region.measure(gray, box, pad=(None if pad_rule == 'fixed' else neighbor_pad(lines, i)))
         n = int(m.get('n_lines', 0))
         per_line.append(n)
         for j in range(n):
@@ -117,9 +138,9 @@ def _owners(ch, els, tau, stats):
     return own
 
 
-def group_gap(gray, lines, tau=TAU):
+def group_gap(gray, lines, tau=TAU, pad_rule='fixed'):
     """Surya 줄 상자 → (줄마다 묶음 번호 또는 None, 진단). 번호는 패턴 블록이 먼저, 폴백 묶음이 뒤."""
-    els, per_line = elements(gray, lines)
+    els, per_line = elements(gray, lines, pad_rule)
     stats = Counter()
     blk = {}
     for ci, ch in enumerate(chains(els, tau)):
@@ -151,6 +172,6 @@ def group_gap(gray, lines, tau=TAU):
                     best, bv = j, v
             if best is not None:
                 asg[i] = len(ids) + best; src[i] = 'A'
-    return asg, dict(per_line_measured=per_line, source=src, n_elements=len(els),
+    return asg, dict(per_line_measured=per_line, source=src, n_elements=len(els), pad_rule=pad_rule,
                      n_pattern_blocks=len(ids), n_fallback_blocks=n_fb, n_leftover_lines=len(leftover),
                      ties=dict(stats))
