@@ -1,4 +1,10 @@
 {
+ "폐기": {
+  "날짜": "2026-09-14",
+  "상태": "폐기 — 쓰지 않는다",
+  "경위": "docs/GROUP_SET_ANATOMY.md 8절",
+  "대신": "깨끗한 세트 docs/clean_preregister.json"
+ },
  "무엇": "묶기 방식 비교 — A(현재 규칙) · VLM Set-of-Mark · 오라클, 합성 240장 (VLM 120장)",
  "사전등록": "docs/group_preregister.json",
  "사전등록_sha256": "4d6fab2c726c4b4553a18864e4ad83622443480847fd97e4ed1a775edaf7a154",

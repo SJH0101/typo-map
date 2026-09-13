@@ -121,7 +121,9 @@ def main(argv=None):
         run('eval/synth_score.py', '--dir', S['dir'], '--manifest', S['manifest'],
             '--prereg', S['prereg'], '--cache-dir', S['cache_dir'], '--out', S['out'])
 
-    if R.get('group'):
+    if R.get('group') and R['group'].get('폐기'):
+        print(f"\n묶기 비교 240장 세트는 폐기됐다 ({R['group']['폐기']['날짜']}, {R['group']['폐기']['경위']}) — 다시 채점하지 않는다")
+    elif R.get('group'):
         Gp = R['group']
         vl = [os.path.expanduser(v) for v in Gp['vlm']]
         if not all(os.path.exists(v) for v in vl):
@@ -158,7 +160,7 @@ def main(argv=None):
             + ([R['loo_place_text']['out']] if R.get('loo_place_text') else [])
             + ([R['series_check']['out']] if R.get('series_check') else [])
             + ([R['synth']['out']] if R.get('synth') else [])
-            + ([R['group']['out'], R['group'].get('diag_out')] if R.get('group') else [])
+            + ([R['group']['out'], R['group'].get('diag_out')] if R.get('group') and not R['group'].get('폐기') else [])
             + ([R['measure_pad']['out']] if R.get('measure_pad') else [])
             + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)

@@ -76,6 +76,12 @@
   "out": "docs/synth_result.json"
  },
  "group": {
+  "폐기": {
+   "날짜": "2026-09-14",
+   "상태": "폐기 — 쓰지 않는다",
+   "경위": "docs/GROUP_SET_ANATOMY.md 8절",
+   "대신": "깨끗한 세트 docs/clean_preregister.json"
+  },
   "dir": "~/.typo-mcp/group",
   "manifest": "docs/group_manifest.json",
   "lines": "~/.typo-mcp/group-lines.json",
