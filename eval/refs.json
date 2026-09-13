@@ -74,5 +74,24 @@
   "note": "합성 포스터 통제 실험. eval/synth_gen.py 가 만들고, 채점 스크립트(아직 없음)가 읽는다. 실물 캐시와 섞지 않는다",
   "cache_dir": "~/.typo-mcp",
   "out": "docs/synth_result.json"
+ },
+ "group": {
+  "dir": "~/.typo-mcp/group",
+  "manifest": "docs/group_manifest.json",
+  "lines": "~/.typo-mcp/group-lines.json",
+  "som_dir": "~/.typo-mcp/group/som",
+  "vlm": [
+   "boxes/group_vlm_pass1.json",
+   "boxes/group_vlm_pass2.json"
+  ],
+  "prereg": "docs/group_preregister.json",
+  "out": "docs/group_result.json",
+  "note": "묶기 비교. eval/group_gen.py 가 만들고 eval/group_score.py detect → som → (VLM 서브에이전트, eval/group_vlm_merge.py 로 합침) → score. VLM 묶음은 다시 만들 수 없으므로 boxes/ 에 둔다. notes 는 실행 경위이며 score 의 --note 로 결과에 실린다",
+  "notes": [
+   "사용량 한도(HTTP 429): 8개 서브에이전트 가운데 5개가 한도에 걸려 끝났다. 그 가운데 4개(pass1_b2 · pass1_b3 · pass2_b1 · pass2_b2)는 끝나기 전에 출력 파일을 다 썼고 검증을 통과했다. pass1_b4 만 파일이 없었다",
+   "pass1_b4 는 새 서브에이전트로 다시 돌렸다. 그사이 부모 세션 모델이 claude-opus-5 로 바뀌어, 한 패스 안에 모델이 섞이지 않도록 model=fable 을 명시했다. 8묶음 모두 claude-fable-5-1 (자기 보고)",
+   "출력 검증: 240묶음-장(120장 × 2패스) 모두 줄 번호가 정확히 한 번씩 — 다시 요청한 장 0. 열어 본 파일은 묶음마다 지시문 · 목록 · 이미지 30장 = 32개, 그 밖 0 (자기 보고)"
+  ],
+  "diag_out": "docs/group_diag.json"
  }
 }

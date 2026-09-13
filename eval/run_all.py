@@ -121,6 +121,24 @@ def main(argv=None):
         run('eval/synth_score.py', '--dir', S['dir'], '--manifest', S['manifest'],
             '--prereg', S['prereg'], '--cache-dir', S['cache_dir'], '--out', S['out'])
 
+    if R.get('group'):
+        Gp = R['group']
+        vl = [os.path.expanduser(v) for v in Gp['vlm']]
+        if not all(os.path.exists(v) for v in vl):
+            print('VLM 묶음 파일이 없다 — docs/group_vlm_prompt.md 방식으로 새 서브에이전트가 만든다. 묶기 채점을 건너뛴다')
+        else:
+            vv = []
+            for v in Gp['vlm']:
+                vv += ['--vlm', v]
+            nn = []
+            for n in Gp.get('notes', []):
+                nn += ['--note', n]
+            run('eval/group_score.py', 'score', '--dir', Gp['dir'], '--manifest', Gp['manifest'],
+                '--lines', Gp['lines'], *vv, '--prereg', Gp['prereg'], '--out', Gp['out'], *nn)
+            if Gp.get('diag_out'):
+                run('eval/group_diag.py', '--dir', Gp['dir'], '--manifest', Gp['manifest'],
+                    '--lines', Gp['lines'], *vv, '--out', Gp['diag_out'])
+
     if R.get('idml') and not a.skip_idml:
         I = R['idml']
         run('idml_explore.py', 'score', '--idml-dir', I['dir'], '--map', I['map'],
@@ -131,6 +149,7 @@ def main(argv=None):
             + ([R['loo_place_text']['out']] if R.get('loo_place_text') else [])
             + ([R['series_check']['out']] if R.get('series_check') else [])
             + ([R['synth']['out']] if R.get('synth') else [])
+            + ([R['group']['out'], R['group'].get('diag_out')] if R.get('group') else [])
             + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)
 
