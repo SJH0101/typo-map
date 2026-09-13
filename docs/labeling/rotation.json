@@ -1,0 +1,77 @@
+{
+ "판정한이": "Claude (claude-opus-5) — 사람이 아니다. 기울어진 판은 코드(EasyOCR 상자 기울기)",
+ "날짜": "2026-09-14",
+ "탐색용": "탐색용 · 논문 수치 아님",
+ "기준": {
+  "기울어진판": "measure_corpus.SKEW 와 같다: EasyOCR 넓은 상자 12개 윗변 기울기 중앙값 |각| ≥ 14° (캐시 skewed=True). 판 전체가 돌아간 판",
+  "회전블록": "판이 기울지 않았어도, 글줄 방향이 가로가 아닌 활자 블록이 하나라도 있으면 뺀다. «가로가 아니다» = 한 글줄의 양 끝 높이 차가 그 글자의 x높이보다 크다 (세로 · 사선 · 돌아간 카드 위의 글). 가로선 하나로 그 줄의 베이스라인을 나타낼 수 없는 경우다.",
+  "세지않는것": "판 가장자리(판 폭 · 높이의 5% 안)에 붙은 한 줄짜리 인쇄소 · 디자이너 표기와 서명. 브로크만 판 대부분에 세로 인쇄 표기가 있어 이것까지 세면 표본이 남지 않는다. 라벨러는 이런 줄을 블록으로 긋고 «가로 아님» 으로 표시한다. 기울임꼴(이탤릭)과 그림 글자(95 «ja»)는 회전이 아니다."
+ },
+ "방법": "기울어진 판은 캐시 값. 회전 블록은 기울지 않고 줄 40 이하인 97장을 반 크기 밀착 인화지로 다시 보고(원본 해상도로 한 번 본 뒤), EasyOCR 상자 기울기(|각| ≥ 3° · 폭 ≥ 30px, 또는 세로로 긴 상자)를 보조로 대조했다. EasyOCR 보조는 69 · 39 · 109 를 잡았고 9 를 놓쳤다.",
+ "기울어진판": [
+  {
+   "key": "Juni_Festwochen__1964_Stadttheater Zürich - Internationale Juni-Festwochen - (...).jpg",
+   "skew": -26.68
+  },
+  {
+   "key": "Musica_Viva__1958_Végh-Quartett - Musica Viva - Paul Hindemith - Alban Berg - .jpg",
+   "skew": 39.31
+  },
+  {
+   "key": "Musica_Viva__1959_19. Volkskonzert der Tonhalle-Gesellschaft Zürich - Dienstag.jpg",
+   "skew": -43.45
+  },
+  {
+   "key": "Musica_Viva__1961_Musica viva - Dienstag, den 18. April 1961 - Tonhalle Grosse.jpg",
+   "skew": -32.62
+  },
+  {
+   "key": "Musica_Viva__1961_Musica viva - The Fine Arts Quartet - Arnold Schönberg - Wal.jpg",
+   "skew": -36.71
+  },
+  {
+   "key": "Musica_Viva__1961_Rudolf Kelterborn - Karl Amadeus Hartmann - Arnold Schönberg.jpg",
+   "skew": -33.82
+  },
+  {
+   "key": "Musica_Viva__1961_Tonhalle Grosser Saal - Musica viva - Freitag, den 6. Januar.jpg",
+   "skew": -43.53
+  },
+  {
+   "key": "Tonhalle_Konzert__1955_Strawinsky - Berg - Fortner - Tonhalle grosser Saal.jpg",
+   "skew": 30.92
+  },
+  {
+   "key": "Verkehr__1960_Moins de bruit.jpg",
+   "skew": 19.36
+  },
+  {
+   "key": "Verkehr__1960_Weniger Lärm.jpg",
+   "skew": 36.88
+  }
+ ],
+ "회전블록": [
+  {
+   "key": "Ausstellung__1986_Kunsthaus Zürich - Hans Arp - Hugo Ball.jpg",
+   "설명": "사진 옆 세로 캡션 여러 줄 (판 가운데, 가장자리 표기 아님)"
+  },
+  {
+   "key": "Juni_Festwochen__1964_Juni-Festwochen Zürich 1964 - Sinfoniekonzerte.jpg",
+   "설명": "표제 «sinfonie-konzerte» «tonhalle-gesellschaft zürich» «juni-festwochen» 이 세로(90°)로 놓임"
+  },
+  {
+   "key": "Musica_Viva__1964_Musica Viva - Räto Tschupp - Andrej Lütschg - (...) - Tonhal.jpg",
+   "설명": "글이 든 흰 카드가 약 10° 돌아가 있음 — 긴 줄의 양 끝 높이 차가 x높이의 몇 배"
+  },
+  {
+   "key": "Verkehr__1955_Das freundliche Handzeichen schützt vor Unfällen.jpg",
+   "설명": "표제 «das freundliche Handzeichen» 이 세로(90°)로 놓임"
+  }
+ ],
+ "참고_줄40초과라_이미_빠진_회전블록판": [
+  {
+   "key": "Ausstellung__1953_T - Das Plakat - 400 neue Plakate aus 25 Ländern - Kunstgewe.jpg",
+   "설명": "세로로 놓인 안내문 단"
+  }
+ ]
+}

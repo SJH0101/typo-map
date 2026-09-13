@@ -1,0 +1,509 @@
+{
+ "판정한이": "Claude (claude-opus-5) — 사람이 아니다",
+ "주의": "이 파일은 Claude 의 눈 판정이다. 사람 판정이 아니므로 정답이나 사람 참조로 쓰지 않는다. 라벨링 포스터 선정의 층화에만 썼다.",
+ "날짜": "2026-09-14",
+ "방법": "브로크만 코어 123장을 원본 해상도(약 560×800) 이미지로 한 장씩 보고 판정. OCR 결과는 보기 전에 판정했다.",
+ "기준": {
+  "cap": "U = 읽을 수 있는 활자에 대문자가 하나라도 있음, L = 없음. 판 가장자리의 못 읽는 작은 인쇄 표기와 손글씨는 판정에서 뺐다.",
+  "allcaps_line": "전부 대문자로 된 줄이 하나라도 있음"
+ },
+ "교차확인": "docs/labeling/caps_compare.json (EasyOCR 와의 일치)",
+ "탐색용": "탐색용 · 논문 수치 아님",
+ "n": 123,
+ "U": 73,
+ "L": 50,
+ "labels": {
+  "Ausstellung__1948_Deine Wohnung - Dein Nachbar - Deine Heimat - Ausstellung im.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Ausstellung__1953_T - Das Plakat - 400 neue Plakate aus 25 Ländern - Kunstgewe.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Ausstellung__1957_Werner Bischof - Das fotografische Werk - Kunstgewerbemuseum.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Ausstellung__1958_Henry van de Velde - Kunstgewerbemuseum Zürich - 6. Juni - 3.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Ausstellung__1958_The Family of Man - -Wir Menschen- - Kunstgewerbemuseum Züri.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Ausstellung__1958_The Family of Man - -Wir Menschen- - Kunsthalle Bern - Foto-.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Ausstellung__1958_Werner Bischof - Das fotografische Werk - Gewerbemuseum Base.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Ausstellung__1960_Kunstgewerbemuseum Zürich - Ausstellung - Der Film.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Ausstellung__1961_Zürich plant und baut - Helmhaus Zürich - 12.Oktober -15.Nov.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Ausstellung__1986_Kunsthaus Zürich - Hans Arp - Hugo Ball.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Ausstellung__1994_Zürcher Szenen von Edi Baur - Ausstellung im Stadthaus Züric.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "BEA__1956_Fly Viscount - Fly BEA - British European Airways.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "BEA__1958_Fly Viscount - the Rolls Royce of the skies - BEA - British .jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Juni_Festwochen__1950_Juni-Festwochen Zürich 1950 - Helmhaus - Grosse Chinesische .jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Juni_Festwochen__1950_Kunstgewerbemuseum - Die gute Form - Wanderausstellung der S.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Juni_Festwochen__1950_Schauspielhaus - Juni-Festwochen Zürich 1950.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Juni_Festwochen__1950_Stadttheater - Juni-Festwochen 1950.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Juni_Festwochen__1950_Tonhalle - Juni-Festwochen Zürich 1950.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Juni_Festwochen__1953_Juni-Festwochen Zürich 1953 - Tonhalle Grosser Saal - George.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1953_Tonhalle Grosser Saal - Juni-Festwochen Zürich 1953 - Leitun.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1953_Tonhalle Grosser Saal - Juni-Festwochen Zürich 1953 - Tonhal.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1955_Erich Schmid - Leitung - Carl Seemann - Klavier - Wolfgang S.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1956_Juni-Festwochen Zürich 1956 - 1. Juni-Festkonzert - Leitung .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1956_Juni-Festwochen Zürich 1956 - 2. Juni-Festkonzert - Leitung .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1956_Juni-Festwochen Zürich 1956 - 3. Juni-Festkonzert - Leitung .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1956_Juni-Festwochen Zürich 1956 - 4. Juni-Festkonzert - Leitung .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1956_Juni-Festwochen Zürich 1956 - 5. Juni-Festkonzert - Leitung .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1957_Juni-Festwochen Zürich 1957 - Tonhalle Grosser Saal - 4. Jun.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1957_Junifestwochen Zürich 1957 - Stadttheater.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1959_Juni-Festwochen Zürich 1959 - Abschiedskonzerte von Dr. Volk.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1959_Juni-Festwochen Zürich 1959 - Stadttheater.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1959_Juni-Festwochen Zürich 1959 - Tonhalle Grosser Saal - Leitun.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1960_Juni-Festwochen Zürich 1960 - Stadttheater.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1960_Viertes Juni-Festkonzert 1960 der Tonhalle-Gesellschaft - Fr.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1961_Juni-Festwochen Zürich - Stadttheater.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1962_Internationale Juni-Festwochen 1962 - Stadttheater Zürich.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1962_Internationale Juni-Festwochen Zürich - Sinfonie-Konzerte de.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1963_1963 - Sinfonie-Konzerte der Tonhalle-Gesellschaft - Interna.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1963_Internationale Juni-Festwochen - Stadttheater Zürich - 1963.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1964_Juni-Festwochen Zürich 1964 - Sinfoniekonzerte.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1964_Stadttheater Zürich - Internationale Juni-Festwochen - (...).jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1965_Internationale Juni-Festwochen Zürich 1965 - Konzerte der To.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1965_Opernhaus Zürich - Internationale Juni-Festwochen 1965.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1965_Opernhaus Zürich - Internationale Juni-Festwochen Zürich 196.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1966_Juni-Festwochen 66 - Tonhalle Gesellschaft Zürich.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1966_Opernhaus Zürich - Internationale Juni-Festwochen Zürich 196.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Juni_Festwochen__1971_Junifestwochen Zürich 1971 - 1. Junifestkonzert - Tonhalle -.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1956_Musica Viva - Hartmann - Bartok - Honegger - 20. Volkskonzer.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1956_Musica Viva - V. Einem - Schönberg - Strawinsky - 11. Volksk.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1956_Strawinsky - Musica viva - Dienstag, 16. Okt. 1956 - 1. Extr.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1957_Musica Viva - 16. Volkskonzert - 26.März 1957 - Tonhalle Gro.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1957_Musica Viva - Grosser Saal Tonhalle - Leitung Erich Schmid.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1957_Musica Viva - Paul Hindemith - Sonate für Viola und Klavier .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1957_Musica Viva - Thyl Claes - Tonhalle Grosser Saal.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1958_Musica viva - Dienstag, den 7. Januar 1958 - Schweizerische .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1958_Tonhalle-Quartett - Zürcher Bläser-Quintett - Strawinsky - S.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1958_Végh-Quartett - Musica Viva - Paul Hindemith - Alban Berg - .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1959_19. Volkskonzert der Tonhalle-Gesellschaft Zürich - Dienstag.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1959_Musica Viva - Kleiner Tonhallesaal - Matthias Hauer - Werner.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1959_Musica viva - Erich Schmid Leitung - Adolf Neumeier Schlagze.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1960_Donnerstag, den 7.Januar 1960, 20.15 Uhr, Grosser Tonhallesa.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1960_Musica viva - Donnerstag, 10. März 1960 - Tonhalle Grosser S.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1961_Musica viva - Dienstag, den 18. April 1961 - Tonhalle Grosse.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1961_Musica viva - The Fine Arts Quartet - Arnold Schönberg - Wal.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1961_Rudolf Kelterborn - Karl Amadeus Hartmann - Arnold Schönberg.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1961_Tonhalle Grosser Saal - Musica viva - Freitag, den 6. Januar.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1962_Musica Viva - Ensemble de Musique Moderne - Eric Satie - Arn.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1962_Musica Viva - Hans Rosbaud - Anton Fietz (...) - 2. Musica V.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1963_Musica Viva - Anton Webern - Alban Berg - Arnold Schönberg -.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Musica_Viva__1964_Musica Viva - Räto Tschupp - Andrej Lütschg - (...) - Tonhal.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Opernhaus__1964_Opernhaus Zürich - Die Schneekönigin - Märchenvorstellung. U.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1964_Opernhaus Zürich - Die vier Grobiane - Komische Oper von Erm.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1964_Opernhaus Zürich - Dornröschen - Musik von Peter Iljitsch Ts.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1964_Opernhaus Zürich - Eröffnung der Spielzeit 1964-65 - Oberon .jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1964_Opernhaus Zürich - Wiener Blut - Operette von Johann Strauss.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Andrea Chenier - Musikalisches Drama von .jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Der Igel als Bräutigam - 4. Dezember 1965.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Der Liebestrank - Komische Oper von Gaeta.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Der Opernball - von Richard Heuberger - 3.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Der Vogelhändler - Operette von Carl Zell.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Die Liebe zu den drei Orangen - Oper von .jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Eröffnung der Spielzeit 1965-66 - Die ver.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Orpheus in der Unterwelt - Operette von J.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Schwanensee - Ballett von Peter I. Tschai.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1965_Opernhaus Zürich - Undine - Ballett von Frederick Ashton - M.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1966_Opernhaus Zürich - Ballettabend - Don Quijote - Lessons in l.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1966_Opernhaus Zürich - Der fliegende Holländer - von Richard Wag.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1966_Opernhaus Zürich - Die lustige Witwe - Operette von Franz Lé.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1966_Opernhaus Zürich - Don Carlos - Oper von Giuseppe Verdi - 5..jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1966_Opernhaus Zürich - Eröffnung der Spielzeit 1966-67 - Tannhäu.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Opernhaus__1966_Opernhaus Zürich - Wenn ich König wär... - Oper von Adolphe .jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Schauspielhaus__1961_Stadttheater Zürich - Fünf Fest-Vorstellungen - Fidelio - Op.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Schauspielhaus__1962_Stadttheater Zürich - The New York City Ballet - 11. - 15. S.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Sonstige__1900_Josef Müller-Brockmann - Affiches-projets - Impressions 1900.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Sonstige__1949_Freies Lyceum - Tages- und Abendkurse.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Sonstige__1950_Bundesfinanzreform Ja - Zurück zur Verfassung.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Sonstige__1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Sonstige__1955_Für alle... - Oscar Weber.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Sonstige__1957_Wir telefonieren mit der ganzen Welt - schneller und billige.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Tonhalle_Konzert__1952_Tonhalle Zürich Grosser Saal - 10. Abonnementskonzert der To.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Tonhalle_Konzert__1954_Extrakonzert - Tonhalle Grosser Saal - Solistin Clara Haskil.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Tonhalle_Konzert__1955_Beethoven - Tonhalle - Grosser Saal.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Tonhalle_Konzert__1955_Carl Schuricht Leitung - Erica Morini Violine - Beethoven - .jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Tonhalle_Konzert__1955_Ferenc Fricsay - Leitung - Arthur Rubinstein - Solist - Tonh.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Tonhalle_Konzert__1955_Strawinsky - Berg - Fortner - Tonhalle grosser Saal.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Tonhalle_Konzert__1957_Extra-Konzert - Leitung Carl Schuricht - Violine Johanna Mar.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Tonhalle_Konzert__1958_Collegium Musicum Zürich - Leitung- Paul Sieber - 5 Kammeror.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Verkehr__1953_Automobile-Club de Suisse - Protégez l'enfant!.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1953_Schützt das Kind!.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1955_Das freundliche Handzeichen schützt vor Unfällen.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1957_Überholen ...- Im Zweifel nie!.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1958_Cycliste - Attention - Attention - Cycliste.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1958_Projet constitutionnel sur le routier réseau Oui.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1958_Radfahrer - Achtung - Achtung - Radfahrer.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1958_Strassenbau-Vorlage ja.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Verkehr__1960_Moins de bruit.jpg": {
+   "cap": "L",
+   "allcaps_line": false
+  },
+  "Verkehr__1960_Weniger Lärm.jpg": {
+   "cap": "U",
+   "allcaps_line": false
+  },
+  "Volg__1956_Volg -Traubensaft - naturrein.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Volg__1957_Volg Traubensaft naturrein - Energieleistung.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Volg__1957_Volg Traubensaft naturrein - Festlichkeit.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Volg__1957_Volg Traubensaft naturrein - Gesundheit.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Volg__1957_Volg Traubensaft naturrein - Konzentration.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  },
+  "Volg__1957_Volg Traubensaft naturrein - Zuverlässigkeit.jpg": {
+   "cap": "U",
+   "allcaps_line": true
+  }
+ }
+}

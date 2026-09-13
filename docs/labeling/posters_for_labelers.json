@@ -1,0 +1,321 @@
+{
+ "note": "선 긋기 도구가 읽는 목록. 칸 표시 · 파이프라인 값은 넣지 않는다",
+ "seed": 20260914,
+ "image_root": "~/Documents/연구2/브로크만 정리/corpus/코어",
+ "main": [
+  {
+   "order": 1,
+   "folder": "Ausstellung",
+   "file": "1948_Deine Wohnung - Dein Nachbar - Deine Heimat - Ausstellung im.jpg",
+   "sha256": "21c4a83e739c9563887eecc69165ad44c434f8d7cd1f96376c58a6bf10e2648e"
+  },
+  {
+   "order": 2,
+   "folder": "Juni_Festwochen",
+   "file": "1956_Juni-Festwochen Zürich 1956 - 1. Juni-Festkonzert - Leitung .jpg",
+   "sha256": "50b1904b5d84d9cd0b94c9d527cab5cc665c31e8ae940991016bb05961b101a6"
+  },
+  {
+   "order": 3,
+   "folder": "Juni_Festwochen",
+   "file": "1956_Juni-Festwochen Zürich 1956 - 3. Juni-Festkonzert - Leitung .jpg",
+   "sha256": "83ee7bc1d97b3126267304a986cc4265484a6721f27cd30780423ebd56a002d7"
+  },
+  {
+   "order": 4,
+   "folder": "Musica_Viva",
+   "file": "1957_Musica Viva - 16. Volkskonzert - 26.März 1957 - Tonhalle Gro.jpg",
+   "sha256": "ab5700d0e939157574dc13d50fd6af94015aaae0f77f1a9cb3b07b3f38bc468f"
+  },
+  {
+   "order": 5,
+   "folder": "Ausstellung",
+   "file": "1957_Werner Bischof - Das fotografische Werk - Kunstgewerbemuseum.jpg",
+   "sha256": "19ba2e38c8003f8525f62d7b2b60dafbbf664ad0f7bf00856233d808148e31b8"
+  },
+  {
+   "order": 6,
+   "folder": "Opernhaus",
+   "file": "1965_Opernhaus Zürich - Eröffnung der Spielzeit 1965-66 - Die ver.jpg",
+   "sha256": "952e91b2fe8f189d5f46d6aaeca44c693bfe799fbef6817c93d7c92005aab799"
+  },
+  {
+   "order": 7,
+   "folder": "Opernhaus",
+   "file": "1964_Opernhaus Zürich - Dornröschen - Musik von Peter Iljitsch Ts.jpg",
+   "sha256": "98475eb3864ff04e0b9481514355cebb2592150016e140efe8e33f455a3f2a88"
+  },
+  {
+   "order": 8,
+   "folder": "Opernhaus",
+   "file": "1966_Opernhaus Zürich - Der fliegende Holländer - von Richard Wag.jpg",
+   "sha256": "8034955ce3e6e49f7a7951b485f67f2f556a52316447f370467c43f5b8693263"
+  },
+  {
+   "order": 9,
+   "folder": "Volg",
+   "file": "1956_Volg -Traubensaft - naturrein.jpg",
+   "sha256": "e3972e4206a7e083711a39da340b0e58ade1c79bbfffede6f0dcaab7a4d5ad1e"
+  },
+  {
+   "order": 10,
+   "folder": "Musica_Viva",
+   "file": "1962_Musica Viva - Hans Rosbaud - Anton Fietz (...) - 2. Musica V.jpg",
+   "sha256": "14b2edcbfc32cbf478446b81e70c2a6a2aee4931e1b8aefed6a79351ae10beb4"
+  },
+  {
+   "order": 11,
+   "folder": "Opernhaus",
+   "file": "1964_Opernhaus Zürich - Die Schneekönigin - Märchenvorstellung. U.jpg",
+   "sha256": "fdf72d73c34572cdea6d9bfa2a64659a9e9de623d4bb4a422159f8b49dee2b2c"
+  },
+  {
+   "order": 12,
+   "folder": "Volg",
+   "file": "1957_Volg Traubensaft naturrein - Gesundheit.jpg",
+   "sha256": "5998671128ee87e040ffd7d2ec737ff169e592f9fd8364ddb10646ab55015db0"
+  },
+  {
+   "order": 13,
+   "folder": "Juni_Festwochen",
+   "file": "1956_Juni-Festwochen Zürich 1956 - 5. Juni-Festkonzert - Leitung .jpg",
+   "sha256": "e7fe4202ae4add484fc079dde53f9284deeb0574604bcc23b3c902de2f08ad66"
+  },
+  {
+   "order": 14,
+   "folder": "Juni_Festwochen",
+   "file": "1959_Juni-Festwochen Zürich 1959 - Abschiedskonzerte von Dr. Volk.jpg",
+   "sha256": "153f19d11fab90f70e45c2091356533dbdc75929a6533359e8c4b82a1d92e9c2"
+  },
+  {
+   "order": 15,
+   "folder": "Sonstige",
+   "file": "1900_Josef Müller-Brockmann - Affiches-projets - Impressions 1900.jpg",
+   "sha256": "2006a2c6ba0a7fd5e0b25415b848eb19bca3edf38204498cd91eee9f733dea4c"
+  },
+  {
+   "order": 16,
+   "folder": "Ausstellung",
+   "file": "1960_Kunstgewerbemuseum Zürich - Ausstellung - Der Film.jpg",
+   "sha256": "1cde6aae79c938a5846073650215d565b7088cff127db0e36cb77f04393dab94"
+  },
+  {
+   "order": 17,
+   "folder": "Tonhalle_Konzert",
+   "file": "1952_Tonhalle Zürich Grosser Saal - 10. Abonnementskonzert der To.jpg",
+   "sha256": "d237d18a4538561e738b7acf40af760fba1270579788f8042a854e132006dcce"
+  },
+  {
+   "order": 18,
+   "folder": "Tonhalle_Konzert",
+   "file": "1955_Ferenc Fricsay - Leitung - Arthur Rubinstein - Solist - Tonh.jpg",
+   "sha256": "0e913796ea0797737db45c8c86d9be58c7399e3f55907dcfe8d9ac44108d14f1"
+  },
+  {
+   "order": 19,
+   "folder": "Musica_Viva",
+   "file": "1958_Tonhalle-Quartett - Zürcher Bläser-Quintett - Strawinsky - S.jpg",
+   "sha256": "142c01bf248f01ca7bc34667b223ea1e81da9f8e188dc7d003b54472b831cac3"
+  },
+  {
+   "order": 20,
+   "folder": "Ausstellung",
+   "file": "1994_Zürcher Szenen von Edi Baur - Ausstellung im Stadthaus Züric.jpg",
+   "sha256": "0b93d4e967ced4999a81dbb8e63e7517a6ecf9ccdbedbc9e92c1cd8d3c46d1fe"
+  },
+  {
+   "order": 21,
+   "folder": "Opernhaus",
+   "file": "1966_Opernhaus Zürich - Don Carlos - Oper von Giuseppe Verdi - 5..jpg",
+   "sha256": "8440b94a24c4dc1428af6bdf96b8e674f818f34f59f6255a7a809d8674ae63e3"
+  },
+  {
+   "order": 22,
+   "folder": "Juni_Festwochen",
+   "file": "1957_Juni-Festwochen Zürich 1957 - Tonhalle Grosser Saal - 4. Jun.jpg",
+   "sha256": "88feecccbb2378263be1c977eec159f6ff8ba2d8475b6f6f157ec903708065fa"
+  },
+  {
+   "order": 23,
+   "folder": "Tonhalle_Konzert",
+   "file": "1955_Beethoven - Tonhalle - Grosser Saal.jpg",
+   "sha256": "c91328035669682af9b3acc2dd7bc0c9828d2ab8f5a1cec5a9d31d76e4ef328c"
+  },
+  {
+   "order": 24,
+   "folder": "Juni_Festwochen",
+   "file": "1953_Juni-Festwochen Zürich 1953 - Tonhalle Grosser Saal - George.jpg",
+   "sha256": "7a112de21a855fd7ef9256f8bedd626453d45b322a5154e79d5afa67d782ee26"
+  },
+  {
+   "order": 25,
+   "folder": "Juni_Festwochen",
+   "file": "1971_Junifestwochen Zürich 1971 - 1. Junifestkonzert - Tonhalle -.jpg",
+   "sha256": "091855192fde8dda0275519431dd0568a67811ff7cb599d2853cba3cffab6902"
+  },
+  {
+   "order": 26,
+   "folder": "Sonstige",
+   "file": "1957_Wir telefonieren mit der ganzen Welt - schneller und billige.jpg",
+   "sha256": "3f0933a8762783d0be67669f5a303130d2debf4359ba82eb141837a4d8ad2245"
+  },
+  {
+   "order": 27,
+   "folder": "Musica_Viva",
+   "file": "1959_Musica viva - Erich Schmid Leitung - Adolf Neumeier Schlagze.jpg",
+   "sha256": "b364214483ffd840911a1360eed11c6358dc63019fa205eb8a96e80cd9d6f8c0"
+  },
+  {
+   "order": 28,
+   "folder": "Musica_Viva",
+   "file": "1957_Musica Viva - Grosser Saal Tonhalle - Leitung Erich Schmid.jpg",
+   "sha256": "a5904f3b6b7be9473f388e6ea6f5e2630855b0dcd229c55878b21fc12d825f0d"
+  },
+  {
+   "order": 29,
+   "folder": "Juni_Festwochen",
+   "file": "1959_Juni-Festwochen Zürich 1959 - Tonhalle Grosser Saal - Leitun.jpg",
+   "sha256": "a640e848df85423803d3285ee31bc7387f23f09b439d8d45c12cd74774514278"
+  },
+  {
+   "order": 30,
+   "folder": "Musica_Viva",
+   "file": "1956_Strawinsky - Musica viva - Dienstag, 16. Okt. 1956 - 1. Extr.jpg",
+   "sha256": "eb5579287eab24ecde17f1e1d32abfb47472a1fc38239a44aa3f77b82b719649"
+  },
+  {
+   "order": 31,
+   "folder": "Verkehr",
+   "file": "1953_Schützt das Kind!.jpg",
+   "sha256": "5863fb87fa649b1b18a541ab4127af6db9a171813fe4773907be659699c73379"
+  },
+  {
+   "order": 32,
+   "folder": "Juni_Festwochen",
+   "file": "1953_Tonhalle Grosser Saal - Juni-Festwochen Zürich 1953 - Tonhal.jpg",
+   "sha256": "81ceef31d4fcc59b4ab3adbb2a134489d421b6da25f516e354940d6bc5f04136"
+  },
+  {
+   "order": 33,
+   "folder": "Juni_Festwochen",
+   "file": "1960_Viertes Juni-Festkonzert 1960 der Tonhalle-Gesellschaft - Fr.jpg",
+   "sha256": "5a2c7034b44eb434ac3cf544628aebd630e0d51979d5a07c0727284f92a8a963"
+  },
+  {
+   "order": 34,
+   "folder": "Opernhaus",
+   "file": "1966_Opernhaus Zürich - Ballettabend - Don Quijote - Lessons in l.jpg",
+   "sha256": "7ce66fc70ad21e3f2e9c46634734615efb407a38508531bccaaabce71189b021"
+  },
+  {
+   "order": 35,
+   "folder": "Opernhaus",
+   "file": "1965_Opernhaus Zürich - Der Opernball - von Richard Heuberger - 3.jpg",
+   "sha256": "0821c37f6b48ebe1969e25d659e50715a0a030a6d96a7b66f6bdd7d0f3820bb8"
+  },
+  {
+   "order": 36,
+   "folder": "Verkehr",
+   "file": "1958_Projet constitutionnel sur le routier réseau Oui.jpg",
+   "sha256": "8e07ce9ae89ea2404873fdc3cb3056c6035127f361ae10a370a9770f9244a009"
+  },
+  {
+   "order": 37,
+   "folder": "Juni_Festwochen",
+   "file": "1956_Juni-Festwochen Zürich 1956 - 2. Juni-Festkonzert - Leitung .jpg",
+   "sha256": "1ddd6d15b56b7f82092bd0cd3feacd3599351b962bfb83a6bd2ce6d0856ed70d"
+  },
+  {
+   "order": 38,
+   "folder": "Ausstellung",
+   "file": "1958_Henry van de Velde - Kunstgewerbemuseum Zürich - 6. Juni - 3.jpg",
+   "sha256": "81e4f55353ebbde830d40eed93da32b7c6121d635d389c68f14dda6263e79831"
+  },
+  {
+   "order": 39,
+   "folder": "Sonstige",
+   "file": "1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg",
+   "sha256": "6bcbbc87052695311141e1373764c26fb5c820c45d4286b1d870ac0d9f5b3765"
+  },
+  {
+   "order": 40,
+   "folder": "Musica_Viva",
+   "file": "1960_Musica viva - Donnerstag, 10. März 1960 - Tonhalle Grosser S.jpg",
+   "sha256": "eff1d80ca9b455f3d9e34366fc548743c8773bd16b36879af047cbf515325e8b"
+  },
+  {
+   "order": 41,
+   "folder": "Tonhalle_Konzert",
+   "file": "1957_Extra-Konzert - Leitung Carl Schuricht - Violine Johanna Mar.jpg",
+   "sha256": "199d4d9298e2fb083e921ca7106cffbedb0f487e844ca08079c7a0e5e21919b2"
+  },
+  {
+   "order": 42,
+   "folder": "Musica_Viva",
+   "file": "1957_Musica Viva - Thyl Claes - Tonhalle Grosser Saal.jpg",
+   "sha256": "a1468ebfae573477dba484b737bbdb8057eb98f50c34c57e67a074ddb9dbdfd9"
+  },
+  {
+   "order": 43,
+   "folder": "Juni_Festwochen",
+   "file": "1965_Internationale Juni-Festwochen Zürich 1965 - Konzerte der To.jpg",
+   "sha256": "e78f22144d6960c8b613ccc3f64807a97f5d46dc7f37adeabff8117ec02e790d"
+  },
+  {
+   "order": 44,
+   "folder": "Opernhaus",
+   "file": "1964_Opernhaus Zürich - Die vier Grobiane - Komische Oper von Erm.jpg",
+   "sha256": "1f8283f7a938b1e4cdc69007609c9cb3118b6be72291ddb7d0a5c5c0f84434ff"
+  },
+  {
+   "order": 45,
+   "folder": "Ausstellung",
+   "file": "1958_The Family of Man - -Wir Menschen- - Kunsthalle Bern - Foto-.jpg",
+   "sha256": "7860e980dd9e9ea847287c653813788fac94be598399ffa496cb33934e438b5b"
+  },
+  {
+   "order": 46,
+   "folder": "Opernhaus",
+   "file": "1965_Opernhaus Zürich - Orpheus in der Unterwelt - Operette von J.jpg",
+   "sha256": "28f4446404b7c83ec456076921868937afbd03ed062f47585c080f254d36a9b2"
+  },
+  {
+   "order": 47,
+   "folder": "Juni_Festwochen",
+   "file": "1956_Juni-Festwochen Zürich 1956 - 4. Juni-Festkonzert - Leitung .jpg",
+   "sha256": "db6d966861d7221cc63176112b9bbf27595edcd4d18147b416559e42f6ccb884"
+  },
+  {
+   "order": 48,
+   "folder": "Juni_Festwochen",
+   "file": "1950_Kunstgewerbemuseum - Die gute Form - Wanderausstellung der S.jpg",
+   "sha256": "895520f1f3a10af5ed851ea3898d551484495737bea368d590abe6508f9f2121"
+  },
+  {
+   "order": 49,
+   "folder": "Musica_Viva",
+   "file": "1959_Musica Viva - Kleiner Tonhallesaal - Matthias Hauer - Werner.jpg",
+   "sha256": "0bdcc183390b41cc30328ff27a4b752c6a9bb387d14dfcb5f5ced45aada04b6d"
+  },
+  {
+   "order": 50,
+   "folder": "Verkehr",
+   "file": "1958_Radfahrer - Achtung - Achtung - Radfahrer.jpg",
+   "sha256": "47c14fbbc1abf3e35a5fb40a3560bf7c8ce88469541b79bae58932205706e3d6"
+  }
+ ],
+ "practice": [
+  {
+   "order": 1,
+   "folder": "BEA",
+   "file": "1958_Fly Viscount - the Rolls Royce of the skies - BEA - British .jpg",
+   "sha256": "96c52a6431350d22d7d012a98ab89aed82054036116fbcb38e8dd30dbab20b88"
+  },
+  {
+   "order": 2,
+   "folder": "Musica_Viva",
+   "file": "1956_Musica Viva - V. Einem - Schönberg - Strawinsky - 11. Volksk.jpg",
+   "sha256": "d39d39513a5ef9b773963557dbf9ff5dc1dedbb54392d0699b6e3b8f5ad57f49"
+  }
+ ]
+}

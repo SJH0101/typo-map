@@ -1,0 +1,429 @@
+{
+ "note": "탐색용 · 논문 수치 아님",
+ "render": [
+  {
+   "case": "작은 딸림말 + 큰 이름 (같은 베이스라인)",
+   "truth": [
+    {
+     "text": "leitung",
+     "px": 11,
+     "cap_top": 72,
+     "x_top": 74,
+     "baseline": 80
+    },
+    {
+     "text": "otto",
+     "px": 11,
+     "cap_top": 72,
+     "x_top": 74,
+     "baseline": 80
+    },
+    {
+     "text": "klemperer",
+     "px": 34,
+     "cap_top": 55,
+     "x_top": 61,
+     "baseline": 80
+    }
+   ],
+   "measure": {
+    "n_lines": 1,
+    "baselines": [
+     80
+    ],
+    "caps": [
+     55
+    ],
+    "x_tops": [
+     61
+    ]
+   }
+  },
+  {
+   "case": "큰 이름 + 작은 딸림말",
+   "truth": [
+    {
+     "text": "Ferenc Fricsay",
+     "px": 30,
+     "cap_top": 58,
+     "x_top": 63,
+     "baseline": 80
+    },
+    {
+     "text": "leitung",
+     "px": 10,
+     "cap_top": 73,
+     "x_top": 75,
+     "baseline": 80
+    }
+   ],
+   "measure": {
+    "n_lines": 1,
+    "baselines": [
+     81
+    ],
+    "caps": [
+     58
+    ],
+    "x_tops": [
+     63
+    ]
+   }
+  },
+  {
+   "case": "작은 대문자 이름 + 큰 소문자",
+   "truth": [
+    {
+     "text": "Carl",
+     "px": 12,
+     "cap_top": 71,
+     "x_top": 73,
+     "baseline": 80
+    },
+    {
+     "text": "schuricht",
+     "px": 34,
+     "cap_top": 55,
+     "x_top": 61,
+     "baseline": 80
+    }
+   ],
+   "measure": {
+    "n_lines": 1,
+    "baselines": [
+     80
+    ],
+    "caps": [
+     55
+    ],
+    "x_tops": [
+     61
+    ]
+   }
+  },
+  {
+   "case": "작은 글이 큰 글 가운데 높이 (베이스라인 다름)",
+   "truth": [
+    {
+     "text": "leitung",
+     "px": 11,
+     "cap_top": 62,
+     "x_top": 64,
+     "baseline": 70
+    },
+    {
+     "text": "klemperer",
+     "px": 34,
+     "cap_top": 55,
+     "x_top": 61,
+     "baseline": 80
+    }
+   ],
+   "measure": {
+    "n_lines": 1,
+    "baselines": [
+     80
+    ],
+    "caps": [
+     55
+    ],
+    "x_tops": [
+     61
+    ]
+   }
+  },
+  {
+   "case": "큰 글만 (대조)",
+   "truth": [
+    {
+     "text": "klemperer",
+     "px": 34,
+     "cap_top": 55,
+     "x_top": 61,
+     "baseline": 80
+    }
+   ],
+   "measure": {
+    "n_lines": 1,
+    "baselines": [
+     80
+    ],
+    "caps": [
+     55
+    ],
+    "x_tops": [
+     61
+    ]
+   }
+  }
+ ],
+ "real": [
+  {
+   "folder": "Tonhalle_Konzert",
+   "file": "1955_Ferenc Fricsay - Leitung - Arthur Rubinstein - Solist - Tonh.jpg",
+   "what": "큰 이름 오른쪽의 작은 «leitung» «solist»",
+   "box_with_small": [
+    53,
+    465,
+    288,
+    513
+   ],
+   "box_without_small": [
+    53,
+    465,
+    248,
+    513
+   ],
+   "with_small": {
+    "n_lines": 2,
+    "baselines": [
+     485,
+     512
+    ],
+    "caps": [
+     465,
+     493
+    ],
+    "x_tops": [
+     471,
+     498
+    ]
+   },
+   "without_small": {
+    "n_lines": 2,
+    "baselines": [
+     485,
+     512
+    ],
+    "caps": [
+     465,
+     493
+    ],
+    "x_tops": [
+     471,
+     498
+    ]
+   },
+   "differs": {}
+  },
+  {
+   "folder": "Tonhalle_Konzert",
+   "file": "1957_Extra-Konzert - Leitung Carl Schuricht - Violine Johanna Mar.jpg",
+   "what": "큰 이름 왼쪽의 작은 «leitung» «violine» (다른 색 면)",
+   "box_with_small": [
+    327,
+    492,
+    554,
+    597
+   ],
+   "box_without_small": [
+    362,
+    492,
+    554,
+    597
+   ],
+   "with_small": {
+    "n_lines": 4,
+    "baselines": [
+     512,
+     539,
+     568,
+     597
+    ],
+    "caps": [
+     492,
+     521,
+     549,
+     578
+    ],
+    "x_tops": [
+     498,
+     526,
+     555,
+     583
+    ]
+   },
+   "without_small": {
+    "n_lines": 4,
+    "baselines": [
+     512,
+     539,
+     568,
+     597
+    ],
+    "caps": [
+     492,
+     521,
+     549,
+     578
+    ],
+    "x_tops": [
+     498,
+     526,
+     555,
+     583
+    ]
+   },
+   "differs": {}
+  },
+  {
+   "folder": "Juni_Festwochen",
+   "file": "1957_Juni-Festwochen Zürich 1957 - Tonhalle Grosser Saal - 4. Jun.jpg",
+   "what": "큰 성 왼쪽의 작은 이름 «carl» «maria» …",
+   "box_with_small": [
+    55,
+    237,
+    288,
+    409
+   ],
+   "box_without_small": [
+    116,
+    237,
+    288,
+    409
+   ],
+   "with_small": {
+    "n_lines": 7,
+    "baselines": [
+     255,
+     280,
+     306,
+     331,
+     357,
+     383,
+     408
+    ],
+    "caps": [
+     237,
+     263,
+     289,
+     314,
+     null,
+     365,
+     390
+    ],
+    "x_tops": [
+     242,
+     268,
+     294,
+     318,
+     344,
+     370,
+     395
+    ]
+   },
+   "without_small": {
+    "n_lines": 7,
+    "baselines": [
+     255,
+     281,
+     306,
+     331,
+     357,
+     383,
+     408
+    ],
+    "caps": [
+     237,
+     263,
+     289,
+     314,
+     null,
+     365,
+     390
+    ],
+    "x_tops": [
+     242,
+     268,
+     293,
+     318,
+     344,
+     370,
+     395
+    ]
+   },
+   "differs": {
+    "baselines": [
+     [
+      1,
+      280,
+      281
+     ]
+    ],
+    "x_tops": [
+     [
+      2,
+      294,
+      293
+     ]
+    ]
+   }
+  },
+  {
+   "folder": "Juni_Festwochen",
+   "file": "1956_Juni-Festwochen Zürich 1956 - 1. Juni-Festkonzert - Leitung .jpg",
+   "what": "큰 성 왼쪽의 작은 이름 «otto» «nathan»",
+   "box_with_small": [
+    49,
+    479,
+    220,
+    618
+   ],
+   "box_without_small": [
+    80,
+    479,
+    220,
+    618
+   ],
+   "with_small": {
+    "n_lines": 4,
+    "baselines": [
+     501,
+     540,
+     579,
+     618
+    ],
+    "caps": [
+     479,
+     518,
+     556,
+     596
+    ],
+    "x_tops": [
+     485,
+     524,
+     563,
+     602
+    ]
+   },
+   "without_small": {
+    "n_lines": 4,
+    "baselines": [
+     501,
+     540,
+     579,
+     618
+    ],
+    "caps": [
+     479,
+     518,
+     556,
+     596
+    ],
+    "x_tops": [
+     485,
+     524,
+     563,
+     602
+    ]
+   },
+   "differs": {}
+  }
+ ],
+ "conclusion": [
+  "크기가 섞인 한 줄은 한 줄로 잡히고, 베이스라인 · 캡 · x높이 윗끝은 큰 글자의 값이다. 작은 글자는 재지 않는다 — 베이스라인이 달라도 그렇다 (렌더 다섯 경우).",
+  "실물 네 판 중 셋은 작은 글이 상자에 들어가도 값이 같았다. 1957 Juni-Festwochen 4. 은 두 값이 1px 달라졌다 (작은 글 잉크가 행 합에 더해져 절반 문턱 행이 움직임).",
+  "묶기 단계(detect_surya.group)는 작은 딸림말을 크기 계층(H_RATIO)으로 큰 글과 따로 두지만, Surya 줄 상자가 작은 글까지 덮으면 큰 글 블록 상자가 작은 글 자리까지 늘어난다. 작은 글이 따로 1줄 블록으로도 잡히거나(겹쳐 두 번 잼), 넓이 200px² 미만이라 버려진다.",
+  "따라서 요청서 규칙: 가로로 틈을 둔 다른 크기 무리는 따로 블록, 가를 수 없으면 큰 글자에 선. 사람의 큰 글 블록 선이 파이프라인 큰 글 블록 값과 같은 대상을 가리키고, 파이프라인이 작은 글을 삼킨 것은 선 차이가 아니라 블록 차이로 드러난다."
+ ]
+}

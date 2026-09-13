@@ -1,0 +1,152 @@
+{
+ "note": "탐색용 · 논문 수치 아님. 눈 판정은 Claude, 사람 판정이 아니다",
+ "rule": {
+  "conf": 0.5,
+  "min_len": 2,
+  "distinct_caps": "ABDEFGHLMNQRTYÄÖÜ"
+ },
+ "n": 123,
+ "table": {
+  "eyeU_ocrU": 64,
+  "eyeU_ocrL": 9,
+  "eyeL_ocrU": 6,
+  "eyeL_ocrL": 44
+ },
+ "agreement": 0.878,
+ "kappa": 0.75,
+ "disagreements": [
+  {
+   "key": "Ausstellung__1948_Deine Wohnung - Dein Nachbar - Deine Heimat - Ausstellung im.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Ausstellung__1960_Kunstgewerbemuseum Zürich - Ausstellung - Der Film.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Juni_Festwochen__1956_Juni-Festwochen Zürich 1956 - 3. Juni-Festkonzert - Leitung .jpg",
+   "eye": "L",
+   "ocr": "U",
+   "ocr_hits": [
+    [
+     "Furich 1956",
+     0.519
+    ]
+   ]
+  },
+  {
+   "key": "Juni_Festwochen__1959_Juni-Festwochen Zürich 1959 - Tonhalle Grosser Saal - Leitun.jpg",
+   "eye": "L",
+   "ocr": "U",
+   "ocr_hits": [
+    [
+     "Lkonzert der tonhalle",
+     0.852
+    ]
+   ]
+  },
+  {
+   "key": "Juni_Festwochen__1966_Juni-Festwochen 66 - Tonhalle Gesellschaft Zürich.jpg",
+   "eye": "L",
+   "ocr": "U",
+   "ocr_hits": [
+    [
+     "Anoancescal",
+     0.84
+    ],
+    [
+     "Lschuikows",
+     0.765
+    ],
+    [
+     "Louslen",
+     0.571
+    ]
+   ]
+  },
+  {
+   "key": "Juni_Festwochen__1971_Junifestwochen Zürich 1971 - 1. Junifestkonzert - Tonhalle -.jpg",
+   "eye": "L",
+   "ocr": "U",
+   "ocr_hits": [
+    [
+     "Hunifestkonzert",
+     0.555
+    ],
+    [
+     "fr 550 Dis 16.50",
+     0.683
+    ]
+   ]
+  },
+  {
+   "key": "Musica_Viva__1957_Musica Viva - Thyl Claes - Tonhalle Grosser Saal.jpg",
+   "eye": "L",
+   "ocr": "U",
+   "ocr_hits": [
+    [
+     "Lonhalle",
+     0.637
+    ]
+   ]
+  },
+  {
+   "key": "Musica_Viva__1958_Musica viva - Dienstag, den 7. Januar 1958 - Schweizerische .jpg",
+   "eye": "L",
+   "ocr": "U",
+   "ocr_hits": [
+    [
+     "\"Y SU sangre va vienne Cantando-",
+     0.531
+    ]
+   ]
+  },
+  {
+   "key": "Opernhaus__1965_Opernhaus Zürich - Andrea Chenier - Musikalisches Drama von .jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Sonstige__1949_Freies Lyceum - Tages- und Abendkurse.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Verkehr__1953_Automobile-Club de Suisse - Protégez l'enfant!.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Verkehr__1955_Das freundliche Handzeichen schützt vor Unfällen.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Verkehr__1958_Projet constitutionnel sur le routier réseau Oui.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Verkehr__1958_Strassenbau-Vorlage ja.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  },
+  {
+   "key": "Verkehr__1960_Weniger Lärm.jpg",
+   "eye": "U",
+   "ocr": "L",
+   "ocr_hits": []
+  }
+ ],
+ "disagreement_review": "eye L · OCR U 6장은 OCR 토큰 자리를 4배 확대해 Claude 가 다시 봤다 — 모두 소문자 («zürich», «1.konzert», «zino francescatti», «tschaikowsky», «solisten», «junifestkonzert», «bis», «tonhalle», «cantando»). eye U · OCR L 9장은 대문자가 규칙에서 뺀 글자(P S V)뿐이거나, 회전 · 저대비 글자라 OCR 이 못 읽은 경우다. 눈 판정을 유지했다."
+}
