@@ -109,26 +109,31 @@ def score_poster(t, m):
     mr, merged, split = match_blocks(t['blocks'], m['blocks'])
     rows, n_truth, n_hit = [], 0, 0
     per_block = {}
+    ls = dict(lost=0, in_matched=0, no_pair=0, out_tol=0)   # 줄 분해 — 결과를 본 뒤 더한 기술 통계 (2026-09-14)
     for i, tb in enumerate(t['blocks']):
         lead = _lead_of(tb)
         n_truth += tb['n']
         if i not in mr:
             per_block[tb['id']] = None
+            ls['lost'] += tb['n']
             continue
         mb = m['blocks'][mr[i]]
         got = match_lines(tb['lines'], lead, mb['bases'], mb['caps'], mb['xtops'])
+        hit_b = 0
         for g in got:
             g.update(block=tb['id'], lead=lead, pct=100.0 * g['err'] / lead,
                      err800=g['err'] / t['scale_from_800'])
             if abs(g['err']) <= LINE_TOL * lead:
                 n_hit += 1
+                hit_b += 1
+        ls['in_matched'] += tb['n']; ls['no_pair'] += tb['n'] - len(got); ls['out_tol'] += len(got) - hit_b
         rows += got
         per_block[tb['id']] = dict(j=mr[i], bases=list(mb['bases']),
                                    caps=list(mb['caps']), n=mb['n'])
     n_meas = sum(len(b['bases']) for b in m['blocks'])
     return dict(rows=rows, n_truth=n_truth, n_hit=n_hit, n_meas=n_meas,
                 n_matched=len(rows), blocks_hit=len(mr), blocks=len(t['blocks']),
-                merged=merged, split=split, per_block=per_block)
+                merged=merged, split=split, per_block=per_block, line_split=ls)
 
 
 def _q(a, ps):
@@ -162,7 +167,23 @@ def summarize(posters):
         과병합=sum(p['merged'] for p in posters), 과분할=sum(p['split'] for p in posters),
         캡_오차_px=dict(중앙=_q(cap, (50,))[50], 절대_중앙=_q([abs(x) for x in cap], (50,))[50], n=len(cap)),
         x높이선_오차_px=dict(중앙=_q(xt, (50,))[50], 절대_중앙=_q([abs(x) for x in xt], (50,))[50], n=len(xt)),
-        줄_재현율_장별=[round(p['n_hit'] / p['n_truth'], 3) for p in posters])
+        줄_재현율_장별=[round(p['n_hit'] / p['n_truth'], 3) for p in posters],
+        줄_분해=_line_split(posters, nh))
+
+
+def _line_split(posters, nh):
+    """결과를 본 뒤 더한 기술 통계 (2026-09-14). 줄 재현율의 분모(정답 줄)를 네 칸으로 나눈다.
+    채점 정의(블록 짝 · 줄 짝 · 허용 0.2·행간)와 문턱은 그대로다."""
+    c = Counter()
+    for p in posters:
+        c.update(p['line_split'])
+    return dict(
+        표시='결과를 본 뒤 더한 기술 통계 (2026-09-14) — 채점 정의 · 문턱은 그대로',
+        짝_없는_블록의_줄=c['lost'], 짝지은_블록_안_줄=c['in_matched'],
+        줄_짝_못_지음=c['no_pair'], 짝했지만_허용_밖=c['out_tol'], 재현=nh,
+        짝지은_블록_안_재현율=(round(nh / c['in_matched'], 4) if c['in_matched'] else None),
+        주의=('줄_짝_못_지음에는 짝지은 측정 블록이 그 정답 블록의 줄 일부만 가진 경우(과분할 짝)의 묶기 오차가 섞인다. '
+            '짝지은_블록_안_재현율은 재기만의 재현율이 아니다'))
 
 
 # ── 규칙 채택 정오 ──────────────────────────────────────────────

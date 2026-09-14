@@ -13,10 +13,12 @@ QUANT = 0.5                # 행간 · 캡 높이의 양자화 불확도 (px). �
 def _tol(lead, h):
     """후보 비 r = 행간/캡 의 측정 불확도 반폭 δr.
 
-    행간과 캡 높이가 정수 px 로 재진다고 보고 각각 ±0.5px 를 두어 비로 전파한다.
-    보수적 상한이다 — 합성 실험에서 베이스라인 오차가 0.0px 였으므로 실제 불확도는
-    이보다 작다. 관대한 쪽이라 위반을 놓칠 수는 있어도 정답을 위반으로 몰지 않는다.
-    합성 실험 결과를 본 뒤 넣은 수정이다 (docs/check_layout_fix_preregister.json).
+    측정은 정수 행 단위다 (measure/ink.py baseline() 은 정수 행을 돌려준다 — 서브픽셀 추정이
+    없다). 그래서 행간과 캡 높이를 정수로 잰 양으로 보고, 각각 양자화 폭 ±0.5px 를 두어 비로
+    전파한다. ±0.5px 는 양자화 폭이지 측정 오차의 상한이 아니다 — 캡 높이는 정수 행 두 개의
+    차라 0.5px 넘게 틀릴 수 있어, 위반을 놓칠 수도 맞는 배치를 위반으로 볼 수도 있다
+    (docs/legacy_numbers.md 5절). 합성 실험 결과를 본 뒤 넣은 수정이다
+    (docs/check_layout_fix_preregister.json).
     """
     r = lead / h
     return r * math.sqrt((QUANT / lead) ** 2 + (QUANT / h) ** 2)
