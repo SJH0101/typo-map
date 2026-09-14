@@ -154,6 +154,14 @@ def main(argv=None):
         run('eval/clean_check.py', '--dir', Cl['dir'], '--manifest', Cl['manifest'], '--prereg', Cl['prereg'],
             '--out', Cl['check_out'], '--review-dir', Cl['review_dir'], *hh)
         run('eval/clean_som_samples.py', '--check', Cl['check_out'], '--review-dir', Cl['review_dir'])
+        vv = [os.path.join(ROOT, v) for v in Cl.get('vlm', [])]
+        if os.path.exists(os.path.expanduser(Cl['lines'])) and vv and all(os.path.exists(v) for v in vv):
+            nn = sum((['--note', n] for n in Cl.get('score_notes', [])), [])
+            run('eval/group_score.py', 'score-clean', '--dir', Cl['dir'], '--manifest', Cl['manifest'], '--lines', Cl['lines'],
+                *sum((['--vlm', v] for v in Cl['vlm']), []), '--prereg', Cl['prereg'], '--check', Cl['check_out'],
+                '--out', Cl['out'], '--c-pad-rule', Cl['c_pad_rule'], *nn)
+        else:
+            print('깨끗한 세트 줄 파일 또는 VLM 패스 파일이 없다 — 채점을 건너뛴다')
 
     if R.get('measure_pad'):
         Mp = R['measure_pad']

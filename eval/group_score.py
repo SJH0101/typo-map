@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import itertools
 import json
+import math
 import os
 import sys
 from collections import Counter, defaultdict
@@ -463,9 +464,401 @@ def score(a):
     print('→', a.out)
 
 
+# ── score-clean (깨끗한 세트, docs/clean_preregister.json) ───────────
+
+CLEAN_LEVELS = ('c_in', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '4.0')
+
+
+def _stratum(t):
+    return (t['condition']['columns'], t['condition']['xh_px_at_800'])
+
+
+def _sname(s):
+    return f'{s[0]}단·{s[1]}px'
+
+
+def _pool(vals, prop=True):
+    """층별 {층: (값, n)} → 같은 가중 (단순 평균). 값이 None 이거나 n = 0 인 층은 빼고 적는다.
+    비율이면 SE = (1/k) · √Σ p(1−p)/n (사전등록 수정 1, k = 넣은 층 수)."""
+    ok = {s: (p, n) for s, (p, n) in vals.items() if p is not None and n}
+    out = dict(값=None, 층수=len(ok), 뺀_층=[_sname(s) for s in vals if s not in ok])
+    if ok:
+        out['값'] = round(float(np.mean([p for p, _n in ok.values()])), 4)
+        if prop:
+            out['SE'] = round(math.sqrt(sum(p * (1 - p) / n for p, n in ok.values())) / len(ok), 4)
+    return out
+
+
+def _q(v):
+    v = [x for x in v if x is not None]
+    if not v:
+        return dict(n=0)
+    return dict(n=len(v), 중앙=round(float(np.median(v)), 3), p25=round(float(np.percentile(v, 25)), 3),
+                p75=round(float(np.percentile(v, 75)), 3))
+
+
+def clean_method(items, L, truths, asg_of, src_of=None):
+    """판마다 블록 수 · 쌍 판정 · 정답 블록이 묶음 둘 이상에 흩어졌는지. 정의는 score_method 와 같다."""
+    per = {}
+    for k, p, it in items:
+        lines = L[k]['lines']; t = truths[k]; asg = asg_of[k]
+        src = src_of[k] if src_of else None
+        boxes = boxes_of(lines, asg)
+        P = [b[1][:4] for b in boxes]
+        T = [tb['ink_box'] for tb in t['blocks']]
+        mr, mp = DSc.match(T, P)
+        c = Counter(참조=len(T), 출처=len(P), 맞음=len(mr),
+                    과병합=sum(1 for pb in P if sum(1 for r in T if DSc.held(pb, r) >= DSc.INSIDE) >= 2),
+                    과분할=sum(1 for j, pb in enumerate(P) if j not in mp and any(DSc.inside(pb, r) >= DSc.INSIDE for r in T)))
+        gsrc = {}
+        if src is not None:
+            for i, j in enumerate(asg):
+                if j is not None:
+                    gsrc.setdefault(j, src[i])
+            for gid, _bx in boxes:
+                c['묶음_' + str(gsrc.get(gid))] += 1
+            for _i, jj in mr.items():
+                c['맞음_' + str(gsrc.get(boxes[jj][0]))] += 1
+            for i, j in enumerate(asg):
+                c['줄_' + str(src[i] if j is not None else None)] += 1
+        orc = groups_oracle(lines, t)
+        by_truth = defaultdict(list)
+        for i, ti in enumerate(orc):
+            if ti is not None:
+                by_truth[ti].append(i)
+        idx = {tb['id']: i for i, tb in enumerate(t['blocks'])}
+        pairs = []
+        for q in t['pairs']:
+            u, l = idx[q['upper']], idx[q['lower']]
+            gu = Counter(asg[i] for i in by_truth.get(u, []) if asg[i] is not None)
+            gl = Counter(asg[i] for i in by_truth.get(l, []) if asg[i] is not None)
+            dec, ps = None, '판정불가'
+            if gu and gl:
+                a_, b_ = gu.most_common(1)[0][0], gl.most_common(1)[0][0]
+                dec = (a_ == b_)
+                if src is not None:
+                    su, sl = gsrc.get(a_), gsrc.get(b_)
+                    ps = 'C 기전' if su == sl == 'C' else ('A 폴백' if su == sl == 'A' else '혼합')
+            pairs.append(dict(level=q['level'], merged=dec, src=(ps if src is not None else None)))
+        spread = [len({asg[i] for i in by_truth.get(bi, []) if asg[i] is not None}) >= 2 for bi in range(len(t['blocks']))]
+        per[k] = dict(c=c, pairs=pairs, spread=spread, by_truth=dict(by_truth), stratum=_stratum(t))
+    return per
+
+
+def clean_curves(per, strata, levels):
+    tot, dec = Counter(), defaultdict(list)
+    for r in per.values():
+        for q in r['pairs']:
+            key = (r['stratum'], q['level']); tot[key] += 1
+            if q['merged'] is not None:
+                dec[key].append(q['merged'])
+    rate = lambda s, lv: (float(np.mean(dec[(s, lv)])) if dec[(s, lv)] else None, len(dec[(s, lv)]))
+    by_s = {_sname(s): {lv: dict(쌍=tot[(s, lv)], 판정불가=tot[(s, lv)] - len(dec[(s, lv)]),
+                                병합률=(round(rate(s, lv)[0], 4) if rate(s, lv)[0] is not None else None))
+                        for lv in levels} for s in strata}
+    pooled = {lv: _pool({s: rate(s, lv) for s in strata}) for lv in levels}
+    xh = {str(x): {lv: _pool({s: rate(s, lv) for s in strata if s[1] == x}) for lv in levels}
+          for x in sorted({s[1] for s in strata})}
+    return dict(층별=by_s, 층_가중_합산=pooled, x높이별_단순평균=xh)
+
+
+def clean_blocks(per, strata):
+    agg = defaultdict(Counter)
+    for r in per.values():
+        agg[r['stratum']].update(r['c'])
+    by_s, F, R_, P_, OM, OS = {}, {}, {}, {}, {}, {}
+    for s in strata:
+        c = agg[s]
+        R = c['맞음'] / c['참조'] if c['참조'] else None
+        Pp = c['맞음'] / c['출처'] if c['출처'] else None
+        f = 2 * R * Pp / (R + Pp) if R and Pp else (0.0 if R == 0 or Pp == 0 else None)
+        by_s[_sname(s)] = dict(참조=c['참조'], 출처=c['출처'], 맞음=c['맞음'], 재현율=R and round(R, 4),
+                               정밀도=Pp and round(Pp, 4), F1=(round(f, 4) if f is not None else None),
+                               과병합=c['과병합'], 과분할=c['과분할'],
+                               과병합_정답블록당=round(c['과병합'] / c['참조'], 4), 과분할_정답블록당=round(c['과분할'] / c['참조'], 4))
+        F[s] = (f, c['참조']); R_[s] = (R, c['참조']); P_[s] = (Pp, c['출처'])
+        OM[s] = (c['과병합'] / c['참조'], c['참조']); OS[s] = (c['과분할'] / c['참조'], c['참조'])
+    xh = {str(x): dict(과분할_정답블록당=_pool({s: OS[s] for s in strata if s[1] == x}, prop=False)['값'],
+                       과병합_정답블록당=_pool({s: OM[s] for s in strata if s[1] == x}, prop=False)['값'],
+                       F1=_pool({s: F[s] for s in strata if s[1] == x}, prop=False)['값'])
+          for x in sorted({s[1] for s in strata})}
+    return dict(층별=by_s, 층_가중_합산=dict(F1=_pool(F, False)['값'], 재현율=_pool(R_, False)['값'], 정밀도=_pool(P_, False)['값'],
+                                           과병합_정답블록당=_pool(OM, False)['값'], 과분할_정답블록당=_pool(OS, False)['값']),
+                x높이별_단순평균=xh,
+                합계=dict(sum((agg[s] for s in strata), Counter())))
+
+
+def _box_of_line(boxes, ib):
+    """정답 줄 → 줄 잉크 세로 중심이 들고 가로로 겹치는 Surya 상자 (여럿이면 가로 겹침이 가장 긴 것)."""
+    cy = (ib[1] + ib[3]) / 2
+    cand = [(min(b[2], ib[2]) - max(b[0], ib[0]), j) for j, b in enumerate(boxes) if b[1] <= cy <= b[3]]
+    cand = [(v, j) for v, j in cand if v > 0]
+    return max(cand)[1] if cand else None
+
+
+def score_clean(a):
+    D = os.path.expanduser(a.dir); M = json.load(open(a.manifest))
+    LL = json.load(open(os.path.expanduser(a.lines)))
+    Lp, L = LL.get('provenance'), LL['lines']
+    items = _items(D, M)
+    for k, p, it in items:
+        if _sha(p) != it['image_sha256'] or L[k]['sha256'] != it['image_sha256']:
+            sys.exit(f'manifest 와 다른 이미지 또는 줄 캐시: {p}')
+    truths = {k: json.load(open(p[:-4] + '.json')) for k, p, it in items}
+    levels = list(a.levels)
+    strata = sorted({_stratum(t) for t in truths.values()})
+    vlms = [load_vlm(vp) for vp in a.vlm or []]
+    # 방식별 줄 소속
+    A1 = {k: groups_A(L[k]['lines']) for k, _p, _it in items}
+    A2 = {k: groups_A(L[k]['lines']) for k, _p, _it in items}
+    C, Cdiag, c_same = {}, {}, True
+    for k, p, it in items:
+        g = np.asarray(Image.open(p).convert('L')).astype(float)
+        c1, d1 = GG.group_gap(g, L[k]['lines'], pad_rule=a.c_pad_rule)
+        c2, d2 = GG.group_gap(g, L[k]['lines'], pad_rule=a.c_pad_rule)
+        c_same = c_same and c1 == c2 and d1 == d2
+        C[k], Cdiag[k] = c1, d1
+    asg = {'A': A1, 'C': C, '오라클': {k: groups_oracle(L[k]['lines'], truths[k]) for k, _p, _it in items}}
+    vparse = {}
+    for i, (vm, _info) in enumerate(vlms, 1):
+        asg[f'VLM{i}'] = {}
+        cnt = Counter()
+        for k, _p, _it in items:
+            asg[f'VLM{i}'][k], info = groups_vlm(L[k]['lines'], vm.get(k))
+            cnt.update(info); cnt['없는 장'] += (k not in vm); cnt['invalid 표시 장'] += int(vm.get(k, {}).get('valid') is False)
+        vparse[f'VLM{i}'] = dict(cnt)
+    order = ['A'] + [f'VLM{i}' for i in range(1, len(vlms) + 1)] + ['C', '오라클']
+    per = {m: clean_method(items, L, truths, asg[m], src_of=({k: Cdiag[k]['source'] for k in C} if m == 'C' else None))
+           for m in order}
+    res = dict(무엇='깨끗한 세트 묶기 비교 — A · VLM(Opus 5, 2패스) · C · 오라클, 280장',
+               사전등록=a.prereg, 사전등록_sha256=_sha(a.prereg), manifest=a.manifest, manifest_sha256=_sha(a.manifest),
+               줄_provenance=Lp, 줄_순서=LL.get('order'), VLM=[v[1] for v in vlms], VLM_파싱=vparse, 경위=a.note or [],
+               층별_장수={_sname(s): sum(1 for t in truths.values() if _stratum(t) == s) for s in strata},
+               정의=dict(쌍='위 · 아래 블록의 Surya 줄이 가장 많이 든 묶음이 같으면 병합. 한쪽에 Surya 줄이 없으면 판정 불가',
+                       층_가중='수준마다 층별 병합률의 단순 평균, 판정 가능한 쌍이 0 인 층은 빼고 적는다. SE = (1/k) · √Σ p(1−p)/n',
+                       x높이별='x높이마다 단 층 셋의 단순 평균',
+                       블록='IoU ≥ 0.5 1:1 (detector_score.match). 과병합 = 정답 블록 둘 이상을 절반 넘게 덮은 묶음, 과분할 = 짝 못 지은 묶음 중 한 정답 블록 안에 절반 넘게 든 것. 층별 값의 단순 평균',
+                       C=f'group_gap.group_gap τ {GG.TAU}px · pad_rule {a.c_pad_rule} · 3줄 미만 조각은 detect_surya.group 폴백',
+                       판정='예측 정오는 점추정으로 가른다. SE 를 함께 적는다'))
+    res['주_결과_병합률'] = {m: clean_curves(per[m], strata, levels) for m in order}
+    res['블록'] = {m: clean_blocks(per[m], strata) for m in order}
+    res['A_결정론_280장'] = (A1 == A2)
+    res['C_결정론_280장'] = c_same
+    # VLM 패스 간
+    if len(vlms) >= 2:
+        ps = {}
+        for s in strata:
+            its = [x for x in items if _stratum(truths[x[0]]) == s]
+            ps[s] = pass_agreement(its, L, vlms[0][0], vlms[1][0])
+        res['VLM_패스간_일치'] = dict(층별={_sname(s): v for s, v in ps.items()},
+                                   층_가중_합산=dict(줄쌍_일치율_평균=_pool({s: (v['줄쌍_일치율_평균'], 1) for s, v in ps.items()}, False)['값'],
+                                                   블록_F1=_pool({s: (v['블록_F1'], 1) for s, v in ps.items()}, False)['값']),
+                                   전체_모아서=pass_agreement(items, L, vlms[0][0], vlms[1][0]))
+    # C 폴백 몫
+    fb = {}
+    for s in strata:
+        c = sum((r['c'] for r in per['C'].values() if r['stratum'] == s), Counter())
+        pr = Counter(q['src'] for r in per['C'].values() if r['stratum'] == s for q in r['pairs'])
+        nl = c['줄_C'] + c['줄_A'] + c['줄_None']; ng = c['묶음_C'] + c['묶음_A']; nm = c['맞음_C'] + c['맞음_A']; npr = sum(pr.values())
+        fb[s] = dict(줄=nl, 줄_A폴백=c['줄_A'], 줄_소속없음=c['줄_None'], 묶음=ng, 묶음_A폴백=c['묶음_A'],
+                     짝지은_블록=nm, 짝지은_블록_A폴백=c['맞음_A'], 쌍=npr, 쌍_출처=dict(pr),
+                     몫=dict(줄_A폴백=round(c['줄_A'] / nl, 4) if nl else None, 묶음_A폴백=round(c['묶음_A'] / ng, 4) if ng else None,
+                            짝지은_블록_A폴백=round(c['맞음_A'] / nm, 4) if nm else None,
+                            쌍_C기전밖=round((pr['혼합'] + pr['A 폴백']) / npr, 4) if npr else None,
+                            쌍_판정불가=round(pr['판정불가'] / npr, 4) if npr else None))
+    keys = ('줄_A폴백', '묶음_A폴백', '짝지은_블록_A폴백', '쌍_C기전밖', '쌍_판정불가')
+    tie = Counter()
+    for d_ in Cdiag.values():
+        tie.update(d_['ties'])
+    res['C_폴백_몫'] = dict(층별={_sname(s): v for s, v in fb.items()},
+                          층_가중_합산={kk: _pool({s: (v['몫'][kk], 1) for s, v in fb.items()}, False)['값'] for kk in keys},
+                          진단=dict(요소=sum(d_['n_elements'] for d_ in Cdiag.values()),
+                                  패턴블록=sum(d_['n_pattern_blocks'] for d_ in Cdiag.values()),
+                                  폴백묶음=sum(d_['n_fallback_blocks'] for d_ in Cdiag.values()),
+                                  남은줄=sum(d_['n_leftover_lines'] for d_ in Cdiag.values()), 공유요소=dict(tie)))
+    # 줄 단위 재기 늘어남 · 빠짐과 C 과분할
+    gl_s = defaultdict(Counter); cells = Counter(); cell_s = defaultdict(Counter)
+    for k, p, it in items:
+        t = truths[k]; boxes = L[k]['lines']; s = _stratum(t)
+        tl = [ln['ink_box'] for b in t['blocks'] for ln in b['lines']]
+        kind = []
+        for box, n in zip(boxes, Cdiag[k]['per_line_measured']):
+            ins = sum(1 for ib in tl if box[1] <= (ib[1] + ib[3]) / 2 <= box[3] and min(box[2], ib[2]) - max(box[0], ib[0]) > 0)
+            kk = '같음' if n == ins else ('늘어남' if n > ins else '빠짐')
+            kind.append(kk)
+            gl_s[s]['상자'] += 1; gl_s[s][kk] += 1; gl_s[s]['정답 줄 없는 상자'] += (ins == 0); gl_s[s]['못 잰 상자'] += (n == 0)
+        r = per['C'][k]
+        for bi, sp_ in enumerate(r['spread']):
+            ks = {kind[i] for i in r['by_truth'].get(bi, [])}
+            cell = ('늘어남' if '늘어남' in ks else '늘어남없음', '빠짐' if '빠짐' in ks else '빠짐없음')
+            for cc in (cells, cell_s[s]):
+                cc[cell + ('블록',)] += 1; cc[cell + ('과분할',)] += int(sp_)
+    def _rate(cc, pick):
+        n = sum(v for kk, v in cc.items() if kk[2] == '블록' and pick(kk)); x = sum(v for kk, v in cc.items() if kk[2] == '과분할' and pick(kk))
+        return (x / n if n else None, n)
+    sel = {'늘어남 있음': lambda kk: kk[0] == '늘어남', '늘어남 없음': lambda kk: kk[0] == '늘어남없음',
+           '빠짐 있음': lambda kk: kk[1] == '빠짐', '빠짐 없음': lambda kk: kk[1] == '빠짐없음'}
+    res['줄단위_재기'] = dict(
+        늘어남빠짐_층별={_sname(s): dict(gl_s[s]) for s in strata},
+        늘어남빠짐_합계=dict(sum(gl_s.values(), Counter())),
+        C_과분할_정의='정답 블록의 Surya 줄(오라클 소속)이 C 묶음 둘 이상에 흩어지면 «C 과분할 블록»',
+        C_과분할_네칸_합계={f'{a_} · {b_}': dict(블록=cells[(a_, b_, '블록')], 과분할=cells[(a_, b_, '과분할')])
+                        for a_ in ('늘어남', '늘어남없음') for b_ in ('빠짐', '빠짐없음')},
+        C_과분할률_모아서={nm_: (round(_rate(cells, f)[0], 4) if _rate(cells, f)[0] is not None else None, _rate(cells, f)[1]) for nm_, f in sel.items()},
+        C_과분할률_층_가중={nm_: _pool({s: _rate(cell_s[s], f) for s in strata}, False) for nm_, f in sel.items()},
+        C_과분할_블록률_층별={_sname(s): _rate(cell_s[s], lambda kk: True)[0] for s in strata})
+    # 분석용 쌍 기록
+    head = ['seed', '층', 'level', 'ink_gap_px', 'ink_gap_over_xh', 'ink_gap_over_inner', 'box_gap_px', 'upper_box_h_med_px',
+            'upper_box_h_med_over_xh', 'box_gap_over_h', '상자_판정불가'] + order + ['C_출처']
+    rows = []; hvar = defaultdict(list)
+    for k, p, it in items:
+        t = truths[k]; boxes = L[k]['lines']; s = _stratum(t); xh = t['condition']['xh_px_at_800']
+        hs = [b[3] - b[1] for b in boxes]
+        if hs:
+            hvar[s].append((max(hs) - min(hs), float(np.percentile(hs, 90) - np.percentile(hs, 10)), xh))
+        bb = {tb['id']: [_box_of_line(boxes, ln['ink_box']) for ln in tb['lines']] for tb in t['blocks']}
+        for pi, q in enumerate(t['pairs']):
+            ub, lb = bb[q['upper']], bb[q['lower']]
+            gap = hmed = ratio = None; why = None
+            if ub[-1] is None or lb[0] is None:
+                why = '상자 없음'
+            elif {j for j in ub if j is not None} & {j for j in lb if j is not None}:
+                why = '한 상자가 두 블록 줄을 덮음'
+            else:
+                gap = boxes[lb[0]][1] - boxes[ub[-1]][3]
+                hmed = float(np.median([boxes[j][3] - boxes[j][1] for j in {j for j in ub if j is not None}]))
+                ratio = gap / hmed if hmed else None
+            rows.append([int(k), _sname(s), q['level'], q['ink_gap_px'], q['ink_gap_over_xh'], q['ink_gap_over_inner'],
+                         None if gap is None else round(gap, 3), None if hmed is None else round(hmed, 3),
+                         None if hmed is None else round(hmed / xh, 4), None if ratio is None else round(ratio, 4), why]
+                        + [per[m][k]['pairs'][pi]['merged'] for m in order] + [per['C'][k]['pairs'][pi]['src']])
+    col = {h: i for i, h in enumerate(head)}
+    res['분석용_쌍_요약'] = dict(
+        상자_판정불가=dict(Counter(r[col['상자_판정불가']] for r in rows)),
+        수준별_상자틈_나누기_상자높이={lv: _q([r[col['box_gap_over_h']] for r in rows if r[col['level']] == lv]) for lv in levels},
+        층_수준별_상자틈_나누기_상자높이_중앙={_sname(s): {lv: _q([r[col['box_gap_over_h']] for r in rows if r[col['level']] == lv and r[col['층']] == _sname(s)]).get('중앙') for lv in levels} for s in strata},
+        수준별_잉크틈_나누기_x높이={lv: _q([r[col['ink_gap_over_xh']] for r in rows if r[col['level']] == lv]) for lv in levels},
+        층별_상자높이_x높이당_중앙={_sname(s): _q([r[col['upper_box_h_med_over_xh']] for r in rows if r[col['층']] == _sname(s)]).get('중앙') for s in strata},
+        판_내_상자높이_변동={_sname(s): dict(최대_최소_px=_q([v[0] for v in hvar[s]]), p10_p90_px=_q([v[1] for v in hvar[s]]),
+                                        최대_최소_x높이당=_q([v[0] / v[2] for v in hvar[s]])) for s in strata})
+    # A 갈림 분석
+    ag = {}
+    for lv in levels:
+        rs = [r for r in rows if r[col['level']] == lv and r[col['A']] is not None and r[col['box_gap_over_h']] is not None]
+        sp_ = [r for r in rs if r[col['A']] is False]; mg = [r for r in rs if r[col['A']] is True]
+        ag[lv] = dict(가른_쌍=len(sp_), 병합한_쌍=len(mg), 둘_다_5쌍_이상=(len(sp_) >= 5 and len(mg) >= 5),
+                      위_상자높이_px=dict(가름=_q([r[col['upper_box_h_med_px']] for r in sp_]), 병합=_q([r[col['upper_box_h_med_px']] for r in mg])),
+                      위_상자높이_x높이당=dict(가름=_q([r[col['upper_box_h_med_over_xh']] for r in sp_]), 병합=_q([r[col['upper_box_h_med_over_xh']] for r in mg])),
+                      상자틈_나누기_상자높이=dict(가름=_q([r[col['box_gap_over_h']] for r in sp_]), 병합=_q([r[col['box_gap_over_h']] for r in mg])),
+                      가른_쌍_층=dict(Counter(r[col['층']] for r in sp_)), 병합한_쌍_층=dict(Counter(r[col['층']] for r in mg)))
+    res['A_갈림_분석'] = ag
+    res['예측_정오'] = clean_verdicts(res, json.load(open(a.prereg)), json.load(open(a.check)) if a.check else None, order)
+    res['분석용_쌍_기록'] = dict(열=head, 행=rows)
+    json.dump(res, open(a.out, 'w'), ensure_ascii=False, indent=1)
+    for m in order:
+        cv = res['주_결과_병합률'][m]['층_가중_합산']
+        print(f"  {m:4s} F1 {res['블록'][m]['층_가중_합산']['F1']} | " + ' '.join(f"{lv}:{cv[lv]['값']}" for lv in levels))
+    for v in res['예측_정오']:
+        print(' ', v['판정'], '·', v['항목'])
+    print('→', a.out)
+
+
+def clean_verdicts(res, prereg, check, order):
+    """사전등록 «예측» 항마다 맞음 / 틀림 / 판단 불가. 기준은 예측 문장의 수치를 그대로 쓴다 (점추정)."""
+    pred = prereg['예측 (돌리기 전에 적는다)']
+    P = {m: res['주_결과_병합률'][m]['층_가중_합산'] for m in order}
+    X = {m: res['주_결과_병합률'][m]['x높이별_단순평균'] for m in order}
+    v = lambda m, lv: P[m][lv]['값']
+    out = []
+
+    def add(key, ok, basis, sub=None):
+        out.append(dict(항목=key + (f' ({sub})' if sub else ''), 예측=pred[key],
+                        판정={True: '맞음', False: '틀림', None: '판단 불가'}[ok], 근거=basis))
+
+    def allv(ms, lvs):
+        return all(v(m, lv) is not None for m in ms for lv in lvs)
+    L8 = list(CLEAN_LEVELS)
+    k = 'A · 병합률 > 0.5 인 구간'
+    if allv(['A'], L8):
+        ok = (all(v('A', lv) > 0.5 for lv in L8[:5]) and v('A', '3.0') < 0.5 and v('A', '4.0') < 0.5 and 0.3 <= v('A', '2.5') <= 0.7)
+        add(k, ok, {lv: v('A', lv) for lv in L8})
+    else:
+        add(k, None, '빈 수준')
+    k = 'VLM · 병합률 > 0.5 인 구간'
+    for m in [x for x in order if x.startswith('VLM')]:
+        if allv([m], L8):
+            add(k, v(m, 'c_in') > 0.5 and v(m, '0.5') > 0.5 and all(v(m, lv) < 0.5 for lv in L8[2:]), {lv: v(m, lv) for lv in L8}, m)
+        else:
+            add(k, None, '빈 수준', m)
+    if not any(x.startswith('VLM') for x in order):
+        add(k, None, 'VLM 결과 없음')
+    k = 'C · 병합률 > 0.5 인 구간'
+    if allv(['C'], L8):
+        xs = {x: {lv: X['C'][x][lv]['값'] for lv in L8[2:]} for x in X['C']}
+        ok = v('C', 'c_in') >= 0.90 and all(v('C', lv) < 0.5 for lv in L8[1:]) and all(val is not None and val <= 0.10 for d in xs.values() for val in d.values())
+        add(k, ok, dict(합산={lv: v('C', lv) for lv in L8}, x높이별_c1이상=xs))
+    k = 'c_in 에서 세 방식이 모두 병합하나'
+    need = dict(A=0.80, C=0.90, **{m: 0.90 for m in order if m.startswith('VLM')})
+    if all(v(m, 'c_in') is not None for m in need):
+        add(k, all(v(m, 'c_in') >= th for m, th in need.items()), {m: v(m, 'c_in') for m in need})
+    k = 'x높이 5 · c 0.5 에서 C 가 τ 한계로 병합하나'
+    x5, x8, x12 = (X['C'][x]['0.5']['값'] for x in ('5', '8', '12'))
+    if None not in (x5, x8, x12):
+        add(k, 0.10 <= x5 <= 0.50 and x8 <= 0.10 and x12 <= 0.10, {'5': x5, '8': x8, '12': x12})
+    k = 'C 폴백 몫'
+    fbp = res['C_폴백_몫']['층_가중_합산']
+    add(k, fbp['줄_A폴백'] is not None and 0 < fbp['줄_A폴백'] <= 0.05 and fbp['쌍_C기전밖'] <= 0.10,
+        dict(줄_A폴백=fbp['줄_A폴백'], 쌍_C기전밖=fbp['쌍_C기전밖']), '0 이 아님 · 줄 ≤ 5% · 쌍 ≤ 10%')
+    ties = sum(res['C_폴백_몫']['진단']['공유요소'].values())
+    add(k, True if ties == 0 else None, dict(공유요소_합=ties, 요소=res['C_폴백_몫']['진단']['요소'],
+                                           까닭=(None if ties == 0 else '«거의 0» 의 수치 기준이 없다')), '공유 요소 거의 0')
+    k = 'x높이 12 층 C 과분할'
+    xo = {x: res['블록']['C']['x높이별_단순평균'][x]['과분할_정답블록당'] for x in ('5', '8', '12')}
+    add(k, xo['12'] > xo['5'] and xo['12'] > xo['8'], xo)
+    k = '늘어남 · 빠짐의 작용'
+    rr = res['줄단위_재기']['C_과분할률_층_가중']
+    g_, l_ = rr['늘어남 있음']['값'], rr['빠짐 있음']['값']
+    add(k, None if g_ is None or l_ is None else l_ > g_,
+        dict(빠짐_있음=rr['빠짐 있음'], 늘어남_있음=rr['늘어남 있음'], 모아서=res['줄단위_재기']['C_과분할률_모아서']))
+    k = 'VLM 패스 간 블록 F1'
+    if 'VLM_패스간_일치' in res:
+        f = res['VLM_패스간_일치']['층_가중_합산']['블록_F1']
+        add(k, f >= 0.90, f)
+    else:
+        add(k, None, 'VLM 두 패스 없음')
+    k = '블록 F1'
+    add(k, res['블록']['C']['층_가중_합산']['F1'] > res['블록']['A']['층_가중_합산']['F1'],
+        {m: res['블록'][m]['층_가중_합산']['F1'] for m in order})
+    k = 'A 갈림 분석'
+    oks, basis = [], {}
+    for lv in ('2.0', '2.5'):
+        g = res['A_갈림_분석'][lv]
+        if not g['둘_다_5쌍_이상']:
+            oks.append(None); basis[lv] = dict(가른_쌍=g['가른_쌍'], 병합한_쌍=g['병합한_쌍'], 까닭='한쪽이 5쌍 미만'); continue
+        px = g['위_상자높이_px']['가름']['중앙'] < g['위_상자높이_px']['병합']['중앙']
+        xr = g['위_상자높이_x높이당']['가름']['중앙'] < g['위_상자높이_x높이당']['병합']['중앙']
+        oks.append(px if px == xr else None)
+        basis[lv] = dict(px=[g['위_상자높이_px']['가름']['중앙'], g['위_상자높이_px']['병합']['중앙']],
+                         x높이당=[g['위_상자높이_x높이당']['가름']['중앙'], g['위_상자높이_x높이당']['병합']['중앙']],
+                         기준='[가름, 병합] 중앙값. px 와 x높이당이 엇갈리면 판단 불가')
+    add(k, (False if False in oks else (None if None in oks else True)), basis)
+    add('C 결정론', res['C_결정론_280장'], res['C_결정론_280장'])
+    if check:
+        vv = check['검증']['위반_수']
+        add('생성 검증', vv['쌍 겹침'] == 0 and vv['블록 안 겹침'] == 0, vv)
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest='cmd', required=True)
+    s = sp.add_parser('score-clean', help='깨끗한 세트 채점 (docs/clean_preregister.json)')
+    s.add_argument('--dir', required=True); s.add_argument('--manifest', required=True); s.add_argument('--lines', required=True)
+    s.add_argument('--vlm', action='append'); s.add_argument('--prereg', required=True); s.add_argument('--out', required=True)
+    s.add_argument('--check', help='docs/clean_check.json — 예측 «생성 검증» 항')
+    s.add_argument('--note', action='append', help='실행 경위 (결과 파일 «경위» 에 그대로 싣는다)')
+    s.add_argument('--c-pad-rule', default='neighbor_half', choices=GG.PAD_RULES)
+    s.add_argument('--levels', nargs='*', default=CLEAN_LEVELS, help='주 곡선 수준 (쌍의 level 필드 값)')
     for name in ('detect', 'som', 'score'):
         s = sp.add_parser(name)
         s.add_argument('--dir', required=True); s.add_argument('--manifest', required=True); s.add_argument('--lines', required=True)
@@ -480,7 +873,7 @@ def main(argv=None):
             s.add_argument('--c-pad-rule', default='fixed', choices=GG.PAD_RULES,
                            help='방식 C 줄 단위 재기의 세로 pad (docs/measure_pad_preregister.json)')
     a = ap.parse_args(argv)
-    {'detect': detect, 'som': som, 'score': score}[a.cmd](a)
+    {'detect': detect, 'som': som, 'score': score, 'score-clean': score_clean}[a.cmd](a)
 
 
 if __name__ == '__main__':

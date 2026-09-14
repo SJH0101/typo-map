@@ -152,6 +152,18 @@
   "som_samples_out": "~/.typo-mcp/clean/review/som_samples.json",
   "new_from_seed": 3539,
   "new_samples": 2,
-  "new_strata": "1:8,2:12"
+  "new_strata": "1:8,2:12",
+  "vlm_raw": "~/.typo-mcp/clean/vlm_raw",
+  "vlm_batches": {"max_posters": 10, "max_labels": 700},
+  "vlm_run_log": "~/.typo-mcp/clean/vlm_raw/run_log.json",
+  "score_notes": [
+   "2026-09-14 사람 확인 1~3차 (준혁) 뒤 280장 전체 Surya 검출 (--order columns) · SoM · VLM · 채점",
+   "Surya: 280장 모두 찾은 단 수 = 정답 단 수. 줄 수 = 정답 줄 수인 판 221장, 59장은 1~9줄 적다",
+   "SoM: 못 읽는 딱지 2 (3010 한 장), 글자 가림 0. 그림 규칙은 사전등록대로 고정, 고치지 않았다",
+   "VLM: Claude Code 서브에이전트 general-purpose, Agent 도구 model=opus, 자기 보고 claude-opus-5 (68묶음 모두). 34묶음 (판 5~10 · 딱지 ≤ 700, eval/clean_vlm_batches.py) × 2패스, 한 묶음씩 순서대로, 패스 1 이 모두 끝난 뒤 패스 2 (패스 1 06:57 끝 · 패스 2 06:57 시작 · 08:53 끝)",
+   "VLM 중단 · 재실행: 0. 번호 검증을 어긴 장 0 (두 패스). 목록 밖 파일 열람 0. 실행 기록 136줄은 boxes/clean_vlm_pass1.json · pass2.json 의 run_log",
+   "VLM 에이전트가 같은 이미지를 배율 그대로 두 번 연 묶음: 패스 1 b08 (3056 · 3057), 패스 2 b02 (3011 · 3012) · b24 (3181 · 3182 · 3183)",
+   "패스 2 b17 에이전트는 작은 글자 판(3127 · 3128 · 3129)에서 애매한 틈을 붙였다고 자기 보고 — 지시문 «애매하면 끊는다» 와 다르다. 결과는 고치지 않았다"
+  ]
  }
 }

@@ -34,6 +34,7 @@ def main(argv=None):
     ap.add_argument('--raw', required=True); ap.add_argument('--pass', dest='pas', type=int, required=True)
     ap.add_argument('--lines', required=True); ap.add_argument('--prompt', required=True)
     ap.add_argument('--model-note', default=''); ap.add_argument('--out', required=True)
+    ap.add_argument('--run-log', help='묶음 실행 기록 JSON (중단 · 재실행 경위). 합친 파일 «run_log» 에 그대로 싣는다')
     a = ap.parse_args(argv)
     L = json.load(open(os.path.expanduser(a.lines)))['lines']
     raw = os.path.expanduser(a.raw)
@@ -62,6 +63,9 @@ def main(argv=None):
                prompt=a.prompt, prompt_sha256=_sha(a.prompt), batches=batches, notes=notes,
                invalid={k: v for k, v in bad.items()}, n_posters=len(posters), n_invalid=len(bad),
                n_redo_files=len(redo))
+    if a.run_log:
+        log = json.load(open(os.path.expanduser(a.run_log)))
+        out['run_log'] = [e for e in log if e.get('pass') == a.pas]
     json.dump(out, open(os.path.expanduser(a.out), 'w'), ensure_ascii=False, indent=1)
     print(f'패스 {a.pas}: 장 {len(posters)} · 어긴 장 {len(bad)} · redo 파일 {len(redo)} · 모델 {sorted(models)}')
     for k, v in bad.items():
