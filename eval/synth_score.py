@@ -231,7 +231,18 @@ def summarize(posters):
         x높이선_오차_px=dict(중앙=_q(xt, (50,))[50], 절대_중앙=_q([abs(x) for x in xt], (50,))[50], n=len(xt)),
         줄_재현율_장별=[round(p['n_hit'] / p['n_truth'], 3) for p in posters],
         줄_분해=_line_split(posters, nh),
-        선_직접_짝=_direct_summary(posters))
+        선_직접_짝=_direct_summary(posters),
+        캡높이_오차_px=_cap_height(posters))
+
+
+def _cap_height(posters):
+    """결과를 본 뒤 더한 기술 통계 (2026-09-14). 캡 높이(베이스라인 − 캡선) 오차 = 측정 (base − cap) − 정답 (baseline_y − cap_y)
+    = 베이스라인 오차 − 캡선 오차. 기존 캡_오차_px 와 같은 줄 (짝지은 블록 안에서 짝지어지고 측정 캡이 있는 줄)."""
+    e = [r['err'] - r['cap_err'] for p in posters for r in p['rows'] if r['cap_err'] is not None]
+    ae = [abs(x) for x in e]
+    return dict(표시='결과를 본 뒤 더한 기술 통계 (2026-09-14) — 채점 정의 · 기존 값은 그대로',
+                n=len(e), 절대_중앙=_q(ae, (50,))[50], 절대_p90=_q(ae, (90,))[90],
+                편향_중앙=_q(e, (50,))[50], 구간_10_90=[_q(e, (10,))[10], _q(e, (90,))[90]])
 
 
 def _line_split(posters, nh):
