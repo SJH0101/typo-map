@@ -139,9 +139,15 @@ def _direct_summary(posters):
     """결과를 본 뒤 더한 기술 통계 (2026-09-14) — 블록 짝짓기를 거치지 않는 선 단위 재현 · 정밀 · 오차."""
     def stats(ps, n_t):
         ae = [abs(q['err']) for q in ps]; hit = sum(q['hit'] for q in ps)
+        e = [q['err'] for q in ps]
         return dict(참값_선=n_t, 창안_짝=len(ps), 허용안_짝=hit, 재현율=(round(hit / n_t, 4) if n_t else None),
                     오차_절대_중앙=_q(ae, (50,))[50], 오차_절대_10_90=[_q(ae, (10,))[10], _q(ae, (90,))[90]],
-                    편향_중앙=_q([q['err'] for q in ps], (50,))[50])
+                    편향_중앙=_q(e, (50,))[50],
+                    # 사전등록 docs/xheight_g1_preregister.json «보고에 더할 필드» — ink.py 를 고치기 전에 더했다
+                    오차_분포=(dict(행_단위_일치=round(float(np.mean([abs(x) <= 0.5 for x in e])), 4),
+                                  위로_1행_이상=round(float(np.mean([x <= -1 for x in e])), 4),
+                                  아래로_1행_이상=round(float(np.mean([x >= 1 for x in e])), 4),
+                                  최악=[round(float(min(e)), 3), round(float(max(e)), 3)]) if e else None))
     out = dict(표시='결과를 본 뒤 더한 기술 통계 (2026-09-14) — 채점 정의 · 기존 값은 그대로',
                정의=('판 전체에서 참값 선과 측정 선을 선 종류마다 직접 짝짓는다 (블록 대응을 거치지 않음). 후보: |차| ≤ 0.5·행간 (참값 블록 행간, '
                    '한 줄 블록은 2·x높이) 이고 참값 줄 잉크 x1~x2 와 측정 블록 x1~x2 가 가로로 겹침. 차가 작은 순서로 1:1. '

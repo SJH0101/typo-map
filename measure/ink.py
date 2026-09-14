@@ -178,8 +178,20 @@ def split_marks(m, s, e, span, base):
         rows = np.where((lab == i).any(axis=1))[0]
         comps.append((s + rows[0], s + rows[-1]))
 
-    # x 높이 어깨: 잉크가 최댓값의 절반을 넘는 첫 행 (몸통이 시작되는 자리)
+    # x 높이선: 베이스라인 마지막 잉크 행까지 내려오고 윗끝이 줄 잉크 중심 행보다 위인 덩어리들의
+    # 윗끝 가운데 가장 낮은 것 (G1, 사전등록 docs/xheight_g1_preregister.json).
+    # 숫자 · 어센더는 x 높이 글자와 따로 떨어진 덩어리라 이 값을 끌어올리지 못한다. 점 · 악센트는
+    # 베이스라인에 닿지 않고, 마침표 · 하이픈은 중심 행 위로 올라가지 않거나 베이스라인에 닿지 않는다.
+    # 행 프로파일의 «최댓값 절반» 어깨는 숫자가 많은 줄에서 숫자 윗끝(−6px)까지 올라갔다.
+    # 해당하는 덩어리가 없으면 옛 어깨(잉크가 최댓값의 절반을 넘는 첫 행)로 되돌아간다.
     xh = s + int(np.argmax(prof >= 0.5 * prof.max()))
+    raw = min(max(base - BASE_OFFSET - s, 1), len(prof) - 1)
+    w = prof[:raw + 1]
+    if w.sum() > 0:
+        cen = s + float((np.arange(raw + 1) * w).sum() / w.sum())
+        low = [t for t, b in comps if b >= s + raw and t <= cen]
+        if low:
+            xh = max(low)
 
     mark, n_mark, body = None, 0, []
     for top, bot in comps:
