@@ -104,6 +104,68 @@ def match_lines(tlines, tlead, bases, caps, xtops):
     return out
 
 
+DIRECT_KINDS = (('베이스라인', 'bases', 'baseline_y'), ('캡선', 'caps', 'cap_y'), ('x높이선', 'xtops', 'xtop_y'))
+
+
+def direct_lines(t, m):
+    """판 전체에서 참값 선 ↔ 측정 선을 직접 짝짓는다 — 블록 대응을 거치지 않는다.
+    결과를 본 뒤 더한 기술 통계 (2026-09-14). 선 종류마다 따로, 차가 0.5·행간(참값 블록) 안이고 가로 범위
+    (참값 줄 잉크 x1~x2 · 측정 블록 x1~x2)가 겹치는 후보 가운데 차가 작은 순서로 1:1. 허용은 기존 줄 재현과 같은 0.2·행간.
+    캡선 참값은 모든 줄에 글꼴 값으로 적혀 있으므로, 잉크가 캡 · 어센더 높이에 닿는 줄(has_ascender)만 참값으로 센다."""
+    out = {}
+    for name, mk, tk in DIRECT_KINDS:
+        T = []
+        for tb in t['blocks']:
+            lead = _lead_of(tb)
+            for ln in tb['lines']:
+                if mk == 'caps' and not ln['has_ascender']:
+                    continue
+                T.append(dict(y=ln[tk], lead=lead, x1=ln['x1'], x2=ln['x2'], upper=any(ch.isupper() for ch in ln['text'])))
+        P = [(v, b['x1'], b['x2']) for b in m['blocks'] for v in b[mk] if v is not None]
+        cand = sorted((abs(p[0] - tl['y']), i, j) for i, tl in enumerate(T) for j, p in enumerate(P)
+                      if abs(p[0] - tl['y']) <= MATCH_WIN * tl['lead'] and min(tl['x2'], p[2]) - max(tl['x1'], p[1]) > 0)
+        mi, mj, pairs = set(), set(), []
+        for _d, i, j in cand:
+            if i in mi or j in mj:
+                continue
+            mi.add(i); mj.add(j)
+            e = P[j][0] - T[i]['y']
+            pairs.append(dict(err=e, hit=abs(e) <= LINE_TOL * T[i]['lead'], upper=T[i]['upper']))
+        out[name] = dict(n_truth=len(T), n_truth_upper=sum(tl['upper'] for tl in T), n_meas=len(P), pairs=pairs)
+    return out
+
+
+def _direct_summary(posters):
+    """결과를 본 뒤 더한 기술 통계 (2026-09-14) — 블록 짝짓기를 거치지 않는 선 단위 재현 · 정밀 · 오차."""
+    def stats(ps, n_t):
+        ae = [abs(q['err']) for q in ps]; hit = sum(q['hit'] for q in ps)
+        return dict(참값_선=n_t, 창안_짝=len(ps), 허용안_짝=hit, 재현율=(round(hit / n_t, 4) if n_t else None),
+                    오차_절대_중앙=_q(ae, (50,))[50], 오차_절대_10_90=[_q(ae, (10,))[10], _q(ae, (90,))[90]],
+                    편향_중앙=_q([q['err'] for q in ps], (50,))[50])
+    out = dict(표시='결과를 본 뒤 더한 기술 통계 (2026-09-14) — 채점 정의 · 기존 값은 그대로',
+               정의=('판 전체에서 참값 선과 측정 선을 선 종류마다 직접 짝짓는다 (블록 대응을 거치지 않음). 후보: |차| ≤ 0.5·행간 (참값 블록 행간, '
+                   '한 줄 블록은 2·x높이) 이고 참값 줄 잉크 x1~x2 와 측정 블록 x1~x2 가 가로로 겹침. 차가 작은 순서로 1:1. '
+                   '재현율 = |차| ≤ 0.2·행간 인 짝 ÷ 참값 선, 정밀도 = 같은 짝 ÷ 측정 선, 창안짝_정밀도 = 창 안 짝 ÷ 측정 선 (기존 줄_정밀도와 같은 식). '
+                   '오차 통계는 창 안 짝 전부로 낸다 (기존과 같다). 캡선 참값 선 = 잉크가 캡 · 어센더 높이에 닿는 줄 (has_ascender: 대문자 · b d f h k l t · 숫자 · ß)'))
+    for name, _mk, _tk in DIRECT_KINDS:
+        agg = [p['direct'][name] for p in posters]
+        nt = sum(a['n_truth'] for a in agg); nm = sum(a['n_meas'] for a in agg)
+        prs = [q for a in agg for q in a['pairs']]
+        d = stats(prs, nt)
+        d.update(측정_선=nm, 정밀도=(round(d['허용안_짝'] / nm, 4) if nm else None),
+                 창안짝_정밀도=(round(len(prs) / nm, 4) if nm else None))
+        if name == '캡선':
+            nu = sum(a['n_truth_upper'] for a in agg)
+            d['전체_줄'] = sum(p['n_truth'] for p in posters)
+            d['대문자_포함_줄'] = stats([q for q in prs if q['upper']], nu)
+            d['대문자_없는_줄'] = stats([q for q in prs if not q['upper']], nt - nu)
+            if nu == 0:
+                d['대문자_구분_주의'] = ('참값 줄 문구에 대문자가 든 줄이 없다 — 이 셀의 캡선 참값 줄은 모두 소문자 어센더(b d f h k l t) · 숫자 · ß 줄이며, '
+                                   '대문자와 어센더를 나눠 볼 수 없다')
+        out[name] = d
+    return out
+
+
 def score_poster(t, m):
     """한 장: 줄 오차 목록 · 재현 · 블록 짝."""
     mr, merged, split = match_blocks(t['blocks'], m['blocks'])
@@ -133,7 +195,7 @@ def score_poster(t, m):
     n_meas = sum(len(b['bases']) for b in m['blocks'])
     return dict(rows=rows, n_truth=n_truth, n_hit=n_hit, n_meas=n_meas,
                 n_matched=len(rows), blocks_hit=len(mr), blocks=len(t['blocks']),
-                merged=merged, split=split, per_block=per_block, line_split=ls)
+                merged=merged, split=split, per_block=per_block, line_split=ls, direct=direct_lines(t, m))
 
 
 def _q(a, ps):
@@ -168,7 +230,8 @@ def summarize(posters):
         캡_오차_px=dict(중앙=_q(cap, (50,))[50], 절대_중앙=_q([abs(x) for x in cap], (50,))[50], n=len(cap)),
         x높이선_오차_px=dict(중앙=_q(xt, (50,))[50], 절대_중앙=_q([abs(x) for x in xt], (50,))[50], n=len(xt)),
         줄_재현율_장별=[round(p['n_hit'] / p['n_truth'], 3) for p in posters],
-        줄_분해=_line_split(posters, nh))
+        줄_분해=_line_split(posters, nh),
+        선_직접_짝=_direct_summary(posters))
 
 
 def _line_split(posters, nh):
