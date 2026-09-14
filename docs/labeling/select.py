@@ -59,6 +59,15 @@ TEMPLATES = {
     'MV1962_1963': ['1962_Musica Viva - Ensemble de Musique Moderne', '1963_Musica Viva - Anton Webern'],
     'BEA_Viscount': ['Fly Viscount'],
 }
+# 사용자 교체 (2026-09-14) — 선정 뒤 사용자가 다른 판으로 바꾸라고 한 두 장. 같은 칸(대문자 · 단 수)의 남은 후보 가운데
+# 뽑힌 판 · 연습 포스터와 틀이 겹치지 않는 판으로 바꾸고, 긋는 순서 자리는 그대로 둔다.
+# (그 칸의 남은 후보 다섯 중 BEA 1956 은 연습 포스터 BEA 1958 과 같은 틀, Helmhaus 1950 · Tonhalle 1953 Leitung 은 뽑힌 판과 같은 틀)
+USER_REPLACE = [
+    ('Sonstige__1957_Wir telefonieren mit der ganzen Welt - schneller und billige.jpg',
+     'Tonhalle_Konzert__1954_Extrakonzert - Tonhalle Grosser Saal - Solistin Clara Haskil.jpg'),
+    ('Sonstige__1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg',
+     'Opernhaus__1966_Opernhaus Zürich - Eröffnung der Spielzeit 1966-67 - Tannhäu.jpg'),
+]
 # 연습 판 — 두 라벨러가 같이 보며 규칙을 맞추는 판. 본 목록에서 뺀다
 PRACTICE = ['BEA__1958_Fly Viscount - the Rolls Royce of the skies - BEA - British .jpg',
             'Musica_Viva__1956_Musica Viva - V. Einem - Schönberg - Strawinsky - 11. Volksk.jpg']
@@ -66,6 +75,11 @@ PRACTICE = ['BEA__1958_Fly Viscount - the Rolls Royce of the skies - BEA - Briti
 IDML = ['Andrea Ch', 'Die Liebe', 'Don Carlo', 'Dornrösch', 'Die vier', 'Der flieg', 'Der Igel', 'Wenn ich',
         'Der Liebe', 'Orpheus', 'Die Schne', 'Schwanens', 'Undine', 'Der Vogel', 'Wiener Bl', 'Die lusti',
         'Ballettab', 'Der Opern']          # eval/idml_map.json 의 값 (Opernhaus 판 이름 앞부분)
+
+
+def nfc(s):
+    import unicodedata
+    return unicodedata.normalize('NFC', s)
 
 
 def template_of(k):
@@ -148,6 +162,19 @@ def main():
     if len(chosen) != N:
         raise SystemExit(f'{N} 장을 채우지 못했다: {len(chosen)} · {take}')
     rng.shuffle(chosen)
+    replaced = []
+    for old, new in USER_REPLACE:
+        i = next((i for i, (_c, k) in enumerate(chosen) if nfc(k) == nfc(old)), None)
+        if i is None:
+            raise SystemExit(f'교체할 판이 선정에 없다: {old}')
+        c = chosen[i][0]
+        new_key = next((k for k in pool[c] if nfc(k) == nfc(new)), None)
+        if new_key is None or new_key in {k for _c, k in chosen}:
+            raise SystemExit(f'교체 후보가 같은 칸의 남은 후보가 아니다: {new} (칸 {c})')
+        chosen[i] = (c, new_key)
+        excluded['사용자 교체 (2026-09-14)'].append(chosen_old := old)
+        replaced.append(dict(order=i + 1, out=old, **{'in': new_key}, cell=f'{c[0]}·{c[1]}',
+                             reason='사용자 결정 2026-09-14 — 같은 칸 · 틀 겹치지 않는 후보로 교체, 순서 자리 유지'))
 
     rows, lab = [], []
     for i, (c, k) in enumerate(chosen, 1):
@@ -172,7 +199,7 @@ def main():
     res = dict(
         note=('라벨러에게 주지 않는다. 대문자 유무는 Claude 눈 판정(사람 판정이 아니다), 단 수 · 줄 수는 파이프라인 값. '
               '탐색용 · 논문 수치 아님'),
-        seed=SEED, n=N, max_lines=MAX_LINES,
+        seed=SEED, n=N, max_lines=MAX_LINES, replaced=replaced,
         cells={f'{a_}·{b_}': cnt[(a_, b_)] for a_, b_ in order},
         pool={f'{a_}·{b_}': len(pool[(a_, b_)]) for a_, b_ in order},
         lines_total=sum(r['lines_pipeline'] for r in rows), blocks_total=sum(r['blocks_pipeline'] for r in rows),

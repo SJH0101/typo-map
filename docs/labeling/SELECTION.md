@@ -1,4 +1,4 @@
-# 브로크만 선 긋기 50장 — 선정 기록
+# 브로크만 가이드 긋기 50장 — 선정 기록
 
 **라벨러에게 주지 않는다.** 판마다 칸(대문자 · 단 수)과 파이프라인 값이 들어 있다. 요청서는 `docs/LABELING_REQUEST.md`.
 
@@ -17,8 +17,9 @@
 | 회전 블록이 있는 판 | 4 | 한 글줄의 양 끝 높이 차가 그 글자의 x높이보다 큰 활자 블록이 있다. 판 가장자리의 한 줄짜리 인쇄 표기 · 서명은 세지 않는다 (`rotation.json`) |
 | 줄 40 초과 | 16 | 파이프라인 추정 줄 수 |
 | 같은 디자인 변형 | 9 | 언어나 장소만 바꾼 판. 한 무리에서 한 장만 남겼다 (`select.py` `TWINS`) |
-| 연습 판 | 2 | BEA 1958 Fly Viscount · Musica Viva 1956 V. Einem |
-| 칸 채우고 남은 후보 | 32 | 아래 2절 |
+| 연습 포스터 | 2 | BEA 1958 Fly Viscount · Musica Viva 1956 V. Einem |
+| 사용자 교체 | 2 | 선정 뒤 사용자가 바꾸라고 한 판 — 6절 |
+| 칸 채우고 남은 후보 | 30 | 아래 2절 |
 
 기울어진 판 10장 가운데 8장이 대문자 없는 판이다 (Musica Viva 1958–61 사선 배치). 그래서 대문자 없는 판의 후보가 줄었다.
 
@@ -39,7 +40,7 @@
 
 배치 틀(격자 · 색면 · 글 자리)이 같고 글과 색만 바꾼 판이 여럿 들어 있다.
 
-| 틀 | 본 목록 순서 | 장 |
+| 틀 | 본 라벨링 순서 | 장 |
 |---|---|---|
 | 오페라하우스 머리판 1964–66 | 7 · 8 · 11 · 21 · 34 · 35 · 44 · 46 | 8 |
 | Juni-Festwochen 1956 축제음악회 | 2 · 3 · 13 · 37 · 47 | 5 |
@@ -63,15 +64,15 @@
 | 뺄 판 (순서) | 넣을 판 | 칸 | 줄 (뺌 → 넣음) | 까닭 · 대가 |
 |---|---|---|---|---|
 | 3 · 37 · 47 (1956 축제음악회) | Musica viva 1958 «Dienstag, den 7. Januar» · Musica viva 1960 «Donnerstag, den 7. Januar» · Musica Viva 1962 «Ensemble de Musique Moderne» | 대문자 없음 · 1단 | 61 → 55 | 1956 틀을 2장(2 · 13)으로 줄인다. 1958 판은 8/18 손 찍기(만든 이 기록 없음, 베이스라인 25줄)가 있어 참조를 하나 더 얻는다. 1962 판 대신 같은 틀의 1963 «Anton Webern» 도 된다 (둘 중 하나만) |
-| 32 (1953 톤할레 두째 장) | Tonhalle 1954 «Extrakonzert – Clara Haskil» | 대문자 있음 · 2단+ | 21 → 17 | 1953 틀 짝을 없앤다. 32 번은 송준혁이 상자를 그은 판이라 그 노출도 함께 없어진다 |
-| 오페라하우스 머리판 중 4장 (예: 21 · 35 · 44 · 46) | Ausstellung 1961 «Zürich plant und baut» · Sonstige 1949 «Freies Lyceum» · Sonstige 1955 «Für alle… Oscar Weber» · Schauspielhaus 1962 «The New York City Ballet» | 대문자 있음 · 1단 | 45 → 54 | 머리판을 4장으로 줄인다. Freies Lyceum · Oscar Weber 는 대문자만 있는 줄이 있어 캡선 · x높이선 «없음» 경우가 는다. 대가는 IDML 겹침이 8장에서 4장으로 준다는 것 |
+| 32 (1953 톤할레 두째 장) | — | 대문자 있음 · 2단+ | — | 후보였던 Tonhalle 1954 «Extrakonzert – Clara Haskil» 은 6절 사용자 교체로 26번에 들어갔다. 그 칸에 남은 후보(BEA 1956 · Helmhaus 1950 · Tonhalle 1953 Leitung)는 모두 연습 포스터나 뽑힌 판과 틀이 겹친다 |
+| 오페라하우스 머리판 중 4장 (예: 21 · 35 · 44 · 46) | Ausstellung 1961 «Zürich plant und baut» · Sonstige 1949 «Freies Lyceum» · Sonstige 1955 «Für alle… Oscar Weber» · Schauspielhaus 1962 «The New York City Ballet» | 대문자 있음 · 1단 | 45 → 54 | 머리판을 4장으로 줄인다. Freies Lyceum · Oscar Weber 는 대문자만 있는 줄이 있어 캡선 · x높이선 «글자 없음» 경우가 는다. 대가는 IDML 겹침이 8장에서 4장으로 준다는 것 |
 
 - **바꿀 후보가 없는 짝.**
   - 1957 · 1971 색막대 (22 · 25) 와 1959 사선막대 (14 · 29) 는 대문자 없는 판이다. 남은 대문자 없는 후보가 모두 뽑힌 판과 틀이 겹친다.
     - Tonhalle 1955 Carl Schuricht · Juni-Festwochen 1955 Erich Schmid 는 18 번과 같은 틀이다.
     - Musica Viva 1957 Paul Hindemith 는 28 번과 같은 틀이다.
-  - Musica Viva 1956 Hartmann 은 연습 판 V. Einem 과 배치가 비슷하다. 그래서 그대로 둔다.
-- **다 적용하면.** 서로 다른 틀이 36개에서 44개로 늘고, 줄 수는 831 → 825 로 거의 같다.
+  - Musica Viva 1956 Hartmann 은 연습 포스터 V. Einem 과 배치가 비슷하다. 그래서 그대로 둔다.
+- **다 적용하면** (6절 교체 뒤 기준). 서로 다른 틀이 36개에서 43개로 늘고, 글줄 수는 844 → 847 로 거의 같다.
 
 ## 5. 그 밖의 한계
 
@@ -81,6 +82,19 @@
   - 송준혁은 검출 결과와 측정값을 봤고, 32 · 40 · 49 번에 상자를 그은 적이 있다.
   - 공동 연구자는 오페라하우스 8장에 IDML 가이드를 그었다.
 
-## 6. 다시 만들기
+## 6. 사용자 교체 (2026-09-14)
+
+선정을 마친 뒤 사용자가 두 장을 다른 판으로 바꾸라고 했다. 같은 칸(대문자 있음 · 2단+)의 남은 후보 가운데 뽑힌 판 · 연습 포스터와 틀이 겹치지 않는 두 장으로 바꾸고, 긋는 순서 자리는 그대로 두었다 (`select.py` `USER_REPLACE`, `selection.json` `replaced`).
+
+| 순서 | 뺀 판 | 넣은 판 | 글줄 · 블록 (파이프라인) |
+|---|---|---|---|
+| 26 | Sonstige 1957 «Wir telefonieren mit der ganzen Welt» | Tonhalle_Konzert 1954 «Extrakonzert – Clara Haskil» | 11 · 2 → 17 · 7 |
+| 39 | Sonstige 1951 «köstlich und nahrhaft – Bschüssig» | Opernhaus 1966 «Eröffnung der Spielzeit 1966-67 – Tannhäuser» | 6 · 5 → 13 · 7 |
+
+- 그 칸의 남은 후보 다섯 가운데 BEA 1956 은 연습 포스터 BEA 1958 과, Helmhaus 1950 · Tonhalle 1953 Leitung 은 뽑힌 판과 같은 틀이라 쓰지 않았다.
+- 칸 수 · 틀 36개는 그대로다. 글줄 831 → 844, 블록 243 → 250. 뺀 두 장에 대문자만 있는 줄이 있었고 넣은 두 장에는 없어, 그런 줄이 있는 판이 5 → 3장이 됐다.
+- 넣은 두 장은 IDML 가이드 · 송준혁 상자와 겹치지 않는다.
+
+## 7. 다시 만들기
 
 `README.md` 의 명령. `select.py` · `caps_compare.py` · `figure.py` 는 커밋본과 바이트 단위로 같게 나온다 (2026-09-14 확인).

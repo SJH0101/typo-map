@@ -3,6 +3,22 @@
  "seed": 20260914,
  "n": 50,
  "max_lines": 40,
+ "replaced": [
+  {
+   "order": 26,
+   "out": "Sonstige__1957_Wir telefonieren mit der ganzen Welt - schneller und billige.jpg",
+   "in": "Tonhalle_Konzert__1954_Extrakonzert - Tonhalle Grosser Saal - Solistin Clara Haskil.jpg",
+   "cell": "U·2단+",
+   "reason": "사용자 결정 2026-09-14 — 같은 칸 · 틀 겹치지 않는 후보로 교체, 순서 자리 유지"
+  },
+  {
+   "order": 39,
+   "out": "Sonstige__1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg",
+   "in": "Opernhaus__1966_Opernhaus Zürich - Eröffnung der Spielzeit 1966-67 - Tannhäu.jpg",
+   "cell": "U·2단+",
+   "reason": "사용자 결정 2026-09-14 — 같은 칸 · 틀 겹치지 않는 후보로 교체, 순서 자리 유지"
+  }
+ ],
  "cells": {
   "U·1단": 13,
   "L·1단": 17,
@@ -15,8 +31,8 @@
   "U·2단+": 17,
   "L·2단+": 8
  },
- "lines_total": 831,
- "blocks_total": 243,
+ "lines_total": 844,
+ "blocks_total": 250,
  "excluded": {
   "줄 40 초과": [
    "Ausstellung__1953_T - Das Plakat - 400 neue Plakate aus 25 Ländern - Kunstgewe.jpg",
@@ -66,6 +82,10 @@
    "Volg__1957_Volg Traubensaft naturrein - Festlichkeit.jpg",
    "Volg__1957_Volg Traubensaft naturrein - Konzentration.jpg",
    "Volg__1957_Volg Traubensaft naturrein - Zuverlässigkeit.jpg"
+  ],
+  "사용자 교체 (2026-09-14)": [
+   "Sonstige__1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg",
+   "Sonstige__1957_Wir telefonieren mit der ganzen Welt - schneller und billige.jpg"
   ]
  },
  "twins": [
@@ -508,16 +528,16 @@
   },
   {
    "order": 26,
-   "key": "Sonstige__1957_Wir telefonieren mit der ganzen Welt - schneller und billige.jpg",
-   "folder": "Sonstige",
-   "file": "1957_Wir telefonieren mit der ganzen Welt - schneller und billige.jpg",
-   "sha256": "3f0933a8762783d0be67669f5a303130d2debf4359ba82eb141837a4d8ad2245",
+   "key": "Tonhalle_Konzert__1954_Extrakonzert - Tonhalle Grosser Saal - Solistin Clara Haskil.jpg",
+   "folder": "Tonhalle_Konzert",
+   "file": "1954_Extrakonzert - Tonhalle Grosser Saal - Solistin Clara Haskil.jpg",
+   "sha256": "43b9084ae3537cd07ca9958bc205ce80df9811eb02604c11d119ba3e0d08e48a",
    "cap": "U",
    "columns": "2단+",
    "n_columns_pipeline": 2,
-   "lines_pipeline": 11,
-   "blocks_pipeline": 2,
-   "allcaps_line": true,
+   "lines_pipeline": 17,
+   "blocks_pipeline": 7,
+   "allcaps_line": false,
    "template": null,
    "idml_guides": false,
    "boxed_by_songjunhyeok": false
@@ -716,16 +736,16 @@
   },
   {
    "order": 39,
-   "key": "Sonstige__1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg",
-   "folder": "Sonstige",
-   "file": "1951_köstlich und nahrhaft - Bschüssig Eierteigwaren.jpg",
-   "sha256": "6bcbbc87052695311141e1373764c26fb5c820c45d4286b1d870ac0d9f5b3765",
+   "key": "Opernhaus__1966_Opernhaus Zürich - Eröffnung der Spielzeit 1966-67 - Tannhäu.jpg",
+   "folder": "Opernhaus",
+   "file": "1966_Opernhaus Zürich - Eröffnung der Spielzeit 1966-67 - Tannhäu.jpg",
+   "sha256": "abc13646547875eb194796c12550424e9c52405c06478e6123a4fe37e7a8a355",
    "cap": "U",
    "columns": "2단+",
    "n_columns_pipeline": 2,
-   "lines_pipeline": 6,
-   "blocks_pipeline": 5,
-   "allcaps_line": true,
+   "lines_pipeline": 13,
+   "blocks_pipeline": 7,
+   "allcaps_line": false,
    "template": null,
    "idml_guides": false,
    "boxed_by_songjunhyeok": false

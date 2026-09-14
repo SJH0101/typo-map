@@ -1,4 +1,4 @@
-"""선 긋기 도구 만들기 — 포스터 원본 바이트와 참조 그림을 template.html 에 박아 HTML 파일 하나로 낸다.
+"""가이드 긋기 도구 만들기 (파일 이름은 선긋기.html) — 포스터 원본 바이트와 참조 그림을 template.html 에 박아 HTML 파일 하나로 낸다.
 
     .venv/bin/python docs/labeling/tool/build.py docs/labeling/posters_for_labelers.json \
         "~/Documents/연구2/브로크만 정리/corpus/코어" docs/labeling/lines.png \
@@ -18,7 +18,7 @@ import os
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VERSION = 'guides-tool 1.0'
+VERSION = 'guides-tool 2.0'   # 2.0: 용어 교체 · 미입력/잘못된 상태 분리 · 연속 확대 · 좌표 숨김 (저장 코드 typo-guides/2)
 ALLOWED = {'order', 'folder', 'file', 'sha256'}
 MIME = {'.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png'}
 

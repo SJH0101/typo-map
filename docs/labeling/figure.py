@@ -1,4 +1,4 @@
-"""선 네 종류 참조 그림 — 요청서(docs/LABELING_REQUEST.md)와 선 긋기 도구가 같은 그림을 쓴다.
+"""가이드 네 종류 참조 그림 — 요청서(docs/LABELING_REQUEST.md)와 선 긋기 도구가 같은 그림을 쓴다.
 
     .venv/bin/python docs/labeling/figure.py docs/labeling/lines.png
 
@@ -24,14 +24,14 @@ def main():
     bot = lambda ch: font.getbbox(ch)[3]
     rows = [
         ('Tonhalle', {'캡선': top('T'), '어센더선': top('h'), 'x높이선': top('x'), '베이스라인': bot('H')},
-         ['네 선이 다 있는 줄. 이 글꼴은 캡선과 어센더선이 같은 높이다 — 그래도 둘 다 긋는다.',
+         ['가이드 네 개가 다 있는 글줄. 이 글꼴은 캡선과 어센더선이 같은 높이다 — 그래도 둘 다 긋는다.',
           'o 의 둥근 윗·아랫끝이 조금 넘치는 것은 따르지 않는다 (평평한 글자 T · h · n 에 맞춘다).']),
         ('Leitung', {'캡선': top('L'), '어센더선': None, 'x높이선': top('x'), '베이스라인': bot('L')},
          ['t 는 어센더가 아니다 (b d h k l 만). g 의 꼬리는 베이스라인이 아니다.', 'i 의 점은 x높이선이 아니다.']),
         ('musica viva', {'캡선': None, '어센더선': None, 'x높이선': top('x'), '베이스라인': bot('x')},
-         ['소문자만 — 대문자 · 어센더가 없으니 캡선 · 어센더선은 «없음». 다른 줄에서 옮겨 오지 않는다.']),
+         ['소문자만 — 대문자 · 어센더가 없으니 캡선 · 어센더선은 «글자 없음». 다른 글줄에서 옮겨 오지 않는다.']),
         ('ZÜRICH', {'캡선': top('H'), '어센더선': None, 'x높이선': None, '베이스라인': bot('H')},
-         ['대문자만 — x높이선 · 어센더선 «없음». Ü 의 점은 캡선이 아니다.']),
+         ['대문자만 — x높이선 · 어센더선 «글자 없음». Ü 의 점은 캡선이 아니다.']),
     ]
     W, RH = 1560, 265
     im = Image.new('RGB', (W, RH * len(rows) + 30), (255, 255, 255))
@@ -51,7 +51,7 @@ def main():
             d.line([(160, ly + 14), (x0 - 28, y0 + v)], fill=COL[k], width=1)
         none = [k for k, v in L.items() if v is None]
         if none:
-            d.text((x0 + tw + 50, y0 + 30), '없음: ' + ' · '.join(none), font=lab, fill=(105, 105, 105))
+            d.text((x0 + tw + 50, y0 + 30), '글자 없음: ' + ' · '.join(none), font=lab, fill=(105, 105, 105))
         for j, c in enumerate(caps):
             d.text((24, y0 + PX + 22 + j * 29), c, font=lab, fill=(60, 60, 60))
     im.save(a.out)

@@ -38,16 +38,16 @@
 | `content_1965.py` — 1965 판의 글·칸·위계 | **기록 없음** («easyocr 로 읽고 눈으로 고쳤다» 의 «내가» 가 누구인지 없다) | 5980ea3 · 71a6ce1 | 생성 시험 브리프. 칸 나눔은 착시로 정정됐다 (`docs/inline_test.json`) |
 | `snapshot.py` 회귀 포스터 10장, `render.py` 가짜 낱말 61개, `booktest.py` 어림 상수 2개, `docs/related.json` 선행연구 41건 | 고르거나 적은 이 기록 없음 | d2ea46c · 6164fe1 · 28bc0cf | 회귀 검사 · 렌더러 · 검사 보조 · `docs/RELATED.md` |
 | 산문에만 남은 눈 확인 (`baseline/scan.py` 30장 중 16장, `docs/PART2.md`, `docs/surya_test.json` 5건, `docs/rules_line_test.json` 8장 등) | 기록 없음. 저장된 라벨이 없다 | 각 파일 | `scan.MAX_SKEW = 10` 같은 규칙 도출과 물림 판단. **다시 셀 수 없다** |
-| `docs/labeling/caps_claude_eye.json` — 브로크만 123장 대문자 유무 (U 73 · L 50) · 대문자만 있는 줄 | **Claude** (claude-opus-5, 원본 해상도 눈 판정, 2026-09-14) | 파일 안 `판정한이`. EasyOCR 와 일치 0.878 · κ 0.75 (`caps_compare.json`) | **선정**: 선 긋기 50장의 층화 (`docs/labeling/select.py`). 정답이나 사람 참조로 쓰지 않는다 |
+| `docs/labeling/caps_claude_eye.json` — 브로크만 123장 대문자 유무 (U 73 · L 50) · 대문자만 있는 줄 | **Claude** (claude-opus-5, 원본 해상도 눈 판정, 2026-09-14) | 파일 안 `판정한이`. EasyOCR 와 일치 0.878 · κ 0.75 (`caps_compare.json`) | **선정**: 가이드 긋기 50장의 층화 (`docs/labeling/select.py`). 정답이나 사람 참조로 쓰지 않는다 |
 | `docs/labeling/rotation.json` 의 «회전 블록» 4장 | **Claude** (눈 판정). 기울어진 판 10장은 코드(EasyOCR 각) | 파일 안 `판정한이` | **선정**: 50장에서 뺐다 |
 | `docs/labeling/select.py` 의 `TEMPLATES` — 같은 틀 판 무리 · `TWINS` — 같은 디자인 변형 | **Claude** (눈 판정) | 코드 주석 | **선정 기록**: 변형은 뺐고, 같은 틀은 표시만 했다 (`docs/labeling/SELECTION.md`) |
-| `docs/labeling/tool/verify_synth.json` 의 «화면을 보고 누름» 6점 | **Claude** (브라우저 조작) | 파일 안 `한이` | **검증**: 선 긋기 도구의 좌표 약속. 사람 읽기 오차를 재지 않는다 |
+| `docs/labeling/tool/verify_synth.json` 의 «화면을 보고 누름» 6점 | **Claude** (브라우저 조작) | 파일 안 `한이` | **검증**: 가이드 긋기 도구의 좌표 약속. 사람 읽기 오차를 재지 않는다 |
 
 ## D. 요청했거나 만드는 중인 것 — 아직 받지 않았다
 
 | 자료 | 무엇 | 몇 개 | 누가 | 상태 |
 |---|---|---|---|---|
-| 브로크만 선 긋기 50장 (`guides_{이름}_….json`) | 블록 상자 + 줄마다 베이스라인 · 캡선 · 어센더선 · x높이선 (또는 «없음» · «못 가림»), 원본 픽셀 경계 좌표. 요청서 `docs/LABELING_REQUEST.md` · 도구 `~/Documents/poster/labeler/선긋기.html` | 본 목록 50장 + 연습 판 2장 (파이프라인 추정 831줄 · 243블록) | **송준혁 · 공동 연구자** 2인 독립 (연습 판만 같이). 송준혁은 검출 결과를 이미 봤다. 공동 연구자는 8장에 IDML 가이드를 그었다 | 요청서 · 도구 · 목록 준비 (2026-09-14). 받으면 이 행을 B 절로 옮기고 파일 안 `labeler` · 도구 판 · 날짜를 적는다. `docs/VALIDATION_NEEDS.md` 9번 |
+| 브로크만 가이드 긋기 50장 (`guides_{이름}_….json`) | 텍스트 블록 영역 + 글줄마다 베이스라인 · 캡선 · 어센더선 · x높이선 (또는 «글자 없음» · «판독 불가»), 원본 픽셀 경계 좌표. 요청서 `docs/LABELING_REQUEST.md` · 도구 `~/Documents/poster/labeler/선긋기.html` | 본 라벨링 50장 + 연습 포스터 2장 (파이프라인 추정 844글줄 · 250블록) | **송준혁 · 공동 연구자** 2인 독립 (연습 포스터만 같이). 송준혁은 검출 결과를 이미 봤다. 공동 연구자는 8장에 IDML 가이드를 그었다 | 요청서 · 도구 · 목록 준비 (2026-09-14). 받으면 이 행을 B 절로 옮기고 파일 안 `labeler` · 도구 판 · 날짜를 적는다. `docs/VALIDATION_NEEDS.md` 9번 |
 
 ## 논문 쪽에서 보면
 
