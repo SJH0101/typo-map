@@ -358,9 +358,8 @@ open ~/.typo-mcp/group/069.jpg ~/.typo-mcp/group/004.jpg ~/.typo-mcp/group/002.j
 **표시한 곳.**
 - 결과 파일 두 개의 «폐기» 필드
 - `eval/refs.json` 의 `group.폐기` — `eval/run_all.py` 가 이 세트를 다시 채점하지 않는다
-- `docs/RESULTS_FOR_PAPER.md` «쓰지 않는 것» 한 줄
 - `docs/HANDOFF.md` 1b 머리
-- 경위는 이 절에만 적는다.
+- 폐기 표시와 경위는 이 절에만 적는다. `docs/RESULTS_FOR_PAPER.md` 는 논문에 들어갈 것만 담으므로 폐기 사실을 적지 않는다 (2026-09-14 사용자 결정 — 전에는 그 문서 «쓰지 않는 것» 에 한 줄을 두었다).
 
 **VLM.** 이 세트의 VLM 은 Fable 5.1 이고 새 세트는 Opus 5 다. 모델이 다르고 이 세트는 폐기됐으므로, 두 세트의 VLM 수치를 비교하지 않는다.
 

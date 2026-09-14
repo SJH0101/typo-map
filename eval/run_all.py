@@ -160,8 +160,24 @@ def main(argv=None):
             run('eval/group_score.py', 'score-clean', '--dir', Cl['dir'], '--manifest', Cl['manifest'], '--lines', Cl['lines'],
                 *sum((['--vlm', v] for v in Cl['vlm']), []), '--prereg', Cl['prereg'], '--check', Cl['check_out'],
                 '--out', Cl['out'], '--c-pad-rule', Cl['c_pad_rule'], *nn)
+            if Cl.get('c_diag_out'):
+                run('eval/clean_c_diag.py', '--dir', Cl['dir'], '--manifest', Cl['manifest'], '--lines', Cl['lines'],
+                    '--result', Cl['out'], '--prereg', Cl['c_diag_prereg'], '--out', Cl['c_diag_out'],
+                    '--c-pad-rule', Cl['c_pad_rule'])
+            if Cl.get('a_sweep_out'):     # 정답을 보고 최적화한 A — 파이프라인 기본값 아님
+                run('eval/clean_a_sweep.py', '--dir', Cl['dir'], '--manifest', Cl['manifest'], '--lines', Cl['lines'],
+                    '--result', Cl['out'], '--prereg', Cl['a_sweep_prereg'], '--out', Cl['a_sweep_out'])
         else:
             print('깨끗한 세트 줄 파일 또는 VLM 패스 파일이 없다 — 채점을 건너뛴다')
+
+    if R.get('brockmann_group'):
+        Bg = R['brockmann_group']      # 1단계 결과는 봉인 — 수치를 찍지 않는다
+        vv = [os.path.join(ROOT, v) for v in Bg['vlm']]
+        if os.path.exists(os.path.join(os.path.expanduser(Bg['work']), 'lines.json')) and all(os.path.exists(v) for v in vv):
+            run('eval/brockmann_group_explore.py', 'explore', '--work', Bg['work'], *sum((['--vlm', v] for v in Bg['vlm']), []),
+                '--prereg', Bg['prereg'], '--out', Bg['explore_out'], '--c-pad-rule', Bg['c_pad_rule'])
+        else:
+            print('브로크만 1단계 줄 파일 또는 VLM 패스 파일이 없다 — 건너뛴다')
 
     if R.get('measure_pad'):
         Mp = R['measure_pad']
@@ -182,7 +198,7 @@ def main(argv=None):
             + ([R['series_check']['out']] if R.get('series_check') else [])
             + ([R['synth']['out']] if R.get('synth') else [])
             + ([R['group']['out'], R['group'].get('diag_out')] if R.get('group') and not R['group'].get('폐기') else [])
-            + ([R['clean']['check_out']] if R.get('clean') else [])
+            + ([v for v in (R['clean'].get(x) for x in ('check_out', 'out', 'c_diag_out', 'a_sweep_out')) if v] if R.get('clean') else [])
             + ([R['measure_pad']['out']] if R.get('measure_pad') else [])
             + ([R['idml']['out']] if R.get('idml') else []))
     subprocess.run(['git', 'status', '--short', '--', *outs], cwd=ROOT)
