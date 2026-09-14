@@ -53,7 +53,11 @@ def main(which):
         MC.write(os.path.join(NEW, c + '.json'), raw, rules=r,
                  source=f'remeasure.py — {OLD}/{c}.json 의 열쇠 {len(raw)}장')
         print(f'  → {NEW}/{c}.json', flush=True)
-    json.dump(report, open('docs/remeasure_log.json', 'w'), ensure_ascii=False, indent=1)
+    # 일부 코퍼스만 다시 재면 그 코퍼스 항목만 바꾸고 나머지 기록은 남긴다 (2026-09-15, 브로크만만 G1 로 다시 잴 때)
+    log = 'docs/remeasure_log.json'
+    prev = json.load(open(log)) if os.path.exists(log) else {}
+    prev.update(report)
+    json.dump(prev, open(log, 'w'), ensure_ascii=False, indent=1)
     print('끝', flush=True)
 
 

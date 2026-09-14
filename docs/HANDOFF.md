@@ -175,7 +175,9 @@ server.py (JSON-RPC) → tools/
 
 - **Python.** `.venv/bin/python`. 셸은 zsh 라 따옴표 없는 변수가 단어로 쪼개지지 않는다 (`for s in "a 1"` 이 인자 하나로 들어간다).
 - **MCP 등록.** `~/.claude.json` 의 `typo` 가 이 폴더의 `server.py` 를 가리킨다. 작업 트리 그대로 돌기 때문에 파일을 옮기면 MCP 가 깨진다.
-- **캐시.** `~/.typo-mcp/{brockmann, corpus(호프만), rose, ruder}.json` (surya+ground, provenance 있음). 합성: `~/.typo-mcp/synth/` (이미지 · 정답 390장) · `synth-{셀}.json` 13개 (provenance synthetic, 실물과 섞지 않는다). `brockmann-ground.json` (Claude 가 짚은 4장, provenance 없음). 옛 캐시 `old-20260824/`.
+- **캐시.** `~/.typo-mcp/{brockmann, corpus(호프만), rose, ruder}.json` (surya+ground, provenance 있음).
+  - **브로크만은 x높이선 G1 으로 다시 쟀다 (2026-09-15, `python remeasure.py brockmann`, provenance commit `e4df0cf`).** 옛 캐시는 `brockmann.pre_g1.json`. 판 · 블록 상자 · 줄 수 · 베이스라인은 옛 캐시와 같고, x높이선 · 상단 잉크선(`caps`) · 블록 `xh` 와 그로 뽑은 규칙이 바뀌었다. 재측정으로 규칙 도출이 어떻게 바뀌었는지는 라벨링이 끝날 때까지 보고하지 않는다 (라벨링 오염 방지 — 봉인과 같은 까닭).
+  - **로제 · 루더 · 호프만은 다시 재지 않았다 — 이번 논문에 쓰지 않으므로 보류 (사용자 결정 2026-09-15).** 이 셋은 옛 x높이선 규칙의 값이다. 브로크만 규칙의 설명력(«갈림/공통» scope, `rules.derive` 의 references)은 이 셋을 참조로 쓰므로 두 정의가 섞인다. 채택 판정(변동계수 · 판별력)은 references 를 쓰지 않는다. 합성: `~/.typo-mcp/synth/` (이미지 · 정답 390장) · `synth-{셀}.json` 13개 (provenance synthetic, 실물과 섞지 않는다). `brockmann-ground.json` (Claude 가 짚은 4장, provenance 없음). 옛 캐시 `old-20260824/`.
 - **외부 자료** (경로는 `eval/refs.json`):
   - 포스터: `~/Documents/연구2/{브로크만 정리, 호프만정리, 로제정리, 루더정리}` (브로크만 `corpus/index.csv` · `분류기준.md`)
   - 사람 상자: `~/Downloads/boxes_송준혁-2.csv`, 라벨 도구: `~/Documents/poster/labeler/`

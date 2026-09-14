@@ -5,15 +5,15 @@
   "lines": "~/Downloads/lines_20260818-2048.csv",
   "blocks": "~/Downloads/blocks_20260818-2048.csv",
   "cache": "~/.typo-mcp/brockmann.json",
-  "cache_sha256": "80dba6fba51e360bb64a4b2931bcd4eba0c9bcc1132401b833a632e3eb7a0a3f",
+  "cache_sha256": "cf8d5ee50895fc713f55f176f93720651e5df47295a27cbbd88852099489e5f2",
   "cache_provenance": {
    "pipeline": "surya+ground",
    "detector": "surya-ocr 0.22.1",
    "grouping": "detect_surya.boxes_norm",
    "measurer": "measure/ground.py",
    "skew": "EasyOCR 상자 기울기 중앙값 · skewed = |각| >= 14°",
-   "commit": "9b252ed",
-   "date": "2026-09-11",
+   "commit": "e4df0cf",
+   "date": "2026-09-15",
    "source": "remeasure.py — /Users/junhyeoksong/.typo-mcp/old-20260824/brockmann.json 의 열쇠 123장",
    "n": 123
   },
@@ -21,18 +21,18 @@
   "규칙": "rules.derive(원자료), 참조 코퍼스 없이. 좌표는 블록 베이스라인에 수직인 축"
  },
  "캐시에_저장된_행간규칙": {
-  "median": 1.4,
-  "lo": 1.225,
-  "hi": 1.778,
-  "n": 257,
+  "median": 1.417,
+  "lo": 1.223,
+  "hi": 1.8,
+  "n": 253,
   "verdict": "제약"
  },
  "in_sample_행간규칙": {
-  "median": 1.4,
-  "lo": 1.225,
-  "hi": 1.778,
-  "cv": 0.137,
-  "n": 257,
+  "median": 1.417,
+  "lo": 1.223,
+  "hi": 1.8,
+  "cv": 0.153,
+  "n": 253,
   "verdict": "제약"
  },
  "포스터": {
@@ -45,25 +45,25 @@
    ],
    "행간규칙": {
     "in_sample": {
-     "median": 1.4,
-     "lo": 1.225,
-     "hi": 1.778,
-     "cv": 0.137,
-     "n": 257,
+     "median": 1.417,
+     "lo": 1.223,
+     "hi": 1.8,
+     "cv": 0.153,
+     "n": 253,
      "verdict": "제약"
     },
     "뺀뒤": {
-     "median": 1.4,
-     "lo": 1.223,
-     "hi": 1.778,
-     "cv": 0.138,
-     "n": 254,
+     "median": 1.417,
+     "lo": 1.222,
+     "hi": 1.802,
+     "cv": 0.154,
+     "n": 250,
      "verdict": "제약"
     },
     "변화": {
      "median": 0.0,
-     "lo": -0.002,
-     "hi": 0.0,
+     "lo": -0.001,
+     "hi": 0.002,
      "n": -3
     }
    },
@@ -275,19 +275,19 @@
    "이_판이_규칙에_보탠_값": [],
    "행간규칙": {
     "in_sample": {
-     "median": 1.4,
-     "lo": 1.225,
-     "hi": 1.778,
-     "cv": 0.137,
-     "n": 257,
+     "median": 1.417,
+     "lo": 1.223,
+     "hi": 1.8,
+     "cv": 0.153,
+     "n": 253,
      "verdict": "제약"
     },
     "뺀뒤": {
-     "median": 1.4,
-     "lo": 1.225,
-     "hi": 1.778,
-     "cv": 0.137,
-     "n": 257,
+     "median": 1.417,
+     "lo": 1.223,
+     "hi": 1.8,
+     "cv": 0.153,
+     "n": 253,
      "verdict": "제약"
     },
     "변화": {
@@ -449,8 +449,8 @@
      "사람행간": null,
      "in_sample": {
       "격자": 2,
-      "행간": 20,
-      "행간비": 1.35,
+      "행간": 22,
+      "행간비": 1.48,
       "오차_중앙_px": 0.69,
       "오차_최대_px": 0.69,
       "오차_부호": [
@@ -459,8 +459,8 @@
      },
      "뺀뒤": {
       "격자": 2,
-      "행간": 20,
-      "행간비": 1.35,
+      "행간": 22,
+      "행간비": 1.48,
       "오차_중앙_px": 0.69,
       "오차_최대_px": 0.69,
       "오차_부호": [
